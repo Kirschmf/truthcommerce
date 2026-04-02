@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* =========================================
+   GLOBAL RESET & BASE
+========================================= */
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #000000;
+  color: var(--text-main);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Noise overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.25;
+}
+
+/* =========================================
+   TAILWIND THEME EXTENSIONS
+========================================= */
+
+@theme {
+  /* Colors */
+  --color-green: #07dd2b;
+  --color-green-glow: rgba(7, 221, 43, 0.12);
+  --color-bg-base: #040507;
+  --color-bg-surface: #0a0c10;
+  --color-text-main: #ffffff;
+  --color-text-muted: #a1a1aa;
+  --color-border-light: rgba(255, 255, 255, 0.06);
+
+  /* Fonts */
+  --font-heading: 'Sora', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  /* Easings */
+  --ease-snappy: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* =========================================
+   TYPOGRAPHY UTILITIES
+========================================= */
+
+.accent {
+  color: var(--green);
+  text-shadow: 0 0 20px rgba(7, 221, 43, 0.18);
+}

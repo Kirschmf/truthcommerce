@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truth Commerce - Showreel Lusion</title>
+    
+    <!-- Fontes do seu projeto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ── VARIÁVEIS DO SEU PROJETO ── */
+        :root {
+            --bg-base: #040507;
+            --green: #07dd2b;
+            --text-main: #FFFFFF;
+            --text-muted: #A1A1AA;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ── BACKGROUND DE ESTRELAS ── */
+        .space-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2; pointer-events: none;
+            background-color: #000000;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.4), rgba(0, 0, 0, 0)),
+                radial-gradient(1.5px 1.5px at 90px 40px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.2), rgba(0, 0, 0, 0));
+            background-repeat: repeat;
+            background-size: 250px 250px;
+            opacity: 0.3; 
+        }
+
+        /* ── SECÇÕES SIMULADAS ── */
+        .mock-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .mock-section h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        /* =========================================
+           ESTRUTURA SHOWREEL (STICKY SCROLL)
+        ========================================= */
+        #showreel-section {
+            position: relative;
+            width: 100vw;
+            height: 180vh; /* Altura otimizada para um auto-scroll rápido e magnético */
+            margin: 0;
+            padding: 0;
+            z-index: 10;
+        }
+
+        /* O contêiner que "gruda" no topo do ecrã */
+        .sticky-container {
+            position: sticky;
+            top: 0;
+            width: 100vw;
+            height: 100vh; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* 1. O Início: Posição superior para poder DESCER enquanto estica */
+        #video-start-anchor {
+            position: absolute;
+            top: 20vh; /* Começa na parte superior do ecrã, para viajar até ao centro */
+            left: 5vw; 
+            width: 35vw; 
+            aspect-ratio: 16/9;
+            visibility: hidden; 
+            z-index: 0;
+        }
+        
+        /* 2. O alvo final: Estilo Telão com margens */
+        #video-end-anchor {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90vw; 
+            max-width: 1600px; 
+            aspect-ratio: 16/9;
+            max-height: 85vh; 
+            visibility: hidden;
+        }
+
+        /* =========================================
+           UI HTML (O BOTÃO PLAY)
+        ========================================= */
+        .showreel-ui-layer {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 20;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            opacity: 0;
+        }
+
+        .showreel-labels {
+            position: absolute;
+            width: 90vw; 
+            max-width: 1600px;
+            display: flex;
+            justify-content: space-between;
+            top: 5vh;
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .play-reel-btn {
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            cursor: pointer;
+            pointer-events: auto; 
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+        }
+
+        .play-reel-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .play-text {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(3rem, 6vw, 6rem);
+            font-weight: 400;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+
+        .play-icon-wrapper {
+            width: clamp(80px, 10vw, 120px);
+            height: clamp(80px, 10vw, 120px);
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: background 0.3s ease;
+        }
+        
+        .play-reel-btn:hover .play-icon-wrapper {
+            background: var(--green);
+        }
+
+        .play-icon {
+            width: 35%;
+            height: 35%;
+            fill: #000;
+            margin-left: 10%; 
+            transition: fill 0.3s ease;
+        }
+
+        /* ── CANVAS WEBGL ── */
+        #canvas-showreel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 5; 
+            pointer-events: none;
+            opacity: 0; 
+            transition: opacity 0.5s ease;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="space-bg"></div>
+
+    <section class="mock-section" style="justify-content: flex-end; padding-bottom: 10vh;">
+        <span style="color: var(--green); font-family: 'Space Mono'; font-size: 12px; letter-spacing: 2px;">OS NOSSOS RESULTADOS</span>
+        <h1>A Palavra Final.</h1>
+        <p style="color: var(--text-muted); max-width: 500px; text-align: center; margin-top: 20px;">
+            A prova de que a infraestrutura certa escala qualquer negócio. 
+            ↓ Faça scroll para assistir ao nosso Showreel.
+        </p>
+    </section>
+
+    <!-- O EFEITO COMEÇA AQUI -->
+    <section id="showreel-section">
+        
+        <!-- Estrutura Sticky que trava o ecrã para a animação ocorrer -->
+        <div class="sticky-container">
+            
+            <!-- Ambos os pontos de referência estão agora dentro do sticky -->
+            <div id="video-start-anchor"></div>
+            <div id="video-end-anchor"></div>
+            
+            <div class="showreel-ui-layer" id="ui-layer">
+                <div class="showreel-labels">
+                    <span>Showreel 2026</span>
+                    <span>Casos de Estudo</span>
+                </div>
+
+                <button class="play-reel-btn">
+                    <span class="play-text">PLAY</span>
+                    <div class="play-icon-wrapper">
+                        <svg class="play-icon" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
+                    </div>
+                    <span class="play-text">REEL</span>
+                </button>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="mock-section" style="background: rgba(255,255,255,0.03); z-index: 30; position: relative;">
+        <span style="color: var(--green); font-family: 'Space Mono'; font-size: 12px; letter-spacing: 2px;">FUTURO DA ESCALA</span>
+        <h1>Fim da Apresentação</h1>
+    </section>
+
+    <!-- CANVAS WEBGL -->
+    <canvas id="canvas-showreel"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // ==========================================
+        // LÓGICA DO SHADER WEBGL 
+        // ==========================================
+        const canvas = document.getElementById('canvas-showreel');
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const scene = new THREE.Scene();
+
+        function makeCamera() {
+            const W = window.innerWidth, H = window.innerHeight;
+            const cam = new THREE.OrthographicCamera(-W/2, W/2, H/2, -H/2, -100, 100);
+            cam.position.z = 5;
+            return cam;
+        }
+        let camera = makeCamera();
+
+        function screenToWorld(sx, sy) {
+            return new THREE.Vector2(sx - window.innerWidth / 2, window.innerHeight / 2 - sy);
+        }
+        function elWorldRect(id) {
+            const el = document.getElementById(id);
+            const rect = el.getBoundingClientRect();
+            const tl = screenToWorld(rect.left, rect.top);
+            return { x: tl.x, y: tl.y, width: rect.width, height: rect.height };
+        }
+        function rectToVec4(r) {
+            return new THREE.Vector4(r.x, r.y, r.height, r.width);
+        }
+
+        const vertexShader = `
+            #define PI 3.14159265358979
+            uniform float animateProgress;
+            uniform vec4 startRect;
+            uniform vec4 endRect;
+            varying vec2 vUv;
+
+            vec2 rotateLocal(vec2 v, float a) {
+                float s = sin(a), c = cos(a);
+                return vec2(v.x*c - v.y*s, v.x*s + v.y*c);
+            }
+
+            vec2 getRectPos(vec4 rect, vec2 uv) {
+                vec2 pos;
+                pos.x = mix(rect.x, rect.x + rect.w, uv.x);
+                pos.y = mix(rect.y - rect.z, rect.y,  uv.y);
+                return pos;
+            }
+
+            void main() {
+                float transitionWeight = 1.0 - (pow(uv.x * uv.x, 0.75) + pow(uv.y, 1.5)) / 2.0;
+                
+                float localProgress = smoothstep(
+                    transitionWeight * 0.3,
+                    0.7 + transitionWeight * 0.3,
+                    animateProgress
+                );
+
+                vec2 startPos = getRectPos(startRect, uv);
+                vec2 endPos   = getRectPos(endRect,   uv);
+                vec2 posXY    = mix(startPos, endPos, localProgress);
+
+                float width = mix(startRect.w, endRect.w, localProgress);
+                posXY.x += mix(width, 0.0, cos(localProgress * PI * 2.0) * 0.5 + 0.5) * 0.1;
+
+                float rot = (smoothstep(0.0, 1.0, localProgress) - localProgress) * -0.5;
+                posXY = rotateLocal(posXY, rot);
+
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(posXY, 0.0, 1.0);
+                vUv = uv;
+            }
+        `;
+
+        const fragmentShader = `
+            #define REFERENCE_ASPECT 1.77777777778
+            uniform float animateProgress;
+            uniform vec4 startRect; 
+            uniform vec4 endRect;   
+            uniform sampler2D map;
+            varying vec2 vUv;
+
+            float roundedCornerMask(vec2 uv, float radius, float aspect) {
+                vec2 uvAspect = vec2(uv.x * aspect, uv.y);
+                vec2 q = abs(uvAspect - vec2(aspect * 0.5, 0.5)) - vec2(aspect * 0.5 - radius, 0.5 - radius);
+                float d = length(max(q, 0.0)) - radius;
+                return 1.0 - smoothstep(-0.008, 0.008, d);
+            }
+
+            float getAspect() {
+                float w = mix(startRect.w, endRect.w, animateProgress);
+                float h = mix(startRect.z, endRect.z, animateProgress); 
+                return w / max(h, 0.0001);
+            }
+
+            void main() {
+                vec2 uv = vUv;
+                float aspect = getAspect();
+                
+                float aspectScale = (aspect / REFERENCE_ASPECT) - 1.0;
+                aspectScale /= max(aspect, 0.0001);
+                uv.y = mix(aspectScale, 1.0 - aspectScale, vUv.y);
+                uv.y = clamp(uv.y, 0.0, 1.0);
+
+                vec4 albedo = texture2D(map, uv);
+                
+                float darken = mix(1.0, 0.45, animateProgress);
+                float currentRadius = mix(0.08, 0.02, animateProgress);
+                albedo.a = roundedCornerMask(vUv, currentRadius, aspect);
+                
+                gl_FragColor = vec4(albedo.rgb * darken, albedo.a);
+            }
+        `;
+
+        const textureLoader = new THREE.TextureLoader();
+        const texture = textureLoader.load('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1920&auto=format&fit=crop');
+        texture.colorSpace = THREE.SRGBColorSpace;
+
+        const geo = new THREE.PlaneGeometry(1, 1, 64, 64);
+        const uniforms = {
+            animateProgress : { value: 0 },
+            startRect       : { value: new THREE.Vector4() },
+            endRect         : { value: new THREE.Vector4() },
+            map             : { value: texture }
+        };
+
+        const mat = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: true, side: THREE.DoubleSide });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.frustumCulled = false;
+        scene.add(mesh);
+
+        // ==========================================
+        // LÓGICA DE PROGRESSO E AUTO-SCROLL
+        // ==========================================
+        let scrollAnimStart = 0, scrollAnimEnd = 0;
+        const sectionEl = document.getElementById('showreel-section');
+        const uiLayer = document.getElementById('ui-layer');
+
+        function recalcRects() {
+            uniforms.startRect.value = rectToVec4(elWorldRect('video-start-anchor'));
+            uniforms.endRect.value = rectToVec4(elWorldRect('video-end-anchor'));
+        }
+
+        function calcScrollPositions() {
+            // A animação começa no momento em que a seção entra no topo do ecrã
+            const rect = sectionEl.getBoundingClientRect();
+            scrollAnimStart = rect.top + window.scrollY;
+            // A animação termina exatamente quando o espaço de scroll acaba
+            scrollAnimEnd = scrollAnimStart + rect.height - window.innerHeight;
+        }
+
+        let targetProgress = 0;
+        let currentProgress = 0;
+
+        // Auto-Scroll Variáveis
+        let autoScrollRAF = null;
+        let userScrolling = false;
+        let scrollTimeout = null;
+        let scrollDirection = 1;
+        let lastScrollY = window.scrollY;
+
+        function stopAutoScroll() {
+            if (autoScrollRAF) {
+                cancelAnimationFrame(autoScrollRAF);
+                autoScrollRAF = null;
+            }
+        }
+
+        function autoScrollTo(destY) {
+            stopAutoScroll();
+            const startY = window.scrollY;
+            const distance = destY - startY;
+            // Velocidade dinâmica baseada na distância (máx 1.2 segundos)
+            const duration = Math.min(Math.abs(distance) * 1.5, 1200); 
+            const startTime = performance.now();
+
+            function step(now) {
+                if (userScrolling) return; // Cancela se o utilizador interagir
+                const elapsed = now - startTime;
+                const t = Math.min(elapsed / duration, 1);
+                // Ease-in-out suave
+                const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+                window.scrollTo(0, startY + distance * ease);
+                
+                if (t < 1) {
+                    autoScrollRAF = requestAnimationFrame(step);
+                } else {
+                    autoScrollRAF = null;
+                }
+            }
+            autoScrollRAF = requestAnimationFrame(step);
+        }
+
+        function handleUserInteraction() {
+            userScrolling = true;
+            stopAutoScroll();
+            clearTimeout(scrollTimeout);
+            
+            // Depois de 150ms sem mexer na roda/dedo, consideramos o scroll finalizado e avaliamos o snap
+            scrollTimeout = setTimeout(() => {
+                userScrolling = false;
+                checkSnap();
+            }, 150);
+        }
+
+        function checkSnap() {
+            if (autoScrollRAF || userScrolling) return;
+            
+            // Apenas puxar se estivermos dentro da zona da animação
+            if (window.scrollY > scrollAnimStart && window.scrollY < scrollAnimEnd) {
+                const rawProgress = (window.scrollY - scrollAnimStart) / (scrollAnimEnd - scrollAnimStart);
+                
+                if (scrollDirection === 1) {
+                    // A descer: Se passou de 2%, completa a animação magnética
+                    if (rawProgress > 0.02) autoScrollTo(scrollAnimEnd);
+                    else autoScrollTo(scrollAnimStart);
+                } else {
+                    // A subir: Se recolheu um bocadinho (abaixo de 98%), volta ao início
+                    if (rawProgress < 0.98) autoScrollTo(scrollAnimStart);
+                    else autoScrollTo(scrollAnimEnd);
+                }
+            }
+        }
+
+        // Deteta a direção real do scroll e atualiza a visibilidade do WebGL
+        function onScroll() {
+            if (window.scrollY > lastScrollY) scrollDirection = 1;
+            else if (window.scrollY < lastScrollY) scrollDirection = -1;
+            lastScrollY = window.scrollY;
+
+            targetProgress = THREE.MathUtils.clamp(
+                THREE.MathUtils.inverseLerp(scrollAnimStart, scrollAnimEnd, window.scrollY), 0, 1
+            );
+            recalcRects();
+
+            const sr = sectionEl.getBoundingClientRect();
+            const inSection = sr.top < window.innerHeight && sr.bottom > 0;
+            canvas.style.opacity = inSection ? '1' : '0';
+
+            // Fallback: se usar a barra de scroll nativa (sem roda)
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                userScrolling = false;
+                checkSnap();
+            }, 200);
+        }
+
+        // Listeners para cancelar o auto-scroll quando o utilizador tem a intenção de mexer
+        window.addEventListener('wheel', handleUserInteraction, { passive: true });
+        window.addEventListener('touchstart', handleUserInteraction, { passive: true });
+        window.addEventListener('touchmove', handleUserInteraction, { passive: true });
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        window.addEventListener('resize', () => {
+            camera.left = -window.innerWidth/2; camera.right = window.innerWidth/2;
+            camera.top = window.innerHeight/2; camera.bottom = -window.innerHeight/2;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            recalcRects(); calcScrollPositions(); onScroll();
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Lerp suave (0.08) faz a animação ser elástica e elegante, mesmo com o auto-scroll a correr
+            currentProgress += (targetProgress - currentProgress) * 0.08;
+            uniforms.animateProgress.value = currentProgress;
+
+            // UI Fade In 
+            if (currentProgress > 0.7) {
+                uiLayer.style.opacity = (currentProgress - 0.7) * 3.33;
+                uiLayer.style.pointerEvents = currentProgress > 0.95 ? 'auto' : 'none';
+            } else {
+                uiLayer.style.opacity = '0';
+                uiLayer.style.pointerEvents = 'none';
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        requestAnimationFrame(() => {
+            recalcRects(); calcScrollPositions(); onScroll(); animate();
+        });
+
+    </script>
+</body>
+</html>

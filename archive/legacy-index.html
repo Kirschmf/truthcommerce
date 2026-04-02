@@ -1,0 +1,747 @@
+<!doctype html>
+
+<html lang="pt-br">
+
+<head>
+
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>Truth Commerce | A fundação da escala digital.</title>
+
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="src/css/styles.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js" crossorigin="anonymous"></script>
+
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" crossorigin="anonymous"></script>
+
+  <!-- YouTube IFrame API -->
+  <script>
+    // Stub: se o YT API carregar antes do script.js, guarda a chamada
+    window._ytAPIReady = false;
+    function onYouTubeIframeAPIReady() { window._ytAPIReady = true; }
+  </script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+
+</head>
+
+
+
+<body>
+  <canvas id="bg-canvas"></canvas>
+
+
+  <!-- 3D Canvas: Direct child of body, outside all sections -->
+
+  <div class="rocket-wrapper">
+
+    <div class="core-3d-wrapper">
+
+      <div class="core-3d-blur"></div>
+
+      <div id="canvas-3d-wrapper" style="width: 100%; height: 100%;"></div>
+
+    </div>
+
+  </div>
+
+
+
+  <header class="header">
+    <div class="header-container">
+
+      <!-- LOGO -->
+      <a href="#" class="logo-link">
+        <img src="assets/images/Logo Branca.png" alt="Truth Commerce" class="logo-header">
+      </a>
+
+      <!-- NAV LINKS -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#metodo">Metodologia</a></li>
+          <li><a href="#projetos">Infraestrutura Ativa</a></li>
+          <li><a href="#faq">Perguntas Frequentes</a></li>
+        </ul>
+      </nav>
+
+      <!-- ACTIONS -->
+      <div class="header-actions">
+        <a href="https://wa.me/SEUNUMEROAQUI" target="_blank" class="nav-cta">
+          Avaliar Estrutura <span class="arrow">&rarr;</span>
+        </a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MOBILE OVERLAY -->
+  <div class="mobile-overlay" id="mobileOverlay">
+
+    <!-- Top bar: logo + close -->
+    <div class="mobile-overlay-top">
+      <img src="assets/images/Logo Branca.png" alt="Truth Commerce" class="mobile-overlay-logo">
+      <button class="mobile-close" id="menuClose" aria-label="Fechar menu">&times;</button>
+    </div>
+
+    <!-- Nav links -->
+    <nav class="mobile-overlay-nav">
+      <a href="#metodo" class="mobile-link">Metodologia</a>
+      <a href="#projetos" class="mobile-link">Infraestrutura Ativa</a>
+      <a href="#faq" class="mobile-link">Perguntas Frequentes</a>
+    </nav>
+
+    <!-- Footer CTA -->
+    <div class="mobile-overlay-footer">
+      <a href="https://wa.me/SEUNUMEROAQUI" target="_blank" class="mobile-cta mobile-link">
+        Avaliar Estrutura <span>&rarr;</span>
+      </a>
+    </div>
+
+  </div>
+
+
+
+  <section class="hero-wrapper section-skin skin-hero">
+
+    <div class="hero-container">
+
+
+
+      <div class="hero-content reveal">
+
+        <div class="tag">Infraestrutura B2B</div>
+
+        <h1 class="hero-title">A base sólida que a sua loja física precisa para dominar o <span class="accent">digital.</span></h1>
+
+        <p class="hero-subheadline">Nós cuidamos de toda a parte difícil. Conectamos o seu estoque físico à sua nova loja virtual e aos maiores marketplaces do país, deixando tudo organizado e automático para você focar apenas em vender</p>
+
+
+
+        <div class="hero-actions">
+
+          <a href="#metodo" class="btn-hero btn-solid">Conhecer a estrutura</a>
+
+          <a href="https://wa.me/SEUNUMEROAQUI" target="_blank" class="btn-hero btn-outline">Falar com especialista</a>
+
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+  </section>
+
+
+
+
+  <!-- Marquee moved below Metodo -->
+
+  <section id="alerta" class="text-left section-skin skin-alert theme-light"
+    style="max-width: none; width: 100%; margin: 0; padding: 0 5%;">
+
+    <div class="alerta-text-content">
+
+      <span class="tag reveal">[ ALERTA CRÍTICO ]</span>
+
+      <h2 class="title-medium reveal">Escalar sem estrutura é o caminho mais rápido <span class="accent">para o colapso..</span></h2>
+
+      <p class="subtext reveal">
+
+        Rutura de estoque, devoluções em massa e margens destruídas. Este é o preço de vender na internet sem uma base sólida. Antes de gastar dinheiro com anúncios, precisa de garantir que a sua operação aguenta o volume. Nós blindamos a sua estrutura
+
+      </p>
+
+    </div>
+
+  </section>
+
+
+
+  <section id="metodo" class="surface-section section-skin skin-metodo">
+
+    <div class="surface-content">
+
+      <div class="text-center reveal">
+
+        <span class="tag">Engenharia Operacional</span>
+
+        <h2 class="title-medium">O processo não é improviso.<br>É arquitetura de negócios.</h2>
+
+      </div>
+
+
+
+      <div class="galilee-grid">
+
+        <div class="galilee-card reveal">
+
+          <div class="galilee-visual">
+
+            <div class="g-line" style="width: 40%; background: var(--green);"></div>
+
+            <div class="g-line" style="width: 100%;"></div>
+
+            <div class="g-line" style="width: 80%;"></div>
+
+          </div>
+
+          <div class="galilee-text">
+
+            <h3>01. Diagnóstico Estrutural</h3>
+
+            <p>Mapeamos o seu cenário. Seja uma empresa tradicional dando o primeiro passo online ou um e-commerce
+              precisando de ordem. Entendemos seus sistemas internos e processos para desenhar a arquitetura ideal.</p>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="galilee-card reveal" style="transition-delay: 0.1s;">
+
+          <div class="galilee-visual">
+
+            <div class="g-box"></div>
+
+            <div class="g-line" style="width: 60%;"></div>
+
+            <div class="g-line" style="width: 40%;"></div>
+
+          </div>
+
+          <div class="galilee-text">
+
+            <h3>02. Arquitetura de Catálogo</h3>
+
+            <p>A base de uma conversão previsível. Criamos do zero ou reestruturamos seus produtos: padronizamos
+              descrições, tratamos ativos visuais e organizamos a taxonomia técnica para alta performance.</p>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="galilee-card reveal" style="transition-delay: 0.2s;">
+
+          <div class="galilee-visual" style="align-items: center; gap: 8px;">
+
+            <div class="g-line" style="width: 100%;"></div>
+
+            <div style="display: flex; gap: 8px; width: 100%;">
+
+              <div class="g-box" style="flex: 1;"></div>
+
+              <div class="g-box" style="flex: 1;"></div>
+
+            </div>
+
+          </div>
+
+          <div class="galilee-text">
+
+            <h3>03. Integração Sistêmica</h3>
+
+            <p>Conectamos sua operação de ponta a ponta. Plugamos o seu ERP/PDV às plataformas e canais de venda,
+              garantindo que estoque, preços e logística conversem em tempo real, sem falhas.</p>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="galilee-card reveal" style="transition-delay: 0.3s;">
+
+          <div class="galilee-visual" style="justify-content: space-around;">
+
+            <div class="g-line" style="width: 30px; height: 30px; border-radius: 50%;"></div>
+
+            <div class="g-line" style="width: 90%;"></div>
+
+            <div class="g-line" style="width: 60%;"></div>
+
+          </div>
+
+          <div class="galilee-text">
+
+            <h3>04. Handover e Autonomia</h3>
+
+            <p>Entregamos a máquina pronta e a tripulação treinada. Fornecemos documentação e suporte ativo para que sua
+              empresa assuma o controle da nova operação com total segurança.</p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+  </section>
+
+  <!-- =============================== -->
+  <!--  LOGO MARQUEE (below Metodo)    -->
+  <!-- =============================== -->
+  <div id="marquee-section">
+    <p class="marquee-label">Arquitetura baseada em tecnologia de elite</p>
+    <div class="marquee-track-wrap">
+      <div class="marquee-track" id="gsapMarqueeTrack">
+        <!-- Set 1 -->
+        <div class="marquee-item"><img src="assets/images/Amazon_logo.svg" alt="Amazon"></div>
+        <div class="marquee-item"><img src="assets/images/Shopify_logo_2018.svg" alt="Shopify"></div>
+        <div class="marquee-item"><img src="assets/images/mercadolivre_logo.svg" alt="Mercado Livre"></div>
+        <div class="marquee-item"><img src="assets/images/Bling_logo.svg" alt="Bling"></div>
+        <div class="marquee-item"><img src="assets/images/Nuvemshop-logo.png" alt="Nuvemshop" style="height:44px"></div>
+        <div class="marquee-item"><img src="assets/images/Shopee_logo.svg" alt="Shopee" style="height:44px"></div>
+        <div class="marquee-item"><img src="assets/images/magalu-logo.svg" alt="Magalu" style="height:90px"></div>
+        <div class="marquee-item"><img src="assets/images/tiktokshop_logo.svg" alt="TikTok Shop"></div>
+        <!-- Set 2 — duplicate for seamless loop -->
+        <div class="marquee-item"><img src="assets/images/Amazon_logo.svg" alt="Amazon"></div>
+        <div class="marquee-item"><img src="assets/images/Shopify_logo_2018.svg" alt="Shopify"></div>
+        <div class="marquee-item"><img src="assets/images/mercadolivre_logo.svg" alt="Mercado Livre"></div>
+        <div class="marquee-item"><img src="assets/images/Bling_logo.svg" alt="Bling"></div>
+        <div class="marquee-item"><img src="assets/images/Nuvemshop-logo.png" alt="Nuvemshop" style="height:44px"></div>
+        <div class="marquee-item"><img src="assets/images/Shopee_logo.svg" alt="Shopee" style="height:44px"></div>
+        <div class="marquee-item"><img src="assets/images/magalu-logo.svg" alt="Magalu" style="height:90px"></div>
+        <div class="marquee-item"><img src="assets/images/tiktokshop_logo.svg" alt="TikTok Shop"></div>
+        <!-- Set 3 — duplicate for seamless loop -->
+        <div class="marquee-item"><img src="assets/images/Amazon_logo.svg" alt="Amazon"></div>
+        <div class="marquee-item"><img src="assets/images/Shopify_logo_2018.svg" alt="Shopify"></div>
+        <div class="marquee-item"><img src="assets/images/mercadolivre_logo.svg" alt="Mercado Livre"></div>
+        <div class="marquee-item"><img src="assets/images/Bling_logo.svg" alt="Bling"></div>
+        <div class="marquee-item"><img src="assets/images/Nuvemshop-logo.png" alt="Nuvemshop" style="height:44px"></div>
+        <div class="marquee-item"><img src="assets/images/Shopee_logo.svg" alt="Shopee" style="height:44px"></div>
+        <div class="marquee-item"><img src="assets/images/magalu-logo.svg" alt="Magalu" style="height:90px"></div>
+        <div class="marquee-item"><img src="assets/images/tiktokshop_logo.svg" alt="TikTok Shop"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================= -->
+  <!--  CEO AUTHORITY SECTION                  -->
+  <!-- ======================================= -->
+  <section id="ceo">
+    <div class="ceo-container">
+
+      <!-- INTRO: título grande + descrição + CTA -->
+      <div class="ceo-intro-grid">
+        <div class="ceo-title-block reveal">
+          <span class="ceo-label">/ A Mente por trás da máquina</span>
+          <h2 class="ceo-big-title">Engenharia técnica para<br><span class="accent">estabilidade em escala.</span></h2>
+        </div>
+        <div class="ceo-desc-block reveal">
+          <p class="ceo-desc-text">Com mais de uma década construindo infraestruturas de e-commerce, a Truth Commerce nasceu de uma convicção: crescimento sustentável exige uma fundação cirúrgica.</p>
+          <a href="#contato" class="ceo-cta-pill">
+            <span class="ceo-cta-dot"></span> Iniciar diagnóstico
+          </a>
+        </div>
+      </div>
+
+      <!-- EDITORIAL: foto sticky à esquerda, cards de dados à direita -->
+      <div class="ceo-editorial-container">
+
+        <!-- Esquerda: Foto com quote flutuante + nome -->
+        <div class="ceo-sticky-visual reveal">
+          <div class="ceo-image-mask">
+            <img class="ceo-cutout" src="assets/images/anilo.png" alt="Anilo Foppa – CEO Truth Commerce">
+            <div class="ceo-image-overlay"></div>
+            <div class="ceo-floating-quote">
+              <p>"Não vendemos tráfego. Construímos a máquina que aguenta o tráfego."</p>
+            </div>
+          </div>
+          <div class="ceo-name-badge">
+            <span class="ceo-name-text">Anilo Foppa</span>
+            <span class="ceo-role-text">CEO &amp; Fundador</span>
+          </div>
+        </div>
+
+        <!-- Direita: Cards de dados com scroll -->
+        <div class="ceo-scrolling-data">
+
+          <div class="ceo-data-card reveal">
+            <div class="data-num">+120</div>
+            <div class="data-label">Operações Blindadas</div>
+            <p>Mais de uma centena de e-commerces que saíram do caos logístico e rupturas de estoque para a previsibilidade matemática e escala segura.</p>
+          </div>
+
+          <div class="ceo-data-card reveal">
+            <div class="data-num">98<span class="accent">%</span></div>
+            <div class="data-label">Taxa de Retenção</div>
+            <p>Não somos uma agência de setup pontual. Construímos parcerias de longo prazo baseadas em estabilidade contínua e evolução tecnológica.</p>
+          </div>
+
+          <div class="ceo-data-card reveal">
+            <div class="data-num">10<span class="accent">+</span></div>
+            <div class="data-label">Anos de Experiência</div>
+            <p>Uma década a desbravar o ecossistema de vendas online. Do ERP à integração com os maiores marketplaces do mundo, já resolvemos os piores gargalos do mercado.</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <section id="servicos" class="section-skin skin-services theme-light">
+
+    <div class="services-outer reveal">
+
+      <span class="services-label">NOSSOS PILARES</span>
+
+      <div class="services-container">
+
+        <div class="services-img-col">
+          <div class="services-img-wrapper">
+            <img id="service-img" style="opacity: 0; transition: opacity 0.3s ease;"
+              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"
+              alt="Serviço Ativo">
+          </div>
+        </div>
+        <ul class="services-list">
+          <li class="service-item"
+            data-img="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop">
+            <div class="service-title">Infraestrutura Marketplaces</div>
+            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"
+              class="mobile-service-img" alt="Infraestrutura Marketplaces">
+            <div class="service-desc">Integração completa com Mercado Livre, Amazon, Shopee e outros canais de venda.
+              Catálogo unificado e gestão centralizada.</div>
+          </li>
+
+          <li class="service-item"
+            data-img="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop">
+            <div class="service-title">Arquitetura de E-commerce</div>
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop"
+              class="mobile-service-img" alt="Arquitetura de E-commerce">
+            <div class="service-desc">Criação e estruturação da sua loja virtual com design premium, fluxo otimizado e
+              integração com ERP.</div>
+          </li>
+
+          <li class="service-item"
+            data-img="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop">
+            <div class="service-title">Identidade & Posicionamento</div>
+            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop"
+              class="mobile-service-img" alt="Identidade e Posicionamento">
+            <div class="service-desc">Branding estratégico, identidade visual e posicionamento de marca para o ambiente
+              digital.</div>
+          </li>
+
+          <li class="service-item"
+            data-img="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop">
+            <div class="service-title">Capacitação Operacional</div>
+            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop"
+              class="mobile-service-img" alt="Capacitação Operacional">
+            <div class="service-desc">Treinamento da equipe para gestão autônoma da operação digital. Documentação e
+              suporte contínuo.</div>
+          </li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- CARROSSEL 3D -->
+  <div id="carousel-section">
+    <div class="sticky-container">
+      <div class="carousel-hud" id="carousel-hud">
+        <h2>Infraestrutura,<br>que virou resultado.</h2>
+        <p>Explore o portfólio</p>
+      </div>
+      <canvas id="canvas-webgl"></canvas>
+    </div>
+  </div>
+
+
+  <div id="modal">
+    <button class="modal-close">&times;</button>
+    <div class="modal-content">
+      <img id="modal-img" src="" alt="Preview">
+      <h2 style="font-family: 'Sora';" id="modal-title">Projeto</h2>
+    </div>
+  </div>
+
+
+
+  <!-- SHOWREEL SECTION -->
+  <div class="sr-scroll-track" id="showreel">
+    <div class="sr-sticky-frame">
+
+      <!-- Textos Introdutórios -->
+      <div class="sr-intro-layer" id="sr-intro">
+        <span class="sr-label-tag">/ SHOWREEL 2026</span>
+        <h2 class="sr-main-title">Sistemas que suportam a <span class="accent">pressão da escala.</span></h2>
+        <p class="sr-main-desc">Veja como transformamos operações engessadas em máquinas de alta performance. De migrações complexas a arquiteturas headless, construímos para velocidade e estabilidade extrema.</p>
+      </div>
+
+      <!-- Container do Vídeo -->
+      <div class="sr-video-wrap" id="sr-video-wrap">
+
+        <div class="sr-yt-wrapper">
+          <div id="sr-yt-player"></div>
+        </div>
+
+        <!-- Interface Dashboard (surge no final) -->
+        <div class="sr-ui-layer" id="sr-ui">
+
+          <div class="sr-ui-center">
+            <button class="sr-play-btn">
+              <div class="sr-play-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+                </svg>
+              </div>
+              <span class="sr-play-text">PLAY</span>
+            </button>
+          </div>
+
+          <div class="sr-ui-bottom">
+            <div class="sr-status">
+              <div class="sr-status-dot"></div>
+              SYSTEMS ONLINE
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <!-- FIM SHOWREEL -->
+
+
+
+  <section id="faq" class="section-skin skin-faq theme-light">
+
+    <div class="faq-wrapper reveal">
+
+      <div class="faq-left-col">
+
+        <h2 class="faq-header-title">PERGUNTAS FREQUENTES</h2>
+
+      </div>
+
+      <div class="faq-list">
+
+        <div class="faq-item">
+
+          <button class="faq-question">1. A Truth atende quem está começando agora? <span
+              class="faq-icon"></span></button>
+
+          <div class="faq-answer">
+
+            <div class="faq-answer-inner">Sim. Inclusive, começar com a infraestrutura correta evita refações caríssimas
+              no futuro. Nós estruturamos sua entrada no digital, desde a escolha do sistema e parametrização do ERP até
+              a taxonomia do primeiro produto.</div>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="faq-item">
+
+          <button class="faq-question">2. E quem já vende online, mas está desorganizado?<span
+              class="faq-icon"></span></button>
+
+          <div class="faq-answer">
+
+            <div class="faq-answer-inner">Esse é o nosso core business. Se o seu estoque fura, o ERP não conversa com a
+              loja, ou seus anúncios estão bagunçados, nós entramos com governança para integrar e arrumar todo o seu
+              ecossistema.</div>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="faq-item">
+
+          <button class="faq-question">3. Vocês também criam o e-commerce próprio? <span
+              class="faq-icon"></span></button>
+
+          <div class="faq-answer">
+
+            <div class="faq-answer-inner">Sim! Além da presença forte nos marketplaces, desenhamos e implementamos a
+              arquitetura completa de lojas virtuais próprias (D2C ou B2B), deixando a operação centralizada em um só
+              lugar.</div>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="faq-item">
+
+          <button class="faq-question">4. Vocês fazem a gestão de tráfego (Ads)?<span class="faq-icon"></span></button>
+
+          <div class="faq-answer">
+
+            <div class="faq-answer-inner">Não. Nós somos a etapa obrigatória antes do tráfego. Construímos a vitrine
+              técnica perfeita e o sistema logístico impecável. Quando a máquina estiver sólida, você poderá investir em
+              marketing com a certeza de que suportará o volume.</div>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="faq-item">
+
+          <button class="faq-question">5. O que é entregue no final do projeto? <span class="faq-icon"></span></button>
+
+          <div class="faq-answer">
+
+            <div class="faq-answer-inner">Uma operação digital blindada e conectada. Seu ecossistema 100% integrado,
+              catálogo padronizado segundo as regras de cada canal, fluxos automatizados e sua equipe treinada para
+              operar a estrutura..</div>
+
+          </div>
+
+        </div>
+
+
+
+
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <footer id="footer" class="footer">
+
+    <div class="footer-cta reveal">
+
+      <h2 class="title-medium">Sua empresa tem a base certa para <span class="accent">decolar?</span></h2>
+
+      <p class="subtext center" style="margin-bottom: 40px;">Seja para dar o primeiro passo na internet ou organizar uma
+        operação que já roda. Pare de perder vendas por desorganização técnica.</p>
+
+      <a href="https://wa.me/SEUNUMEROAQUI" target="_blank" class="btn primary"
+        style="padding: 22px 48px; font-size: 14px;">Iniciar Diagnóstico</a>
+
+    </div>
+
+
+
+    <div class="footer-content reveal">
+
+      <div class="footer-brand">
+
+        <img src="assets/images/Logo Branca.png" alt="Truth Commerce" class="logo-footer">
+
+        <p>A infraestrutura técnica por trás das marcas que escalam com segurança, sem quebrar a operação no meio do
+          caminho.</p>
+
+        <p style="margin-top: 24px; font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--text-muted);">
+          © 2026 Truth Commerce.</p>
+
+      </div>
+
+      <div class="footer-col">
+
+        <h4>/ Sistemas</h4>
+
+        <ul>
+
+          <li><a href="#">Setup E-commerce</a></li>
+
+          <li><a href="#">Expansão Marketplaces</a></li>
+
+          <li><a href="#">Integração ERP/PDV</a></li>
+
+          <li><a href="#">PIM (Catálogo)</a></li>
+
+        </ul>
+
+      </div>
+
+      <div class="footer-col">
+
+        <h4>/ A Empresa</h4>
+
+        <ul>
+
+          <li><a href="#metodo">Protocolo</a></li>
+
+          <li><a href="#projetos">Infraestrutura Ativa</a></li>
+
+          <li><a href="#faq">Dados Técnicos</a></li>
+
+        </ul>
+
+      </div>
+
+      <div class="footer-col">
+
+        <h4>/ Conexão</h4>
+
+        <ul>
+
+          <li><a href="#">WhatsApp</a></li>
+
+          <li><a href="#">LinkedIn</a></li>
+
+          <li><a href="#">Instagram</a></li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="bgword">Truth Commerce</div>
+
+  </footer>
+
+  <script src="src/js/script.js"></script>
+</body>
+
+</html>

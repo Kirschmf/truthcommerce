@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lusion — Video Panel Shader</title>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--h1:9vw}
+  html{scroll-behavior:auto}
+  body{
+    background:#F0F1FA;
+    font:14px Arial,sans-serif;
+    color:#1c1d21;
+    scrollbar-width:none;
+    overflow-x:hidden;
+    overscroll-behavior-y:none;
+  }
+  body::-webkit-scrollbar{display:none}
+
+  #canvas{
+    position:fixed;top:0;left:0;
+    width:100vw;height:100vh;
+    z-index:0;pointer-events:none;
+  }
+
+  #content{position:relative;z-index:1}
+
+  section{
+    display:flex;flex-direction:column;
+    padding:0 4vw;width:100vw;min-height:100vh;
+  }
+
+  /* HERO */
+  #s-hero{
+    justify-content:flex-end;
+    padding-bottom:8vh;
+  }
+  #s-hero h1{
+    font-size:var(--h1);font-weight:900;
+    line-height:1;letter-spacing:-0.04em;
+    margin-bottom:0.1em;font-family:Arial Black,sans-serif;
+  }
+
+  /* PANEL SECTION */
+  #s-panel{padding-top:18vh;padding-bottom:10vh;gap:8vh;min-height:110vh}
+
+  .paragraphs{
+    display:flex;flex-direction:column;align-items:flex-end;
+    padding-bottom:10vh;
+  }
+  .paragraphs p{width:40%;line-height:1.7;color:#555;margin-bottom:1rem}
+
+  /* Anchors — invisible, Three.js renders on top */
+  #video-panel-start{
+    width:48%;aspect-ratio:16/9;
+    visibility:hidden;
+  }
+  #video-panel-end-parent{
+    position:relative;width:100%;
+    aspect-ratio:16/9;
+    margin:20vh auto 10vh auto;
+  }
+  #video-panel-end{
+    position:absolute;top:50%;left:0;
+    width:100%;height:100%;
+    transform:translateY(-50%);
+    visibility:hidden;
+  }
+
+  #spacer{height:60vh}
+
+  /* HUD */
+  #nav-arrows {
+    position: fixed;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    opacity: 0;
+  }
+  #nav-arrows.visible { opacity: 1; pointer-events: all; }
+  .nav-btn {
+    position: absolute;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    border: none; cursor: pointer;
+    font-size: 20px; font-weight: bold;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-btn:hover { transform: scale(1.1); }
+  .nav-btn.active { background: #fff; color: #111; }
+  .nav-btn.inactive { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.3); pointer-events: none; }
+  #hud {
+    position:fixed;bottom:24px;right:24px;z-index:99;
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(12px);
+    border-radius:16px;padding:20px 24px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.12);
+    font-family:monospace;font-size:11px;
+    min-width:230px;
+  }
+  #hud h3{font-size:11px;letter-spacing:.1em;margin-bottom:16px;color:#888;text-transform:uppercase}
+  #hud .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+  #hud .val{color:#4a7bff;font-weight:700}
+  #hud input[type=range]{
+    -webkit-appearance:none;appearance:none;width:100%;height:3px;
+    background:#ddd;border-radius:2px;margin-bottom:14px;outline:none;cursor:pointer;
+  }
+  #hud input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;width:14px;height:14px;
+    background:#4a7bff;border-radius:50%;
+  }
+  #hud .btn{
+    width:100%;padding:8px;border:none;border-radius:8px;
+    background:#1c1d21;color:#fff;cursor:pointer;
+    font-family:monospace;font-size:11px;letter-spacing:.08em;
+  }
+  #hud .btn:hover{background:#4a7bff}
+</style>
+</head>
+<body>
+<div id="nav-arrows">
+  <button class="nav-btn inactive" id="btn-prev">←</button>
+  <button class="nav-btn active"   id="btn-next">→</button>
+</div>
+
+<canvas id="canvas"></canvas>
+
+<div id="content">
+  <section id="s-hero">
+    <h1>BEYOND VISIONS</h1>
+    <h1 style="color:#4a7bff">WITHIN REACH</h1>
+    <p style="margin-top:2vh;color:#888;font-size:13px">↓ scroll down to see the animation</p>
+  </section>
+
+  <section id="s-panel">
+    <div class="paragraphs">
+      <p>The video panel morphs from a small thumbnail into a full-width panel as you scroll. The entire transition is driven by a single <code>animateProgress</code> value (0→1).</p>
+      <p>Each vertex gets its own <code>localProgress</code> based on its UV coordinates, creating the organic "dancing" shape during transition.</p>
+    </div>
+
+    <div id="video-panel-start"></div>
+
+    <div id="video-panel-end-parent">
+      <div id="video-panel-end"></div>
+    </div>
+  </section>
+
+  <div id="spacer"></div>
+</div>
+
+<div id="hud">
+  <h3>videoPanelVert.glsl</h3>
+  <div class="row"><span>animateProgress</span><span class="val" id="v-ap">0.00</span></div>
+  <input type="range" id="s-ap" min="0" max="100" value="0">
+  <div class="row"><span>borderRadius</span><span class="val" id="v-br">0.085</span></div>
+  <input type="range" id="s-br" min="0" max="40" value="8">
+  <button class="btn" id="btn-demo">▶ Play Demo</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ── Renderer ──────────────────────────────────────────────────────────────
+const canvas = document.getElementById('canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0);
+
+const scene = new THREE.Scene();
+
+// ── ORTHOGRAPHIC CAMERA: 1 world unit = 1 CSS pixel ──────────────────────
+// This exactly matches the original project's coordinate system
+function makeCamera() {
+  const W = window.innerWidth, H = window.innerHeight;
+  const cam = new THREE.OrthographicCamera(-W/2, W/2, H/2, -H/2, -100, 100);
+  cam.position.z = 5;
+  return cam;
+}
+let camera = makeCamera();
+
+// ── Convert screen pixel coords to world coords (1:1) ────────────────────
+// screenX/Y are from getBoundingClientRect (top-left origin)
+// world: center=0, y-up
+function screenToWorld(sx, sy) {
+  return new THREE.Vector2(
+    sx - window.innerWidth  / 2,
+    window.innerHeight / 2 - sy
+  );
+}
+
+// Get world-space rect (x=left, y=top, width, height) of a DOM element
+function elWorldRect(id) {
+  const el   = document.getElementById(id);
+  const rect = el.getBoundingClientRect();
+  // top-left in world coords
+  const tl = screenToWorld(rect.left, rect.top);
+  return { x: tl.x, y: tl.y, width: rect.width, height: rect.height };
+}
+
+// rectToVec4 matching videoPanelShader.js: x=xpos, y=ypos, z=height, w=width
+function rectToVec4(r) {
+  return new THREE.Vector4(r.x, r.y, r.height, r.width);
+}
+
+// ── Vertex Shader — exact port of videoPanelVert.glsl ────────────────────
+const vertexShader = `
+#define PI 3.14159265358979
+
+uniform float animateProgress;
+uniform vec4  startRect;
+uniform vec4  endRect;
+varying vec2  vUv;
+
+vec2 rotateLocal(vec2 v, float a) {
+    float s = sin(a), c = cos(a);
+    return vec2(v.x*c - v.y*s, v.x*s + v.y*c);
+}
+
+// Maps uv → world position inside rect
+// rect: (x=left, y=top, z=height, w=width)
+vec2 getRectPos(vec4 rect, vec2 uv) {
+    vec2 pos;
+    pos.x = mix(rect.x, rect.x + rect.w, uv.x);
+    pos.y = mix(rect.y - rect.z, rect.y,  uv.y);
+    return pos;
+}
+
+void main() {
+    // Per-vertex mask: bottom-right (uv=1,0) moves FIRST
+    // top-left (uv=0,0) moves LAST → creates the dancing effect
+    float transitionWeight = 1.0 - (pow(uv.x * uv.x, 0.75) + pow(uv.y, 1.5)) / 2.0;
+
+    // Each vertex has its own localProgress → organic warping
+    float localProgress = smoothstep(
+        transitionWeight * 0.3,
+        0.7 + transitionWeight * 0.3,
+        animateProgress
+    );
+
+    vec2 startPos = getRectPos(startRect, uv);
+    vec2 endPos   = getRectPos(endRect,   uv);
+    vec2 posXY    = mix(startPos, endPos, localProgress);
+
+    // Horizontal wobble that peaks at mid-animation
+    float width = mix(startRect.w, endRect.w, localProgress);
+    posXY.x += mix(width, 0.0, cos(localProgress * PI * 2.0) * 0.5 + 0.5) * 0.1;
+
+    // Tilt: 0 at start, peaks midway, 0 at end
+    float rot = (smoothstep(0.0, 1.0, localProgress) - localProgress) * -0.5;
+    posXY = rotateLocal(posXY, rot);
+
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(posXY, 0.0, 1.0);
+    vUv = uv;
+}
+`;
+
+// ── Fragment Shader — exact port of videoPanelFrag.glsl ───────────────────
+const fragmentShader = `
+#define REFERENCE_ASPECT 1.77777777778
+
+uniform float animateProgress;
+uniform float borderRadius;
+uniform vec4  startRect;
+uniform vec4  endRect;
+uniform vec3  tintColour;
+uniform sampler2D map;
+varying vec2  vUv;
+
+// common.glsl: roundedCornerMask SDF
+float roundedCornerMask(vec2 uv, float radius, float aspect) {
+    vec2 uvAspect = vec2(uv.x * aspect, uv.y);
+    vec2 q = abs(uvAspect - vec2(aspect * 0.5, 0.5)) - vec2(aspect * 0.5 - radius, 0.5 - radius);
+    float d = length(max(q, 0.0)) - radius;
+    return 1.0 - smoothstep(-0.001, 0.001, d);
+}
+
+float getAspect() {
+    float w = mix(startRect.w, endRect.w, animateProgress);
+    float h = mix(startRect.z, endRect.z, animateProgress);
+    return w / max(h, 0.0001);
+}
+
+void main() {
+    vec2 uv = vUv;
+
+    float aspect      = getAspect();
+    float aspectScale = (aspect / REFERENCE_ASPECT) - 1.0;
+    aspectScale /= max(aspect, 0.0001);
+    uv.y = mix(aspectScale, 1.0 - aspectScale, vUv.y);
+    uv.y = clamp(uv.y, 0.0, 1.0);
+
+    vec4 albedo = texture2D(map, uv);
+
+    float tintCurve = 1.0 - smoothstep(1.0, 0.0, animateProgress);
+    albedo.a   = roundedCornerMask(vUv, borderRadius, aspect);
+    albedo.rgb = mix(albedo.rgb * tintColour, albedo.rgb, tintCurve);
+
+    gl_FragColor = albedo;
+}
+`;
+
+// ── Texture: section with video cards (dynamic, navigable) ───────────────
+const ALL_CARDS = [
+  { color: '#b0b8c8', label: 'Founder & CEO',          name: 'Ricardo Alves'    },
+  { color: '#c97c2a', label: 'Diretora de E-commerce',  name: 'Ana Beatriz Lima' },
+  { color: '#4a7baa', label: 'Head de Marketing',       name: 'Carlos Mendes'    },
+];
+let cardOffset = 0; // 0 = show cards 0,1 | 1 = show cards 1,2
+const texCanvas = document.createElement('canvas');
+texCanvas.width  = 1920;
+texCanvas.height = 1080;
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+}
+
+function shiftColor(hex, amt) {
+  const clean = hex.replace('#','');
+  const n = parseInt(clean.length === 6 ? clean : clean+clean, 16);
+  const r = Math.min(255,Math.max(0,((n>>16)&0xff)+amt));
+  const g = Math.min(255,Math.max(0,((n>>8)&0xff)+amt));
+  const b = Math.min(255,Math.max(0,(n&0xff)+amt));
+  return `rgb(${r},${g},${b})`;
+}
+
+function drawPersonShape(ctx, cx, cy, cw, ch, baseColor) {
+  ctx.save();
+  roundRect(ctx, cx, cy, cw, ch, 24); ctx.clip();
+  const hx = cx+cw*0.5, hy = cy+ch*0.3, hr = cw*0.18;
+  const hg = ctx.createRadialGradient(hx-hr*.2,hy-hr*.2,0,hx,hy,hr*1.5);
+  hg.addColorStop(0, shiftColor(baseColor,70)); hg.addColorStop(1, shiftColor(baseColor,-10));
+  ctx.fillStyle = hg;
+  ctx.beginPath(); ctx.arc(hx, hy, hr, 0, Math.PI*2); ctx.fill();
+  const bg = ctx.createLinearGradient(cx,cy+ch*.45,cx,cy+ch);
+  bg.addColorStop(0, shiftColor(baseColor,25)); bg.addColorStop(1, shiftColor(baseColor,-55));
+  ctx.fillStyle = bg;
+  ctx.beginPath(); ctx.ellipse(cx+cw*.5, cy+ch*.78, cw*.4, ch*.35, 0, 0, Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+
+// Pre-generate star positions once
+const stars = Array.from({length:140}, () => ({
+  x: Math.random(), y: Math.random(), r: Math.random()*1.5
+}));
+
+function redrawTexture() {
+  const W = texCanvas.width, H = texCanvas.height;
+  const ctx = texCanvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#080808'; ctx.fillRect(0,0,W,H);
+
+  // Stars
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  stars.forEach(s => {
+    ctx.beginPath(); ctx.arc(s.x*W, s.y*H, s.r, 0, Math.PI*2); ctx.fill();
+  });
+
+  // Badge
+  const bW=190,bH=34,bX=W/2-bW/2,bY=58;
+  ctx.fillStyle='#1a3d1a'; roundRect(ctx,bX,bY,bW,bH,17); ctx.fill();
+  ctx.strokeStyle='#2a6a2a'; ctx.lineWidth=1.5; roundRect(ctx,bX,bY,bW,bH,17); ctx.stroke();
+  ctx.fillStyle='#4ade80'; ctx.font='bold 13px Arial,sans-serif'; ctx.textAlign='center';
+  ctx.fillText('DEPOIMENTOS', W/2, bY+22);
+
+  // Title
+  ctx.fillStyle='#fff'; ctx.font='bold 88px Arial Black,sans-serif'; ctx.textAlign='center';
+  ctx.fillText('A palavra final.', W/2, 220);
+
+  // Cards — show 2 at a time based on offset
+  const visible = [ALL_CARDS[cardOffset], ALL_CARDS[cardOffset+1]];
+  const positions = [0.09, 0.53];
+  const cardW = W*0.38, cardH = H*0.54, cardY = H*0.26;
+
+  visible.forEach((card, i) => {
+    const cx = W * positions[i];
+    const grad = ctx.createLinearGradient(cx,cardY,cx,cardY+cardH);
+    grad.addColorStop(0, shiftColor(card.color,40));
+    grad.addColorStop(1, shiftColor(card.color,-40));
+    ctx.fillStyle = grad;
+    roundRect(ctx,cx,cardY,cardW,cardH,24); ctx.fill();
+
+    drawPersonShape(ctx,cx,cardY,cardW,cardH,card.color);
+
+    // Bottom label bg
+    ctx.fillStyle='rgba(0,0,0,0.5)';
+    roundRect(ctx,cx,cardY+cardH-90,cardW,90,24); ctx.fill();
+    ctx.fillStyle='#fff'; ctx.font='bold 28px Arial,sans-serif'; ctx.textAlign='left';
+    ctx.fillText(card.name,  cx+28, cardY+cardH-54);
+    ctx.fillStyle='rgba(255,255,255,0.6)'; ctx.font='16px Arial,sans-serif';
+    ctx.fillText(card.label, cx+28, cardY+cardH-26);
+
+    // Button
+    const btnW=280,btnH=46,btnX=cx+cardW-btnW-20,btnY2=cardY+20;
+    ctx.fillStyle='rgba(255,255,255,0.92)';
+    roundRect(ctx,btnX,btnY2,btnW,btnH,23); ctx.fill();
+    ctx.fillStyle='#111'; ctx.font='bold 15px Arial,sans-serif'; ctx.textAlign='center';
+    ctx.fillText('▶  Assista o depoimento', btnX+btnW/2, btnY2+30);
+  });
+
+  // Dots indicator
+  const dotY = H*0.87, dotStartX = W/2 - (ALL_CARDS.length-1)*18;
+  ALL_CARDS.forEach((_,i) => {
+    ctx.beginPath();
+    ctx.arc(dotStartX + i*36, dotY, i === cardOffset ? 6 : 4, 0, Math.PI*2);
+    ctx.fillStyle = i === cardOffset ? '#fff' : 'rgba(255,255,255,0.3)';
+    ctx.fill();
+  });
+
+  // Nav arrows
+  const aY=H*0.87, aX=W*0.85;
+  [[aX,'←', cardOffset>0],[aX+72,'→', cardOffset<ALL_CARDS.length-2]].forEach(([ax,arrow,active])=>{
+    ctx.beginPath(); ctx.arc(ax,aY,28,0,Math.PI*2);
+    ctx.fillStyle = active ? '#ffffff' : 'rgba(255,255,255,0.12)'; ctx.fill();
+    ctx.fillStyle = active ? '#111' : 'rgba(255,255,255,0.3)';
+    ctx.font='bold 22px Arial,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(arrow, ax, aY+8);
+  });
+
+  if (texture) { texture.needsUpdate = true; }
+}
+
+const texture = new THREE.CanvasTexture(texCanvas);
+texture.colorSpace = THREE.SRGBColorSpace;
+redrawTexture();
+
+function makeProceduralTexture() { return texture; } // kept for compat
+
+
+
+// ── Mesh: 1×1 plane, 32×32 subdivisions ──────────────────────────────────
+const SUBDIVISIONS = 64; // more than original for smoother warp
+const geo = new THREE.PlaneGeometry(1, 1, SUBDIVISIONS, SUBDIVISIONS);
+
+const uniforms = {
+  animateProgress : { value: 0 },
+  borderRadius    : { value: 0.085 },
+  tintColour      : { value: new THREE.Color(0.6, 0.6, 1.0) },
+  startRect       : { value: new THREE.Vector4() },
+  endRect         : { value: new THREE.Vector4() },
+  map             : { value: texture }
+};
+
+const mat = new THREE.ShaderMaterial({
+  uniforms,
+  vertexShader,
+  fragmentShader,
+  transparent: true,
+  side: THREE.DoubleSide
+});
+
+const mesh = new THREE.Mesh(geo, mat);
+mesh.frustumCulled = false;
+scene.add(mesh);
+
+// ── Recalculate rects (on load + resize) ─────────────────────────────────
+function recalcRects() {
+  const s = elWorldRect('video-panel-start');
+  uniforms.startRect.value = rectToVec4(s);
+
+  // endRect = full-width panel perfectly centered on screen
+  const W = window.innerWidth;
+  const H = W / (16/9); // maintain 16:9
+  // In world coords: top-left is (-W/2, H/2) if centered
+  const endWorld = {
+    x: -W / 2,         // left edge in world
+    y:  H / 2,         // top edge in world (y-up)
+    width:  W,
+    height: H
+  };
+  uniforms.endRect.value = rectToVec4(endWorld);
+}
+
+// ── Scroll positions ──────────────────────────────────────────────────────
+let scrollAnimStart = 0, scrollAnimEnd = 0, scrollFollowEnd = 0;
+
+function calcScrollPositions() {
+  const startEl  = document.getElementById('video-panel-start');
+  const parentEl = document.getElementById('video-panel-end-parent');
+
+  const startAbsTop  = startEl.getBoundingClientRect().top  + window.scrollY;
+  const parentAbsTop = parentEl.getBoundingClientRect().top + window.scrollY;
+  const parentH      = parentEl.getBoundingClientRect().height;
+
+  // Start animation when the thumbnail is at the CENTER of the screen
+  scrollAnimStart = startAbsTop - window.innerHeight * 0.5;
+
+  // End animation when the full-width panel is PERFECTLY centered on screen
+  // = when panel's vertical center aligns with screen center
+  scrollAnimEnd = parentAbsTop + parentH * 0.5 - window.innerHeight * 0.5;
+
+  // Follow ends further down (panel continues traveling up)
+  scrollFollowEnd = scrollAnimEnd + window.innerHeight * 0.6;
+}
+
+// ── Scroll handler ────────────────────────────────────────────────────────
+let targetProgress = 0;
+let currentProgress = 0;
+const LERP_SPEED = 0.1;
+let autoScrollRAF = null;
+let userScrolling = false;
+let userScrollTimer = null;
+let scrollbarIdleTimer = null;
+let lastScrollY = window.scrollY || 0;
+let scrollDirection = 1;
+
+function stopAutoScroll() {
+  if (autoScrollRAF) { cancelAnimationFrame(autoScrollRAF); autoScrollRAF = null; }
+}
+
+function autoScrollTo(destY) {
+  stopAutoScroll();
+  const DURATION = 1800; // Snappy transition (1.2s)
+  const startY = window.scrollY;
+  const startTime = performance.now();
+
+  function step(now) {
+    if (userScrolling) { autoScrollRAF = null; return; }
+    const t = Math.min((now - startTime) / DURATION, 1);
+    const ease = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+    window.scrollTo(0, startY + (destY - startY) * ease);
+    if (t < 1) autoScrollRAF = requestAnimationFrame(step);
+    else autoScrollRAF = null;
+  }
+  autoScrollRAF = requestAnimationFrame(step);
+}
+
+// Detect user intent to scroll (trackpad, touch, keyboard)
+function onUserScrollIntent() {
+  if (autoScrollRAF) stopAutoScroll();
+  
+  userScrolling = true;
+  clearTimeout(userScrollTimer);
+  // Wait for 150ms of inactivity to consider the input stream "done"
+  userScrollTimer = setTimeout(() => { 
+    userScrolling = false; 
+    checkSnapOnIdle();
+  }, 150);
+}
+
+window.addEventListener('wheel',      onUserScrollIntent, { passive: true });
+window.addEventListener('touchmove',  onUserScrollIntent, { passive: true });
+window.addEventListener('touchstart', onUserScrollIntent, { passive: true });
+window.addEventListener('keydown', e => {
+  if ([' ','ArrowDown','ArrowUp','PageDown','PageUp'].includes(e.key)) onUserScrollIntent();
+}, { passive: true });
+
+function checkSnapOnIdle() {
+  if (autoScrollRAF) return; // already animating
+
+  // Only consider snapping if we're technically inside the transition heights
+  if (window.scrollY > scrollAnimStart && window.scrollY < scrollAnimEnd) {
+    const rawProgress = THREE.MathUtils.inverseLerp(scrollAnimStart, scrollAnimEnd, window.scrollY);
+    
+    if (scrollDirection === 1) { // User was scrolling DOWN
+      if (rawProgress > 0.05) autoScrollTo(scrollAnimEnd);
+      else autoScrollTo(scrollAnimStart);
+    } else { // User was scrolling UP
+      if (rawProgress < 0.95) autoScrollTo(scrollAnimStart);
+      else autoScrollTo(scrollAnimEnd);
+    }
+  }
+}
+
+function onScroll() {
+  const rawProgress = THREE.MathUtils.clamp(
+    THREE.MathUtils.inverseLerp(scrollAnimStart, scrollAnimEnd, window.scrollY), 0, 1
+  );
+  recalcRects();
+  targetProgress = rawProgress;
+
+  // Track the direction of real user scrolls
+  if (window.scrollY > lastScrollY) scrollDirection = 1;
+  else if (window.scrollY < lastScrollY) scrollDirection = -1;
+  lastScrollY = window.scrollY;
+
+  // Update HUD
+  document.getElementById('v-ap').textContent = rawProgress.toFixed(2);
+  document.getElementById('s-ap').value       = rawProgress * 100;
+
+  // Catch dragging the scrollbar (which doesn't fire wheel/touch events)
+  clearTimeout(scrollbarIdleTimer);
+  scrollbarIdleTimer = setTimeout(() => {
+    if (!userScrolling) { checkSnapOnIdle(); }
+  }, 200);
+}
+
+window.addEventListener('scroll', onScroll, { passive: true });
+
+// ── HUD controls ──────────────────────────────────────────────────────────
+let manualMode = false;
+
+document.getElementById('s-ap').addEventListener('input', e => {
+  manualMode = true;
+  const v = e.target.value / 100;
+  uniforms.animateProgress.value = v;
+  document.getElementById('v-ap').textContent = v.toFixed(2);
+});
+
+document.getElementById('s-br').addEventListener('input', e => {
+  const v = e.target.value / 100;
+  uniforms.borderRadius.value = v;
+  document.getElementById('v-br').textContent = v.toFixed(3);
+});
+
+// Demo button: auto-scroll to animate
+document.getElementById('btn-demo').addEventListener('click', () => {
+  manualMode = false;
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  setTimeout(() => {
+    window.scrollTo({ top: scrollAnimEnd + window.innerHeight * 0.3, behavior: 'smooth' });
+  }, 100);
+});
+
+// ── Resize ────────────────────────────────────────────────────────────────
+// ── Nav arrows ────────────────────────────────────────────────────────────
+const navEl   = document.getElementById('nav-arrows');
+const btnPrev = document.getElementById('btn-prev');
+const btnNext = document.getElementById('btn-next');
+
+function updateNavArrows() {
+  // Position arrows over where they appear in the texture (85% x, 87% y of screen)
+  const W = window.innerWidth, H = window.innerHeight;
+  const aY = H * 0.87 - 26;
+  const aX = W * 0.85;
+  btnPrev.style.left = (aX - 4)  + 'px';
+  btnPrev.style.top  = aY + 'px';
+  btnNext.style.left = (aX + 68) + 'px';
+  btnNext.style.top  = aY + 'px';
+
+  btnPrev.className = 'nav-btn ' + (cardOffset > 0 ? 'active' : 'inactive');
+  btnNext.className = 'nav-btn ' + (cardOffset < ALL_CARDS.length - 2 ? 'active' : 'inactive');
+
+  // Show arrows only when animation is complete
+  navEl.classList.toggle('visible', currentProgress > 0.92);
+}
+
+btnPrev.addEventListener('click', () => {
+  if (cardOffset > 0) { cardOffset--; redrawTexture(); updateNavArrows(); }
+});
+btnNext.addEventListener('click', () => {
+  if (cardOffset < ALL_CARDS.length - 2) { cardOffset++; redrawTexture(); updateNavArrows(); }
+});
+
+window.addEventListener('resize', () => {
+  const W = window.innerWidth, H = window.innerHeight;
+  camera.left  = -W/2; camera.right = W/2;
+  camera.top   =  H/2; camera.bottom = -H/2;
+  camera.updateProjectionMatrix();
+  renderer.setSize(W, H);
+  recalcRects();
+  calcScrollPositions();
+  onScroll();
+  updateNavArrows();
+});
+
+// ── Render loop ───────────────────────────────────────────────────────────
+function animate() {
+  requestAnimationFrame(animate);
+
+  // Smooth lerp toward target
+  currentProgress += (targetProgress - currentProgress) * LERP_SPEED;
+
+  uniforms.animateProgress.value = currentProgress;
+  updateNavArrows();
+
+  // Vertical follow
+  const followAmt = THREE.MathUtils.clamp(
+    THREE.MathUtils.inverseLerp(scrollAnimEnd, scrollFollowEnd, window.scrollY), 0, 1
+  );
+  const followPx = scrollFollowEnd - scrollAnimEnd;
+  mesh.position.y = followAmt * followPx;
+
+  renderer.render(scene, camera);
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────
+// Wait 2 frames for layout to settle
+requestAnimationFrame(() => requestAnimationFrame(() => {
+  recalcRects();
+  calcScrollPositions();
+  targetProgress = 0;
+  currentProgress = 0;
+  onScroll();
+  animate();
+}));
+</script>
+</body>
+</html>

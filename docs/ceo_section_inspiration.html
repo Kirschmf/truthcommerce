@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Truth Commerce | Seção CEO</title>
+  
+  <!-- Importação das fontes (Sora, Space Mono, Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===============================================================
+      CSS DA NOVA SEÇÃO CEO (INSPIRADA NO SHOWREEL)
+      ===============================================================
+    */
+
+    :root {
+      --bg-base: #040507;
+      --bg-surface: #0a0c10;
+      --green: #07dd2b;
+      --text-main: #FFFFFF;
+      --text-muted: #A1A1AA;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-base);
+      font-family: 'Inter', sans-serif;
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    /* --- Container Principal --- */
+    .ceo-premium-section {
+      position: relative;
+      width: 100vw;
+      max-width: 100%;
+      margin-left: calc(-50vw + 50%);
+      background-color: var(--bg-base);
+      padding: 120px 5%;
+      z-index: 10;
+      /* Background glow sutil para não deixar o fundo totalmente morto */
+      background-image: radial-gradient(800px circle at 15% 50%, rgba(7, 221, 43, 0.03), transparent 60%);
+    }
+
+    .ceo-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* =========================================================
+       1. INTRO GRID (Baseado na estrutura sr-intro-grid)
+       ========================================================= */
+    .ceo-intro-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      margin-bottom: 80px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 80px;
+    }
+
+    @media (min-width: 900px) {
+      .ceo-intro-grid {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+    }
+
+    .ceo-title-block {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 700px;
+    }
+
+    .ceo-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .ceo-big-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin: 0;
+      color: #fff;
+    }
+
+    .ceo-desc-block {
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    .ceo-desc-text {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.6);
+      margin: 0;
+    }
+
+    .ceo-cta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 100px;
+      padding: 12px 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #fff;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(8px);
+    }
+
+    .ceo-cta-pill:hover {
+      border-color: var(--green);
+      background: rgba(7, 221, 43, 0.08);
+    }
+
+    .ceo-cta-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(7, 221, 43, 0.8);
+    }
+
+    /* =========================================================
+       2. EDITORIAL STICKY LAYOUT (O que preenche o espaço)
+       ========================================================= */
+    .ceo-editorial-container {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      position: relative;
+    }
+
+    @media (min-width: 1024px) {
+      .ceo-editorial-container {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 6vw;
+      }
+    }
+
+    /* ESQUERDA: FOTO FIXA */
+    .ceo-sticky-visual {
+      width: 100%;
+      position: relative;
+      z-index: 5;
+    }
+
+    @media (min-width: 1024px) {
+      .ceo-sticky-visual {
+        width: 45%;
+        /* O Segredo do movimento: A foto fica colada no ecrã enquanto os cards passam */
+        position: sticky;
+        top: 100px; 
+        height: calc(100vh - 140px);
+        max-height: 800px;
+      }
+    }
+
+    .ceo-image-mask {
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
+      border-radius: 32px;
+      overflow: hidden;
+      position: relative;
+      background: var(--bg-surface);
+      border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.1);
+    }
+
+    .ceo-image-mask img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: grayscale(100%) contrast(1.1);
+      transition: filter 0.8s ease, transform 0.8s ease;
+      transform: scale(1.02);
+    }
+
+    .ceo-image-mask:hover img {
+      filter: grayscale(0%) contrast(1);
+      transform: scale(1.06);
+    }
+
+    /* Degradete escuro sobre a foto para o texto flutuante ter leitura */
+    .ceo-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(4,5,7,0.95) 0%, rgba(4,5,7,0.3) 40%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .ceo-floating-quote {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      right: 40px;
+      border-left: 3px solid var(--green);
+      padding-left: 24px;
+      pointer-events: none;
+    }
+
+    .ceo-floating-quote p {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      line-height: 1.35;
+      color: #fff;
+      margin: 0;
+      text-shadow: 0 4px 16px rgba(0,0,0,0.9);
+      letter-spacing: -0.01em;
+    }
+
+    /* DIREITA: CARDS QUE FAZEM SCROLL */
+    .ceo-scrolling-data {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    @media (min-width: 1024px) {
+      .ceo-scrolling-data {
+        width: 55%;
+        /* Começa um pouco mais abaixo para quebrar a simetria (estilo Framer) */
+        padding-top: 10vh; 
+        padding-bottom: 10vh;
+      }
+    }
+
+    .ceo-data-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      padding: clamp(32px, 5vw, 48px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ceo-data-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--green), transparent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .ceo-data-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      transform: translateX(10px);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .ceo-data-card:hover::before {
+      opacity: 1;
+    }
+
+    .data-num {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(3.5rem, 6vw, 5.5rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .data-num .accent {
+      color: var(--green);
+    }
+
+    .data-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .ceo-data-card p {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+  </style>
+</head>
+<body>
+
+  <section id="ceo-premium" class="ceo-premium-section">
+    <div class="ceo-container">
+      
+      <!-- 1. BLOCO DE INTRODUÇÃO (Inspirado no showreel-intro) -->
+      <div class="ceo-intro-grid">
+        
+        <div class="ceo-title-block">
+          <span class="ceo-label">/ A MENTE POR TRÁS DA MÁQUINA</span>
+          <h2 class="ceo-big-title">Engenharia técnica para<br><span class="accent">estabilidade em escala.</span></h2>
+        </div>
+
+        <div class="ceo-desc-block">
+          <p class="ceo-desc-text">
+            Com mais de uma década construindo infraestruturas de e-commerce, a Truth Commerce nasceu de uma convicção: crescimento sustentável exige uma fundação cirúrgica.
+          </p>
+          <a href="#contato" class="ceo-cta-pill">
+            <span class="ceo-cta-dot"></span> Iniciar diagnóstico
+          </a>
+        </div>
+
+      </div>
+
+      <!-- 2. LAYOUT EDITORIAL STICKY (Ocupa o espaço vazio) -->
+      <div class="ceo-editorial-container">
+        
+        <!-- ESQUERDA: Poster Cinematográfico Fixo -->
+        <div class="ceo-sticky-visual">
+          <div class="ceo-image-mask">
+            <!-- Sugestão: Use uma foto de alta resolução, mais focada e imponente -->
+            <img 
+              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop" 
+              alt="CEO Truth Commerce" 
+            />
+            <div class="ceo-image-overlay"></div>
+            
+            <!-- Frase de Impacto Flutuante dentro da Imagem -->
+            <div class="ceo-floating-quote">
+              <p>"Não vendemos tráfego. Construímos a máquina que aguenta o tráfego."</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIREITA: Cartões de Dados Ricos com Scroll -->
+        <div class="ceo-scrolling-data">
+          
+          <div class="ceo-data-card">
+            <div class="data-num">+120</div>
+            <div class="data-label">Operações Blindadas</div>
+            <p>Mais de uma centena de e-commerces que saíram do caos logístico e ruturas de stock para a previsibilidade matemática e escala segura.</p>
+          </div>
+
+          <div class="ceo-data-card">
+            <div class="data-num">98<span class="accent">%</span></div>
+            <div class="data-label">Taxa de Retenção</div>
+            <p>Não somos uma agência de setup pontual. Construímos parcerias de longo prazo baseadas em estabilidade contínua e evolução tecnológica.</p>
+          </div>
+
+          <div class="ceo-data-card">
+            <div class="data-num">10<span class="accent">+</span></div>
+            <div class="data-label">Anos de Experiência</div>
+            <p>Uma década a desbravar o ecossistema de vendas online. Do código do ERP à integração com os maiores marketplaces do mundo, já resolvemos os piores gargalos do mercado.</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>

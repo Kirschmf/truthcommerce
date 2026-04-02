@@ -1,0 +1,5587 @@
+{
+  "name": "1. Porteiro",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# Tratando input\n",
+        "height": 540,
+        "width": 1520
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        560
+      ],
+      "id": "e5245579-b62d-4138-8ad8-c62f768b909e",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "[![fazer.ai](https://framerusercontent.com/images/HqY9djLTzyutSKnuLLqBr92KbM.png?scale-down-to=256)](https://fazer.ai?utm_source=n8n&utm_campaign=sec-ep2&utm_medium=cw-1)\n\n## Esse é um template faça você mesmo do canal\n## Lucas Moreira\n\n### Inscreva-se no nosso canal no YouTube\n[![YouTube Lucas Moreira](https://img.shields.io/youtube/channel/subscribers/UCtmp6SxzLscu0GRTbgM8FTw?style=flat-square&logo=youtube&label=Inscreva-se&color=f00)](https://youtube.com/@eulucassmoreira?si=0lH7hwX9pukjhmPQ)\n\n### Siga nosso GitHub\n[![GitHub fazer.ai](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white&label)](https://github.com/fazer-ai)\n",
+        "height": 440,
+        "width": 550,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -940,
+        100
+      ],
+      "id": "ef18c82a-26f8-4685-8f2c-2874197e7f77",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## Pré-requisitos do workflow\n",
+        "height": 1520,
+        "width": 2140,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        580
+      ],
+      "id": "01b47dcd-3ba7-48d7-9a47-90e9f7d9e0e3",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## Quer entender como funciona?\n\n\n### Assista o vídeo, deixe um like, e se inscreva no canal para ter acesso a mais workflows como esse!\n\n[![IMAGE ALT TEXT HERE](https://i1.ytimg.com/vi_webp/cvTWGNJGAu4/maxresdefault.webp)](https://www.youtube.com/watch?v=cvTWGNJGAu4)",
+        "height": 440,
+        "width": 500,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -380,
+        100
+      ],
+      "id": "0e0bb0b0-5c57-4cdb-8a41-c99a98756f90",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "## Tutorial de configuração VPS no Hostinger\n\n## [Clique aqui para criar sua conta](https://www.hostinger.com.br/cart?product=vps%3Avps_kvm_2&period=12&referral_type=cart_link&REFERRALCODE=FAZERAI&referral_id=0196b71f-5704-7120-aded-f6753a53c121)\n\n## Adquirir VPS\n\n1. VPS KVM 2 (Escolha o plano que preferir)\n1. Selecionar opção de \"OS com Painel\" > \"Coolify\"\n1. Criar senha root segura\n1. Aguardar configuração (~10m)\n\n## Configurar Coolify + Chatwoot\n\n1. Na visão geral, clicar em \"Gerenciar\" no servidor\n1. Clicar em \"Gerenciar Painel\"\n1. Preencher dados (usar senha segura!!)\n1. \"Get started\" > \"Next\" > \"Localhost\" > \"Create new project!\" > \"Let's do it\"\n1. Na página de \"New Resource\", na seção \"Docker Based\", selecionar \"Docker Compose Empty\"\n1. Cole o conteúdo do arquivo `docker-compose.coolify.yml` (disponível no material) e clicar em \"Save\"\n1. Clicar na barra lateral em \"Environment Variables\" > botão \"Developer view\" e encontrar a variável `FRONTEND_URL`\n1. Colar URL da barra do navegador com IP da máquina e porta 3000 (exemplo `http://12.34.56.78:3000`)\n1. Clicar \"Save All Environment Variables\"\n1. Clicar \"Deploy\" e acompanhar os logs de deployment\n1. Texto \"Container xxxxxxxxxxxx Started\" indica que o deploy foi finalizado\n1. Clicar na aba \"Links\", e a URL com a porta 3000 deve estar visível. Clicar nela para acessar o Chatwoot. Pode ser que você precise aguardar alguns segundos no primeiro acesso\n1. Configurar super admin (usar senha segura!!!!)\n1. Fazer login com o usuário e senha criados\n\n",
+        "height": 780,
+        "width": 680,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -920,
+        820
+      ],
+      "id": "4362111a-af93-4cae-8a8b-ade4cd059f32",
+      "name": "Sticky Note20"
+    },
+    {
+      "parameters": {
+        "content": "## Tutorial de configuração Chatwoot + Baileys\n\nSe deu tudo certo no passo anterior, você agora tem acesso ao Chatwoot fazer.ai, que inclui integração nativa com o Baileys.\n\nSiga o nosso [GitHub](https://github.com/fazer-ai) para ficar por dentro das atualizações!\n\n[![GitHub fazer.ai](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white&label)](https://github.com/fazer-ai)\n\n### Conectar WhatsApp\n\n1. Clicar em \"Configurações\" na barra lateral\n1. \"Caixas de Entrada\" > \"Adicionar Caixa de Entrada\"\n1. \"WhatsApp\" > \"Provedor de API\" > \"Baileys\"\n1. Preencher \"Nome da Caixa de Entrada\"\n1. Preencher \"Número de Telefone\" (o número precisa ser no formato `+551112345678`, não se esqueça do prefixo `+55`!!)\n1. Clicar em \"Criar canal do WhatsApp\"\n1. Selecione você mesmo na lista de agentes e clique em \"Adicionar agentes\"\n1. Clique em \"Conectar dispositivo\"\n1. Abra o WhatsApp no seu celular e leia o QR code\n1. Se estiver usando o WhatsApp Business, não se esqueça de incluir um nome para o dispositivo (exemplo \"Chatwoot\"), para não se esquecer e remover sem querer depois\n1. Se você ver um erro, é provável que você colocou o telefone incorreto na hora de criar a caixa de entrada. Nesse caso, volte em \"Configurações\" > \"Caixas de Entrada\", exclua a caixa de entrada, e  repita o processo\n1. Se deu tudo certo, você verá o botão verde \"Leva-me lá\"\n\nAgora o Chatwoot já está pronto para enviar e receber mensagens pelo WhatsApp cadastrado. Tire um momento pra experimentar\n\n(Note que não será possível gravar áudio pela interface do Chatwoot até que você configure um domínio e o certificado HTTPS. Mas não se preocupe, que isso não impacta no envio de áudio do agente IA!)\n\n### Configurar credenciais no N8N\n\n1. Instale o community node @devlikeapro/n8n-nodes-chatwoot\n1. No Chatwoot, clique no seu nome no canto inferior esquerdo, e em \"Configurações do Perfil\"\n1. Desça até o final e você verá a seção \"Token de acesso\"\n1. Copie o token de acesso. Cuidado nessa parte! Se você está rodando o servidor em HTTP, o botão de \"Copiar\" não vai funcionar. Você deve exibir o token, selecionar, e copiar manualmente\n1. No workflow do N8N, abra o node \"Testar credencial - Chatwoot\" ao lado\n1. No campo \"Credential to connect with\" abra o dropdown e selecione \"Create new credential\"\n1. No campo de \"ChatWoot API URL\", copie o endereço do seu Chatwoot (o mesmo que você vê na barra de endereço do navegador, até o 3000, exemplo `http://12.34.56.78:3000`)\n1. No campo \"Access Token\", cole o \"Token de acesso\" copiado do Chatwoot\n1. Clique em salvar, e se estiver tudo certo, verá a mensagem de sucesso. Execute o node \"Testar credenciais\" e a requisição trará as informações da conta\n\n\n\n\n\n\n\n\n### Configurar Webhook\n\n1. \"Configurações\" > \"Integrações\" > \"Webhooks\" > \"Configurar\"\n1. \"Adicionar novo webhook\"\n1. Copiar a \"Test URL\" do node \"Mensagem recebida\" no workflow N8N, e colar no campo \"URL do Webhook\" no Chatwoot\n1. Selecionar caixa de entrada e preencher nome do webhook\n1. Selecionar evento \"Mensagem criada\" e \"Criar webhook\"\n1. Repita os passoas acima para a \"Production URL\"",
+        "height": 1440,
+        "width": 680,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -220,
+        640
+      ],
+      "id": "2515d431-8420-452e-91c7-8ced253127d4",
+      "name": "Sticky Note21"
+    },
+    {
+      "parameters": {
+        "content": "## Tutorial de configuração ElevenLabs\n\n## [Clique aqui para criar sua conta gratuita](https://try.elevenlabs.io/9k5l5hagxkel)\n\n### Configurar voz\n\n1. Criar conta\n1. Acessar biblioteca de vozes e escolher uma voz. Recomendamos usar a [Keren](https://elevenlabs.io/app/voice-library?voiceId=33B4UnXyTNbgLmdEDh5P)\n1. Clicar em \"Add to my voices\" e \"Use voice\"\n1. Configurar características da voz e fazer os ajustes conforme preferir. Sugestão para a Keren:\n- **Model**: Eleven Flash v2.5 (caso queira usar um diferente, configure no node \n\"Gerar áudio\")\n- **Speed**: 1.10\n- **Stability**: 35%\n- **Similarity**: 44%\n\n### Configurar credencial\n\n1. Clicar no seu nome no canto inferior esquerdo > \"API Keys\"\n1. \"Create API Key\" > \"Create\". Copie a chave criada\n1. Abra o node \"Testar credencial - ElevenLabs\" ao lado\n1. Abra o campo \"Header Auth\" e selecione \"Create new credential\"\n1. Em \"Name\" preencha \"Xi-Api-Key\"\n1. Em \"Value\" preencha a chave de API do ElevenLabs\n1. Salve e execute o node para confirmar o sucesso na configuração\n1. Abra o node \"Gerar áudio\" na seção \"Gerando resposta\" para usar a nova credencial\n",
+        "height": 840,
+        "width": 660,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        1240
+      ],
+      "id": "c6268178-3b44-49f3-91db-601b7d0fed08",
+      "name": "Sticky Note22"
+    },
+    {
+      "parameters": {
+        "content": "![Chatwoot](https://app.chatwoot.com/brand-assets/logo_dark.svg)",
+        "height": 100,
+        "width": 280,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        400
+      ],
+      "id": "7d123584-6030-43cc-8f2a-4e16a5175244",
+      "name": "Sticky Note23"
+    },
+    {
+      "parameters": {
+        "content": "## Tutorial de configuração tabelas [Supabase](https://supabase.com/)\n\n### Configurar tabelas\n\n1. Criar conta e projeto (use uma senha segura!!)\n1. Na barra lateral, clicar em \"SQL Editor\"\n1. Cole o código disponível no material `[Supabase] Criar histórico e fila de mensagens.sql`\n1. Clicar em \"Run\"\n\n### Configurar credenciais\n\n1. Na barra superior do Supabase, clique em \"Connect\"\n1. Desça até o final na seção \"Session pooler\" > clique em \"View parameters\"\n1. Abra o node \"Testar credencial - Supabase\" ao lado\n1. No campo \"Credential to connect with\", clique em \"Create new credential\"\n1. Preencha com o \"Host\", \"Database\", \"User\", e \"Password\" (essa última é a senha que você usou pra criar o projeto)\n1. Salve a credencial e execute o node para confirmar o sucesso",
+        "height": 580,
+        "width": 660,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        640
+      ],
+      "id": "b4e1863c-4c29-4b49-b5bd-bd1877ce83b0",
+      "name": "Sticky Note18"
+    },
+    {
+      "parameters": {
+        "content": "![Chatwoot](https://app.chatwoot.com/brand-assets/logo_dark.svg)",
+        "height": 100,
+        "width": 260,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        160,
+        820
+      ],
+      "id": "daa0dc14-cd73-4c74-89fb-c62d35f407fe",
+      "name": "Sticky Note24"
+    },
+    {
+      "parameters": {
+        "content": "[![Hostinger](https://hpanel.hostinger.com/assets/images/logos/hostinger-white.svg)](https://www.hostinger.com.br/cart?product=vps%3Avps_kvm_2&period=12&referral_type=cart_link&REFERRALCODE=FAZERAI&referral_id=0196b71f-5704-7120-aded-f6753a53c121)\n",
+        "height": 80,
+        "width": 180,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        900
+      ],
+      "id": "557a6efb-431d-463f-a00c-fc2141714967",
+      "name": "Sticky Note26"
+    },
+    {
+      "parameters": {
+        "content": "[![Supabase logo](https://supabase.com/_next/image?url=https%3A%2F%2Ffrontend-assets.supabase.com%2Fwww%2F6d09404779ac%2F_next%2Fstatic%2Fmedia%2Fsupabase-logo-wordmark--dark.b36ebb5f.png&w=384&q=75&dpl=dpl_H9LPzQFg38dVjzWbzENRNVbXVDjJ)](https://supabase.com/)",
+        "height": 80,
+        "width": 260,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        860,
+        700
+      ],
+      "id": "b682f896-433c-4cf9-9eae-6a053f64cf32",
+      "name": "Sticky Note27"
+    },
+    {
+      "parameters": {
+        "content": "[![ElevenLabs](https://framerusercontent.com/images/YU6MnXR7ZjWNRjlYzx2Hrpcx0.png)](https://try.elevenlabs.io/9k5l5hagxkel)",
+        "height": 80,
+        "width": 160,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        960,
+        1340
+      ],
+      "id": "7fc6181c-d80b-45de-ad5e-92fee35f6eea",
+      "name": "Sticky Note28"
+    },
+    {
+      "parameters": {
+        "content": "## Sugestão\n\nDuplique a aba desse workflow para facilitar a configuração e não precisar ficar abrindo e fechando janelas",
+        "width": 680,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -920,
+        640
+      ],
+      "id": "9ad76058-8ce4-48aa-b3ae-a94bddc9f9b8",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "### Sub-workflows\n\nApós terminar os outros passos, não se esqueça de configurar os workflows secundários com suas credenciais!!\n\n- [ ] 2. MCP Google Calendar\n- [ ] 3. Baixar e enviar arquivo do Google Drive\n- [x] 4. Escalar humano\n- [ ] 5. Enviar mensagem para conversa\n- [ ] 6. Assistente interno",
+        "height": 280,
+        "width": 400,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        740,
+        2140
+      ],
+      "id": "20e8b232-7c1d-440e-be2d-6d641d04d74d",
+      "name": "Sticky Note29"
+    },
+    {
+      "parameters": {
+        "content": "## 1. Secretária",
+        "height": 80,
+        "width": 540,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -860,
+        -40
+      ],
+      "id": "e82791b7-e035-40ce-a02f-5fe956ed9dd7",
+      "name": "Sticky Note30"
+    },
+    {
+      "parameters": {
+        "content": "## Configurar variáveis no Info!!!",
+        "height": 80,
+        "width": 250,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        640
+      ],
+      "id": "94acf447-862b-4886-a3d1-5e6187320112",
+      "name": "Sticky Note31"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(*) FROM n8n_historico_mensagens;\nSELECT COUNT(*) FROM n8n_fila_mensagens;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        960,
+        1080
+      ],
+      "id": "1a34fdff-41eb-4ced-b27d-660344da1dd4",
+      "name": "Testar credencial - Supabase",
+      "credentials": {
+        "postgres": {
+          "id": "Y4nCMo1JrOEl5PKf",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Profile",
+        "operation": "Fetch Profile",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-chatwoot.chatWoot",
+      "typeVersion": 1,
+      "position": [
+        260,
+        1780
+      ],
+      "id": "3a7e7db7-16c3-4ca7-abf6-0352aa61cddb",
+      "name": "Testar credencial - Chatwoot",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## [Clique aqui e entre agora para tirar suas dúvidas](https://lucasmoreira.fazer.ai)\n[![Banner comunidade](https://framerusercontent.com/images/KIXMxk9eKCoCsNeVm1oaz5HnaQ.png)](https://lucasmoreira.fazer.ai)",
+        "height": 440,
+        "width": 1380,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        160,
+        100
+      ],
+      "id": "8da1921f-cd16-47ef-ae4c-2ec33c720a0b",
+      "name": "Sticky Note36"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "20cd5caa-0d33-451e-ac99-cdbe515283ce",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1580,
+        740
+      ],
+      "id": "63449691-a6ce-4497-8cf3-3a7ac4ce5587",
+      "name": "Webhook",
+      "webhookId": "20cd5caa-0d33-451e-ac99-cdbe515283ce"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT message FROM n8n_historico_mensagens\nWHERE session_id = '{{ $('Info').item.json.telefone }}'\nORDER BY created_at DESC\nLIMIT 10;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        6020,
+        -280
+      ],
+      "id": "7a0a4c16-031c-4d38-98ad-128b5dc32376",
+      "name": "Execute a SQL query1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "Y4nCMo1JrOEl5PKf",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega todos os itens (linhas do banco de dados) que chegaram\nconst items = $input.all();\n\n// VERIFICAÇÃO 1: Se a lista de itens estiver vazia, \n// retorna um histórico vazio e encerra a execução deste nó.\nif (items.length === 0) {\n  return [{ json: { historico_recente: '' } }];\n}\n\n// Se houver itens, continua o processo de formatação...\nlet historicoFormatado = '';\n\n// Inverte a ordem para mostrar do mais antigo para o mais novo\nfor (const item of items.reverse()) {\n\n  // VERIFICAÇÃO 2: Garante que o item tem a estrutura esperada antes de usá-lo\n  if (item.json && item.json.message && item.json.message.type && item.json.message.content) {\n    const msg = item.json.message;\n    const tipo = msg.type;\n    const conteudo = msg.content;\n    \n    if (tipo === 'human') {\n      historicoFormatado += `Humano: ${conteudo}\\n`;\n    } else if (tipo === 'ai') {\n      historicoFormatado += `Assistente: ${conteudo}\\n`;\n    }\n  }\n  // Se um item não tiver a estrutura correta, ele será simplesmente ignorado.\n}\n\n// Retorna o objeto com o histórico pronto para ser usado no prompt\nreturn [{ json: { historico_recente: historicoFormatado } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6240,
+        -280
+      ],
+      "id": "eec8dd9c-92bd-4166-a28b-a85354db56cb",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "resource": "chat-api",
+        "operation": "read-messages",
+        "instanceName": "Bot Hexia",
+        "remoteJid": "={{ $json.meta.sender.identifier }}",
+        "messageId": "={{ $json.messages[0].source_id.split(':')[1] }}"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        3040,
+        200
+      ],
+      "id": "c5b078e3-227f-414a-82e9-f529cfe1fb17",
+      "name": "Marcar mensagens como lidas1",
+      "credentials": {
+        "evolutionApi": {
+          "id": "qqo57UlV5GJZ2crX",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8ca54eae-15d1-49d3-af33-7a6e5d17b833",
+              "leftValue": "={{ $('Info').item.json.tipo }}",
+              "rightValue": "incoming",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "18b4969d-3c9c-4384-9432-e3a391a0555d",
+              "leftValue": "={{ !($json.labels || []).includes('agente-off') }}",
+              "rightValue": "agente-off",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        2240,
+        740
+      ],
+      "id": "58ee8503-2ddb-479a-844d-320c65afc6fd",
+      "name": "Mensagem chegando?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const ultima_mensagem_da_fila = $input.last()\nconst mensagem_do_workflow = $('Info').first()\n\nif (ultima_mensagem_da_fila.json.id_mensagem !== mensagem_do_workflow.json.id_mensagem) {\n  // Mensagem encavalada, para o workflow\n  return [];\n}\n\n// Pass-through da fila de mensagens\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3840,
+        740
+      ],
+      "id": "15efa490-173a-4696-ba2f-768d9dbbef18",
+      "name": "Mensagem encavalada?"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_fila_mensagens",
+          "mode": "list"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "telefone",
+              "value": "={{ $('Info').item.json.telefone }}"
+            }
+          ]
+        },
+        "sort": {
+          "values": [
+            {
+              "column": "timestamp"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3640,
+        740
+      ],
+      "id": "5857a883-b018-4027-839d-7c65d0a93d08",
+      "name": "Buscar mensagens",
+      "credentials": {
+        "postgres": {
+          "id": "Y4nCMo1JrOEl5PKf",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "deleteTable",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_fila_mensagens",
+          "mode": "list"
+        },
+        "deleteCommand": "delete",
+        "where": {
+          "values": [
+            {
+              "column": "telefone",
+              "value": "={{ $json.telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4060,
+        740
+      ],
+      "id": "72c65f77-29b3-40ad-989e-61acd016043e",
+      "name": "Limpar fila de mensagens",
+      "credentials": {
+        "postgres": {
+          "id": "Y4nCMo1JrOEl5PKf",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Processando mensagens encavaladas\n\nEssa etapa trata a situação em que o usuário envia múltiplas mensagens seguidas. O ponto negativo é o aumento no tempo de resposta do agente. Lógica dispensa uso de soluções mais complexas, como RabbitMQ.\n\nTempo de espera recomendado de ~16s. Quando estiver testando, recomendamos reduzir um pouco para ficar mais rápido de testar.\n",
+        "height": 540,
+        "width": 1080,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        560
+      ],
+      "id": "b0c1d8f7-c49c-4421-90bc-305804580b15",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "amount": 7
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3420,
+        740
+      ],
+      "id": "e3b32694-a15b-4994-9d54-ab749235c0dc",
+      "name": "Esperar",
+      "webhookId": "8dbe74cf-d417-4790-9c8a-c9cc0b869e9c"
+    },
+    {
+      "parameters": {
+        "content": "# Gerando resposta",
+        "height": 540,
+        "width": 2080,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        9840,
+        600
+      ],
+      "id": "0207df73-db1f-49f9-8a33-ac041fd0944c",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# Enviando resposta",
+        "height": 800,
+        "width": 1620,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        11980,
+        340
+      ],
+      "id": "07e46775-3d5c-4f80-af93-fda31cfdd3f6",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Info').item.json.mensagem }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "id": "1382cd26-d96e-4c55-99dd-2ca305ffe82e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b9a7e16f-b6e4-45d7-846d-92dcb3117593",
+                    "leftValue": "={{ $('Info').item.json.mensagem_de_audio }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Áudio"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2880,
+        740
+      ],
+      "id": "971036ae-4b3b-44e6-9260-c5131c42bea6",
+      "name": "Tipo de mensagem"
+    },
+    {
+      "parameters": {
+        "content": "# Processando áudio",
+        "height": 420,
+        "width": 1080,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        1140
+      ],
+      "id": "e8484688-37d7-47e4-9555-2ed704d6473b",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "Para testar, recomendamos criar uma tag \"testando-agente\" e usar no número que enviará as mensagens para a secretária durante os testes.\n\nVocê pode marcar o seu número no Chatwoot com essa tag para que o agente responda apenas você.\n\nDepois de testar e validar, só remover a regra do filtro pro seu agente responder todo mundo.\n\n",
+        "height": 180,
+        "width": 600,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2120,
+        900
+      ],
+      "id": "9a32bef5-383f-42f4-8943-b9bccbadc17b",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.asasasasa.shop/mcp/db6bc79d-ba32-41c4-b492-f0f5bbcb8fd3/sse",
+        "include": "selected",
+        "includeTools": [
+          "Buscar_todos_os_eventos",
+          "Atualizar_evento",
+          "Buscar_evento",
+          "Deletar_evento",
+          "Criar_evento"
+        ]
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        11420,
+        2040
+      ],
+      "id": "af243fdb-abbc-4661-802a-16a3056ca0bc",
+      "name": "MCP Google Calendar"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1kkxvayw3jnXTftCIFd_VwIbEhpE4vpb6",
+            "mode": "list",
+            "cachedResultName": "pasta-teste",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1kkxvayw3jnXTftCIFd_VwIbEhpE4vpb6"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTool",
+      "typeVersion": 3,
+      "position": [
+        11560,
+        2120
+      ],
+      "id": "abc97891-f2d3-4614-a1ab-4a8e78d4a752",
+      "name": "Listar arquivos",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ny4q7tvtvx6NPsc3",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Use essa ferramenta para baixar um arquivo do Google Drive e enviá-lo para o usuário.\n",
+        "workflowId": {
+          "__rl": true,
+          "value": "SRvH2pUOZ4wgIs2z",
+          "mode": "list",
+          "cachedResultName": "Baixar e enviar arquivo do Google Drive"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "file_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('file_id', ``, 'string') }}",
+            "id_conta": "={{ $('Info').item.json.id_conta }}",
+            "id_conversa": "={{ $('Info').item.json.id_conversa }}",
+            "url_chatwoot": "={{ $('Info').item.json.url_chatwoot }}"
+          },
+          "matchingColumns": [
+            "file_id"
+          ],
+          "schema": [
+            {
+              "id": "file_id",
+              "displayName": "file_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "id_conta",
+              "displayName": "id_conta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "id_conversa",
+              "displayName": "id_conversa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "url_chatwoot",
+              "displayName": "url_chatwoot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        11700,
+        2020
+      ],
+      "id": "b0ae35f7-763a-4e38-98b4-b62ce527b257",
+      "name": "Baixar e enviar arquivo"
+    },
+    {
+      "parameters": {
+        "content": "# Marcar como lida e \"digitando...\"",
+        "height": 540,
+        "width": 660,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        9160,
+        600
+      ],
+      "id": "c3373f41-050f-439c-9855-8071acdd02fe",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 1-5"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        12000,
+        1520
+      ],
+      "id": "4aa37ca7-5dd6-401a-8f12-a8f43faa2487",
+      "name": "Gatilho diário"
+    },
+    {
+      "parameters": {
+        "content": "# Assistente de confirmação de agendamentos - Diário\n\n",
+        "height": 600,
+        "width": 2080,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        11960,
+        1360
+      ],
+      "id": "193cf0ef-8bb7-4538-8019-6bf4e8673d68",
+      "name": "Sticky Note16"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Set mensagens').item.json.mensagem || $('Set mensagens').item.json.mensagem_audio }}",
+        "options": {
+          "systemMessage": "=## CONTEXTO\n\n- Hoje é: {{ $now.setZone(\"America/Sao_Paulo\").toFormat(\"cccc, dd/LL/yyyy 'às' HH:mm\") }}\n- Telefone: {{ $('Info').item.json.telefone }}\n- ID Conversa: {{ $('Info').item.json.id_conversa }}\n- ID Contato Chatwoot: {{ $('Info').item.json.contact_id }}\n- Histórico recente: {{ $json.prompt_para_agente }}\n\n---\n\n## PERFIL\n\nVocê é atendente do WhatsApp da \"Amanda Pfeifer Advocacia\", especializada SOMENTE em Defesa em Busca e Apreensão. Seu papel é qualificar leads, registrar dados e agendar reuniões com a Dra. Amanda Pfeifer.\n\nSe o usuário solicitar qualquer serviço fora de Defesa em Busca e Apreensão de Veículos, você NÃO deve seguir com o atendimento. Use escalar_humano imediatamente e informe que será redirecionado ao setor responsável.\n\n---\n\n## ESTILO\n\n- Nunca chame o Lead pelo nome completo, apenas seu primeiro nome;\n- Comunicação humana, direta e natural.\n- Separe parágrafos com **dupla quebra de linha** (para \"bolhas\").\n- Não usar emojis.\n\n---\n\n## FERRAMENTAS\n\n- `searchFAQ`: Responde perguntas sobre o escritório.\n- `Google Calendar`: Criar, buscar, atualizar e deletar eventos.  \n    - Agenda da Dra. Amanda: `24306c5f8561f73f351e8e8e69445c7b00b627669498e6759106d03bb4d05841@group.calendar.google.com`\n- `Atualizar_contato_chatwoot`: Atualiza nome do lead (requer `contact_id` e `name`).\n- `salvar_lead_crm`: Registra o lead no Pipefy.\n- `escalar_humano`: Para situações críticas.\n- `refletir`: Para validações complexas.\n- `salvar_agendamento`: Use logo após criar um evento. Requer `google_event_id`, `contact_id` e `telefone`.\n- `atualizar_status_agendamento`: Atualiza status do evento. Requer `google_event_id` e `status` (ex: confirmado).\n\n---\n\n## ETAPAS DO ATENDIMENTO\n\n### 1. ACOLHIMENTO\n\n- Se histórico vazio, envie:\n  1. \"Olá, tudo bem? Seja bem-vindo ao escritório Amanda Pfeifer Advocacia!\"\n  2. \"Antes de iniciarmos o seu atendimento, por favor, qual é o seu nome completo?\"\n\n- Se o cliente informar só o primeiro nome, continue com o que tiver.\n\n- Após obter o nome, chame `Atualizar_contato_chatwoot`, agradeça e apresente as opções de serviço.\n\n---\n\n### 2. QUALIFICAÇÃO\n\nSe o lead disser que o veículo foi apreendido, pergunte (uma por vez): se o veículo foi apreendido, data do último pagamento, banco e renda mensal\n\nAo solicitar a renda mensal, utilize a seguinte frase:\n\"Hoje, qual a sua renda mensal aproximada?\"\n(Nunca use justificativas ou explicações)\n\n>  **Nunca peça o e-mail nesta etapa. Peça apenas na etapa 4. AGENDAMENTO**\n\n---\n\n### 3. DECISÃO\n\n- **Lead não qualificado**  \n  - Veículo **não** apreendido **ou** renda **< R$5.000**\n  - Agradeça e finalize.  \n  - Use: `\"acao_interna\": \"finalizar\"`\n\n- **Lead qualificado**  \n  - Veículo **apreendido** e renda **> R$5.000**\n  - Use: `\"qualificacao_lead\": \"bom\"`\n  - Chame `salvar_lead_crm`\n  - Avance para o agendamento.\n\n---\n\n### 4. AGENDAMENTO\n\n- Antes de sugerir qualquer horário, OBRIGATORIAMENTE, use o Google Calendar para buscar e verificar a disponibilidade na agenda da Dra. Amanda.\n- SOMENTE após verificar, sugerir horários, esperar confirmação e depois criar evento.\n- Nunca ofereça horário às 12h.\n\nEstratégia de Sugestão de Horários:\n\n1. Prioridade: Agendar o mais breve possível.\n - Se o atendimento ocorrer na parte da manhã (até 12h):\n   - Sugira 2 horários no mesmo dia, para a parte da tarde.\n     - Ex: Um horário entre 13h e 15h, e outro entre 15h e 17h.\n\n - Se o atendimento ocorrer na parte da tarde (a partir de 12h):\n    - Primeiro, tente sugerir um horário para a parte da tarde do mesmo dia.\n    - Se não houver disponibilidade na tarde do mesmo dia OU para a segunda sugestão, sugira um horário para a parte da manhã do dia útil seguinte.\n    - Ex: Um horário entre 14h e 16h (mesmo dia), e outro entre 9h e 11h (dia seguinte).\n\n  - Se o atendimento ocorrer fora do horário comercial (ex: após 18h):\n    - Sugira 2 horários para o primeiro dia útil seguinte disponível, preferindo um na manhã e outro na tarde.\n     -  Ex: Um horário entre 9h e 11h e outro entre 14h e 16h no próximo dia útil.\n\n2. Regras para as sugestões:\n  - Sempre sugira dois horários distintos, preferencialmente em turnos diferentes (manhã/tarde) no dia mais próximo disponível.\n  - Nunca sugira dois horários consecutivos (ex: 9h e 10h). Deve haver um intervalo de pelo menos 2h.\n \n3. Lidando com a Preferência do Cliente:\n  Atenção: A IA NUNCA deve agendar reuniões com um período maior que 7 dias úteis a partir da data atual.\n\n  Se o cliente sugerir uma data que esteja além de 7 dias úteis:\n    A IA deve tentar ativamente trazer a reunião para uma data mais próxima, justificando a importância da agilidade para o caso (ex: \"Entendo, mas para casos de busca e apreensão, a agilidade é fundamental para a defesa do seu veículo. Teríamos horários disponíveis em datas mais próximas que poderiam agilizar o processo.\").\n    Se, mesmo após a justificativa, o lead insistir em uma data superior a 7 dias úteis, a IA deve utilizar a ferramenta escalar_humano imediatamente.\n\n  Se o cliente sugerir um horário específico que não esteja disponível:\n    A IA deve informar que o horário não está disponível.\n      Em seguida, deve sugerir dois horários alternativos disponíveis que estejam próximos ao horário desejado (um antes e um depois, se possível, ou os dois mais próximos disponíveis).\n\n4. Após confirmação de horário:\nPedir e-mail do cliente, após ele enviar -> Crie o evento -> Adicione o email do lead como convidado.\nChame salvar_agendamento.\nConfirme e finalize.\n\n---\n\n### 5. CONFIRMAÇÃO DE AGENDAMENTO\n\nSe o histórico indicar envio de lembrete e a resposta for \"sim\":\n\n1. Busque eventos do lead\n2. Atualize o título com `[CONFIRMADO]`\n3. Chame `atualizar_status_agendamento` com `status: confirmado`\n4. Agradeça\n5. Finalize\n\n---\n\n### ESCALONAMENTO\n\nUse `escalar_humano` se:\n- O lead pedir.\n- O tom for agressivo.\n- A conversa entrar em loop ou for incompreensível após 2 tentativas.\n- Não for dentro da área de DBA.\n\n---\n\n## REGRA FINAL: FORMATO DA RESPOSTA (JSON)\n\nSua saída final DEVE SER OBRIGATORIAMENTE um único objeto JSON válido.\n\n**Estrutura:**\n{\n\"resposta_para_usuario\": \"...\",\n\"acao_interna\": \"continuar | finalizar .\",\n\"dados_do_lead\": { /* Preencha com TODOS os dados coletados */ }\n}\n\n**Exemplo de Objeto `dados_do_lead` Preenchido:**\n{\n\"nome_completo\": \"...\",\n\"email\": \"...\",\n\"telefone\": \"...\",\n\"status_carro\": \"Sim\",\n\"data_pagamento\": \"...\",\n\"banco\": \"...\",\n\"renda\": \"...\",\n\"nicho\": \"Defesa em Busca e Apreensão (DBA)\",\n\"qualificacao_lead\": \"bom\"\n}",
+          "returnIntermediateSteps": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        10720,
+        780
+      ],
+      "id": "8d1b091e-e7ce-4f2f-a1b1-934940a89fda",
+      "name": "Secretária",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "id": "1382cd26-d96e-4c55-99dd-2ca305ffe82e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b9a7e16f-b6e4-45d7-846d-92dcb3117593",
+                    "leftValue": "={{ $('Info').item.json.mensagem_de_audio }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Áudio"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        11700,
+        660
+      ],
+      "id": "00fa9ff4-ad1b-480a-a7b5-28d6a22854f3",
+      "name": "Tipo de mensagem1"
+    },
+    {
+      "parameters": {
+        "content": "### Importante!!\n\nEssa lógica só irá funcionar com o workflow ativo (modo produção).\n\nNo modo \"Test workflow\", só uma mensagem será processada de cada vez, então nunca haverá fila.",
+        "height": 180,
+        "width": 400,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3720,
+        900
+      ],
+      "id": "9e28c4ba-0249-4fed-81d2-ef935db6d313",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "description": "Use a ferramenta para refletir sobre algo. Ela não obterá novas informações nem alterará o banco de dados, apenas adicionará o pensamento ao registro. Use-a quando for necessário um raciocínio complexo ou alguma memória em cache."
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1,
+      "position": [
+        11140,
+        2020
+      ],
+      "id": "e47cca4d-b25b-486b-a01e-e3f5d0e2449a",
+      "name": "Refletir"
+    },
+    {
+      "parameters": {
+        "content": "## Notas sobre agendas Google Calendar\n\nPara referenciar uma agenda do Google Calendar corretamente, acesse as configurações da agenda, clique em \"Integrar agenda\", e copie o \"ID da agenda\".\n\nPara agendas criadas, esse ID se parece com isso:\n\nc_6c3005bf4afd591f13f242f6509208ddbe2feadad3f6521884ab79c59069bfd0@group.calendar.google.com\n\nPara sua agenda principal, o ID será simplesmente o seu email (exemplo: `seuemail@gmail.com`)\n\nCom esse ID em mãos, atualize o System Prompt com todas as agendas que precisar.\n",
+        "height": 400,
+        "width": 480,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        9840,
+        1160
+      ],
+      "id": "bda5d430-8464-4782-8173-dcbb5495f807",
+      "name": "Sticky Note17"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Envia uma mensagem de reação como resposta a uma mensagem do usuário. Reação é sempre um emoji.",
+        "method": "POST",
+        "url": "={{ $('Info').item.json.url_chatwoot }}/api/v1/accounts/{{ $('Info').item.json.id_conta }}/conversations/{{ $('Info').item.json.id_conversa }}/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "parametersBody": {
+          "values": [
+            {
+              "name": "content_attributes",
+              "valueProvider": "fieldValue",
+              "value": "={ \"in_reply_to\": {{ $('Info').item.json.id_mensagem }}, \"is_reaction\": true }"
+            },
+            {
+              "name": "content"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        11260,
+        2020
+      ],
+      "id": "3a3a09c4-5aeb-4e94-bb7a-2eee54b3370f",
+      "name": "Reagir mensagem",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_fila_mensagens",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telefone": "={{ $('Info').item.json.telefone }}",
+            "mensagem": "={{ $('Info').item.json.mensagem }}",
+            "timestamp": "={{ new Date($('Info').item.json.timestamp * 1000).toISOString() }}",
+            "id_mensagem": "={{ $('Info').item.json.id_mensagem }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "id_mensagem",
+              "displayName": "id_mensagem",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "mensagem",
+              "displayName": "mensagem",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3220,
+        740
+      ],
+      "id": "059035a1-7cc5-4ce7-9947-e561c99d2ce7",
+      "name": "Enfileirar mensagem.",
+      "credentials": {
+        "postgres": {
+          "id": "Y4nCMo1JrOEl5PKf",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info').item.json.url_chatwoot }}/api/v1/accounts/{{ $('Info').item.json.id_conta }}/conversations/{{ $('Info').item.json.id_conversa }}/update_last_seen",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        9260,
+        780
+      ],
+      "id": "d4785044-42bf-4cd2-96d5-993cf5ede54c",
+      "name": "Marcar como lidas",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info').item.json.url_chatwoot }}/api/v1/accounts/{{ $('Info').item.json.id_conta }}/conversations/{{ $('Info').item.json.id_conversa }}/toggle_typing_status",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "typing_status",
+              "value": "={{ $('Info').item.json.mensagem_de_audio ? 'recording' : 'on' }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        9420,
+        780
+      ],
+      "id": "67cad712-d0c6-46e2-bc8b-5445db63d2b1",
+      "name": "Digitando/Gravando...",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7eab8669-6929-4dc6-b3e2-943065bc306c",
+              "name": "mensagem",
+              "value": "={{ $('Info').item.json.mensagem ? $('Mensagem encavalada?').all().map(info => info.json.mensagem).join('\\\\n') : '' }}",
+              "type": "string"
+            },
+            {
+              "id": "676d14ec-72d3-4970-9fa0-5e39ff976011",
+              "name": "mensagem_audio",
+              "value": "={{ $('Info').item.json.mensagem_de_audio ? $('Transcrever audio').item.json.text : '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        9600,
+        780
+      ],
+      "id": "0dcbae52-e555-4226-9c57-a06e12fe7c20",
+      "name": "Set mensagens",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Webhook').item.json.body.conversation.messages[0].attachments[0].data_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3180,
+        1240
+      ],
+      "id": "97da8be9-050e-449e-9b47-8299261c3c2f",
+      "name": "Download áudio"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {
+          "language": "pt"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        4020,
+        1240
+      ],
+      "id": "619a445d-0660-4b6d-b710-35abbba75091",
+      "name": "Transcrever audio",
+      "credentials": {
+        "openAiApi": {
+          "id": "D94cG37buFalyMsb",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        3460,
+        1240
+      ],
+      "id": "f94610be-bf57-4d06-ab0d-c7f6c7eaf1cd",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data",
+        "options": {
+          "fileName": "audio.mp3",
+          "mimeType": "audio.mpeg"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        3740,
+        1240
+      ],
+      "id": "a39b2753-c1b3-4b9e-967d-2f4938f761b1",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "content": "O N8N tem um bug em operar com arquivos em algumas ocasiões.\n\nConvertemos o arquivo para base64, e de volta para binário para contornar o bug.",
+        "height": 120,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3660,
+        1380
+      ],
+      "id": "280315eb-f04e-48e6-a36e-f591c329320f",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info').item.json.url_chatwoot }}/api/v1/accounts/{{ $('Info').item.json.id_conta }}/conversations/{{ $('Info').item.json.id_conversa }}/toggle_typing_status",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "typing_status",
+              "value": "off"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        12480,
+        740
+      ],
+      "id": "e6a75e17-8292-4ea4-b9ac-575a13d23591",
+      "name": "Resetar status",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info').item.json.url_chatwoot }}/api/v1/accounts/{{ $('Info').item.json.id_conta }}/conversations/{{ $('Info').item.json.id_conversa }}/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "is_recorded_audio",
+              "value": "=[\"{{ $binary.data.fileName }}\"]"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "attachments[]",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        13220,
+        940
+      ],
+      "id": "56790304-9c33-4abd-885a-03541df91b26",
+      "name": "Enviar áudio",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info').item.json.url_chatwoot }}/api/v1/accounts/{{ $('Info').item.json.id_conta }}/conversations/{{ $('Info').item.json.id_conversa }}/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $('Dividir Mensagem').item.json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        13320,
+        740
+      ],
+      "id": "53017aa1-0ac0-4795-b6b2-6fd2fb6f5319",
+      "name": "Enviar texto.",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Separando dados output').item.json.resposta_para_usuario }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "id": "1382cd26-d96e-4c55-99dd-2ca305ffe82e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b9a7e16f-b6e4-45d7-846d-92dcb3117593",
+                    "leftValue": "={{ $('Info').item.json.mensagem_de_audio }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Áudio"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        12660,
+        740
+      ],
+      "id": "bf32a578-4546-4bfb-8566-85c91ffe209a",
+      "name": "Tipo de mensagem2"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "=data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        13060,
+        940
+      ],
+      "id": "6e05a56d-b373-4eec-9cd9-a9237a65dc97",
+      "name": "Base64 para áudio"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "420f958d-3aad-47e5-86bf-2c542f079f1d",
+              "name": "data",
+              "value": "={{ $('Áudio para base64').item.json.data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        12880,
+        940
+      ],
+      "id": "648439fd-dc9c-465f-9b93-33faada12f72",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c8fd010d-6096-4a50-b3e2-e9fe26661840",
+              "name": "id_mensagem",
+              "value": "={{ $json.messages[0].id }}",
+              "type": "string"
+            },
+            {
+              "id": "1b513343-9b6a-4f6e-a012-ed819bf34a31",
+              "name": "id_conta",
+              "value": "={{ $('Webhook').item.json.body.account.id }}",
+              "type": "string"
+            },
+            {
+              "id": "05c14b9a-5f27-465a-a047-71553826bd7a",
+              "name": "id_conversa",
+              "value": "={{ $('Webhook').item.json.body.conversation.id }}",
+              "type": "string"
+            },
+            {
+              "id": "8bf522a6-75fb-434a-854c-b736539309e1",
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.conversation.meta.sender.phone_number.replace('+', '') }}",
+              "type": "string"
+            },
+            {
+              "id": "7256f8c3-e3b0-4508-89d4-0d7d95ece7d8",
+              "name": "nome",
+              "value": "={{ $('Webhook').item.json.body.conversation.messages[0].sender.name }}",
+              "type": "string"
+            },
+            {
+              "id": "0d622a33-f313-4758-a764-fa6cbf2b0587",
+              "name": "mensagem",
+              "value": "={{ $('Webhook').item.json.body.conversation.messages[0].content }}",
+              "type": "string"
+            },
+            {
+              "id": "8f4b9d84-56e0-4f45-9f17-68c53f365f43",
+              "name": "mensagem_de_audio",
+              "value": "={{ $('Webhook').item.json.body.attachments?.some(a => a.file_type === 'audio') || false }}",
+              "type": "boolean"
+            },
+            {
+              "id": "24caf88e-74ce-43ab-8dc4-1fff471b706f",
+              "name": "tipo",
+              "value": "={{ $('Webhook').item.json.body.message_type }}",
+              "type": "string"
+            },
+            {
+              "id": "573669d2-1e43-4010-8c82-a67459ffe1db",
+              "name": "etiquetas",
+              "value": "={{ $json.labels }}",
+              "type": "array"
+            },
+            {
+              "id": "40ff895f-f63f-4e4f-bba3-c7d803c277f1",
+              "name": "url_chatwoot",
+              "value": "http://192.168.100.2:3000/",
+              "type": "string"
+            },
+            {
+              "id": "cf71dea1-d585-4235-8f05-29bc5f82b5df",
+              "name": "telegram_chat_id",
+              "value": "<colar seu telegram chat id>",
+              "type": "string"
+            },
+            {
+              "id": "0f9bd9c0-4e43-418b-8641-8b1d9791201d",
+              "name": "timestamp",
+              "value": "={{ $('Webhook').item.json.body.conversation.messages[0].created_at }}",
+              "type": "string"
+            },
+            {
+              "id": "1b655661-1c9c-4a7c-aa44-3b385a3088c8",
+              "name": "contact_id",
+              "value": "={{ $('Webhook').item.json.body.conversation.messages[0].sender_id }}",
+              "type": "string"
+            },
+            {
+              "id": "32076903-36ea-4707-9114-5bf56d94c5a4",
+              "name": "nicho",
+              "value": "={{ $json.meta.sender.custom_attributes.nicho }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2020,
+        740
+      ],
+      "id": "c74d9a06-23be-4b71-bff2-a9fb9155b30e",
+      "name": "Info"
+    },
+    {
+      "parameters": {
+        "description": "Chame essa ferramenta para direcionar o atendimento para o gestor responsável.",
+        "workflowId": {
+          "__rl": true,
+          "value": "BQW3XfWDBnIBJSgR",
+          "mode": "list",
+          "cachedResultName": "Escalar humano"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telefone": "={{ $('Info').item.json.telefone }}",
+            "nome": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('nome', ``, 'string') }}",
+            "ultima_mensagem": "={{ $('Set mensagens').item.json.mensagem || $('Set mensagens').item.json.mensagem_audio }}",
+            "id_conta": "={{ $('Info').item.json.id_conta }}",
+            "id_conversa": "={{ $('Info').item.json.id_conversa }}",
+            "telegram_chat_id": "={{ $('Info').item.json.telegram_chat_id }}",
+            "url_chatwoot": "={{ $('Info').item.json.url_chatwoot }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "nome",
+              "displayName": "nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "ultima_mensagem",
+              "displayName": "ultima_mensagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "id_conta",
+              "displayName": "id_conta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "id_conversa",
+              "displayName": "id_conversa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "telegram_chat_id",
+              "displayName": "telegram_chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "url_chatwoot",
+              "displayName": "url_chatwoot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        11840,
+        1860
+      ],
+      "id": "8c68fc9c-ae74-4d7a-85bb-69e1ec294e35",
+      "name": "Escalar humano"
+    },
+    {
+      "parameters": {
+        "content": "### Configurar telegram_chat_id no node Info!!!",
+        "height": 80,
+        "width": 200,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        10820,
+        1160
+      ],
+      "id": "3530051e-32fe-4c0a-a454-ce66ea14de98",
+      "name": "Sticky Note25"
+    },
+    {
+      "parameters": {
+        "content": "### Configurar workflow do MCP Google Calendar!!!",
+        "height": 80,
+        "width": 200,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        10400,
+        1160
+      ],
+      "id": "89f54263-863f-4669-8b75-524ceb5b8916",
+      "name": "Sticky Note33"
+    },
+    {
+      "parameters": {
+        "content": "### Caso não use a voz da Keren, não se esqueça de atualizar o ID no node \"Gerar áudio\"\n\nAlterar esse ID que está no final da URL: `33B4UnXyTNbgLmdEDh5P`",
+        "width": 300,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        11440,
+        1160
+      ],
+      "id": "7e8602de-ce5d-4d5f-8ded-02930afaf7f8",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "content": "## Importante\n\nSe a mensagem não está sendo marcada como lida, verifique no WhatsApp se essa função está habilitada.",
+        "width": 320,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        9480,
+        960
+      ],
+      "id": "84662ca1-8630-4f78-8c21-ea5d08e8d9e6",
+      "name": "Sticky Note34"
+    },
+    {
+      "parameters": {
+        "resource": "Conversations",
+        "operation": "Get Details Of A Conversation",
+        "account_id": "={{ $json.body.account.id }}",
+        "conversation_id": "={{ $json.body.conversation.id }}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-chatwoot.chatWoot",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        740
+      ],
+      "id": "43077778-49af-44fb-bfcc-968575dcab01",
+      "name": "Conversation Details",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        11000,
+        2000
+      ],
+      "id": "e8739648-24a8-42ed-81b6-20e76bd60adf",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "D94cG37buFalyMsb",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        13540,
+        740
+      ],
+      "id": "f2d42e32-4468-456f-9d36-3600f56cad89",
+      "name": "Wait",
+      "webhookId": "6aa67b74-7846-467e-b836-82402131f67c"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 3
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        12080,
+        3560
+      ],
+      "id": "a46c5454-3b1e-4f02-81e6-ffb340f92bfb",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1AqlyrpdfFULrq1VtY1vXFsEmkUvz35toFAfc2Q4aa7M",
+          "mode": "list",
+          "cachedResultName": "FAQ - BOT Advocacia",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1AqlyrpdfFULrq1VtY1vXFsEmkUvz35toFAfc2Q4aa7M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1AqlyrpdfFULrq1VtY1vXFsEmkUvz35toFAfc2Q4aa7M/edit#gid=0"
+        },
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "specifyRange"
+            }
+          },
+          "outputFormatting": {
+            "values": {
+              "general": "UNFORMATTED_VALUE",
+              "date": "FORMATTED_STRING"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        12260,
+        3560
+      ],
+      "id": "bed3d3c5-890b-435a-a9f0-7fed9c96ee1e",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "S32IDmfef8hlZApq",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7f993a11-1de8-4949-a3d4-1cc41ea2cfbd",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "novo",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "f47295e5-ece3-472f-ba6b-3b06531bcaff",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "atualizado",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        12440,
+        3560
+      ],
+      "id": "8c31ff0e-bcb4-423c-8384-40cf260b9cd1",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d5f4d3d9-e765-4da5-9eed-c2cc55d1dd86",
+              "name": "pageContent",
+              "value": "=Pergunta: {{ $json.Pergunta }} Resposta: {{ $json.Resposta }}",
+              "type": "string"
+            },
+            {
+              "id": "9c598e7d-b2a6-414d-ac23-816e773777ab",
+              "name": "metadata",
+              "value": "={{ JSON.parse($json['Dados operacionais']) }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        12620,
+        3560
+      ],
+      "id": "86465f5b-52a9-48b7-9c86-e793be2d6adc",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        12760,
+        3760
+      ],
+      "id": "a9046280-e6d2-490b-bde6-2badc2eee627",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "D94cG37buFalyMsb",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "faq_rag",
+          "mode": "list",
+          "cachedResultName": "faq_rag"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        12800,
+        3560
+      ],
+      "id": "f2f87d2f-8304-4975-a499-12a40b378924",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.pageContent }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "metadata",
+                "value": "={{ $json.metadata }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        12920,
+        3760
+      ],
+      "id": "bdeb52ff-9ab1-4885-b6a9-6e3e0adea055",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        10260,
+        2000
+      ],
+      "id": "dd67e492-1d2a-423d-91f4-fece302607d8",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "D94cG37buFalyMsb",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use essa tool sempre que o usuário fizer alguma pergunta",
+        "tableName": {
+          "__rl": true,
+          "value": "faq_rag",
+          "mode": "list",
+          "cachedResultName": "faq_rag"
+        },
+        "useReranker": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        10080,
+        1880
+      ],
+      "id": "8540e9ac-83cf-4477-86de-c9dec0b789d9",
+      "name": "searchFAQ",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Criação de Banco de Dados Vetorial a partir de dados do Google sheets\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)",
+        "height": 520,
+        "width": 1560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        12020,
+        3420
+      ],
+      "id": "91e10659-fd2b-4a60-ac8e-b8861e7a02ba",
+      "name": "Sticky Note35"
+    },
+    {
+      "parameters": {
+        "resource": "Conversation Labels",
+        "operation": "Conversation Add Labels",
+        "account_id": "=1",
+        "conversation_id": "={{ $('Loop Over Items').item.json.conversation_id }}",
+        "labels": "[\"aguardando-resposta-lead\"]\n",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-chatwoot.chatWoot",
+      "typeVersion": 1,
+      "position": [
+        15280,
+        420
+      ],
+      "id": "096f9233-d6c2-4d15-9211-392a61ae885c",
+      "name": "Adiciona etiqueta aguardando lead",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Conversation Labels",
+        "operation": "Conversation Add Labels",
+        "account_id": "=1",
+        "conversation_id": "={{ $('Info').item.json.id_conversa }}",
+        "labels": "=[\"{{ $json.etiquetas_como_string }}\"]  ",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-chatwoot.chatWoot",
+      "typeVersion": 1,
+      "position": [
+        2680,
+        740
+      ],
+      "id": "b1a9e707-fd78-4e9f-8fb5-431083b108d6",
+      "name": "Remove etiqueta",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.rerankerCohere",
+      "typeVersion": 1,
+      "position": [
+        10020,
+        2020
+      ],
+      "id": "33839e48-fbc9-4d34-a141-4cd4a7a16347",
+      "name": "Reranker Cohere",
+      "credentials": {
+        "cohereApi": {
+          "id": "5xLiCVKDgFqljCNO",
+          "name": "CohereApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        13120,
+        620
+      ],
+      "id": "a3660f98-5ef8-4efe-9552-6a9cbb2a579e",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega o texto do nó anterior\nconst textoCompleto = $('Separando dados output').first().json.resposta_para_usuario;\n\n\n\n// $('Merge').first().json.text\n// $('Formatar texto').first().json.text\n\n// Nosso novo separador: a quebra de linha dupla.\nconst separador = '\\n\\n';\n\n// Se o texto não existe ou não contém o separador, envia como uma mensagem única.\nif (!textoCompleto || !textoCompleto.includes(separador)) {\n  return [{ json: { text: textoCompleto || '' } }];\n}\n\n// 1. Divide o texto em um array usando a quebra de linha dupla\nconst partesDoTexto = textoCompleto.split(separador);\n\n// 2. Transforma cada parte do texto em um item do n8n\nconst itensSaida = partesDoTexto.map(parte => {\n  // Ignora partes que ficarem vazias \n  if (parte.trim() === '') {\n    return null;\n  }\n  \n  // Cria o objeto no formato que o n8n espera\n  return {\n    json: {\n      text: parte.trim() // .trim() remove espaços/linhas em branco antes e depois\n    }\n  };\n}).filter(item => item !== null); // 3. Remove os itens que ficaram nulos\n\n// Retorna a lista de itens, prontos para o fluxo\nreturn itensSaida;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        12880,
+        620
+      ],
+      "id": "bc606f8e-1ebb-4f9e-9744-1ef0f90808e1",
+      "name": "Dividir Mensagem"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega a nova mensagem do usuário, que está no nó 'Info'\nconst novaMensagem = $('Info').first().json.mensagem;\n\n// Pega o resultado da busca no Supabase\nconst resultadoDb = $input.all();\n\n// Pega o resumo anterior. Se não existir (primeira mensagem), usa \"Nenhum\".\nconst resumoAnterior = resultadoDb[0]?.json.historico_resumido || 'Nenhum';\n\n// Monta o prompt combinado que a IA vai receber\nconst promptCombinado = `Resumo da conversa até agora:\\n${resumoAnterior}\\n\\nNova mensagem do usuário:\\n${novaMensagem}`;\n\n// Retorna o prompt combinado para ser usado pelo Agente\nreturn [{ json: { prompt_para_agente: promptCombinado } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        10100,
+        780
+      ],
+      "id": "b11d8d3e-4494-4730-8412-926636191b2e",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "de1d1751-d30e-4f30-b07e-a42e3083425f",
+              "name": "resposta_para_usuario",
+              "value": "={{ JSON.parse($json.output).resposta_para_usuario }}",
+              "type": "string"
+            },
+            {
+              "id": "50ae9b46-d082-4306-b246-dab9e0accbb2",
+              "name": "acao_interna",
+              "value": "={{ JSON.parse($json.output).acao_interna }}",
+              "type": "string"
+            },
+            {
+              "id": "7f49c7ad-49ca-47f6-a32e-2ef7953e90f1",
+              "name": "dados_do_lead",
+              "value": "={{ JSON.parse($json.output).dados_do_lead }}",
+              "type": "string"
+            },
+            {
+              "id": "6330737f-b853-4c3f-9d8d-aa9b65e75933",
+              "name": "id_contato_final",
+              "value": "={{ $('Webhook').item.json.body.conversation.contact_inbox.contact_id }}",
+              "type": "string"
+            },
+            {
+              "id": "a070f3ac-30ff-4f11-9ad0-0071a188c3ff",
+              "name": "id_conversa_final",
+              "value": "={{ $('Webhook').item.json.body.conversation.messages[0].conversation_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        12280,
+        740
+      ],
+      "id": "5e25e05b-7bb4-4510-8bb0-5b19ec696641",
+      "name": "Separando dados output"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Separando dados output').item.json.acao_interna }}",
+                    "rightValue": "continuar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "bce4fe5c-b63c-4cce-8ef2-5186f64506e7"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "24cfff97-f37c-4011-8019-1714de0349bb",
+                    "leftValue": "={{ $('Separando dados output').item.json.acao_interna }}",
+                    "rightValue": "finalizar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "dc391680-7fa3-4232-af44-53a83b492130",
+                    "leftValue": "={{ $('Separando dados output').item.json.acao_interna }}",
+                    "rightValue": "finalizar_e_salvar_lead",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        14940,
+        600
+      ],
+      "id": "372a4c21-4161-48c2-b087-7f936b2525d9",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c4f1a63b-39c8-4c45-b7b7-02f278272296",
+              "name": "acao_interna",
+              "value": "={{ $('Separando dados output').item.json.acao_interna }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        13320,
+        540
+      ],
+      "id": "2d95ba57-0858-44e4-9b21-9523cf294233",
+      "name": "Edit Fields2",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT historico_resumido FROM sessoes_de_conversa\nWHERE telefone_cliente = '{{ $('Info').item.json.telefone }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        9900,
+        780
+      ],
+      "id": "ab9be97b-5521-49b0-82d8-28e3db194875",
+      "name": "Buscar Resumo Anterior",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "Y4nCMo1JrOEl5PKf",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "87d65f1e-9add-424f-aae7-fda3062c6a53",
+              "leftValue": "={{ $json.telefone_cliente }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        14080,
+        540
+      ],
+      "id": "5c965444-36c4-4458-b51d-8531743d163a",
+      "name": "Verificar se Resumo existe"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "sessoes_de_conversa",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone_cliente",
+              "keyValue": "={{ $('Info').item.json.telefone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        13880,
+        540
+      ],
+      "id": "1504673b-4466-4d80-b4a2-09a52afc330e",
+      "name": "Procura Resumo",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Você é um assistente que sumariza conversas em tópicos. Atualize o 'Resumo Anterior' com as 'Novas Mensagens'. Mantenha o formato de tópicos, seja conciso e em português",
+              "role": "system"
+            },
+            {
+              "content": "=Você receberá:\n\n1. O histórico anterior resumido da conversa \n2. Novos trechos da conversa entre um usuário e a IA\n\n[RESUMO ANTERIOR]\n{{ $('Buscar Resumo Anterior').item.json.historico_resumido || \"Nenhum\" }}\n\n[NOVAS MENSAGENS]\nHumano: {{ $('Info').item.json.mensagem }}\nAssistente: {{ $('Separando dados output').item.json.resposta_para_usuario }}\n\n\nSua tarefa:\n- Atualizar o resumo anterior com o que for novo e relevante\n- Detectar **padrões de repetição**, mesmo que as mensagens do usuário sejam diferentes\n- Caso o usuário tenha mandado variações da mesma ideia (ex: várias saudações) e a IA tenha respondido a mesma coisa, identifique isso como possível **loop**\n\nCritérios para detectar um loop:\n- Mensagens diferentes do usuário (como “oi”, “olá”, “bom dia”) que resultam em **respostas idênticas ou quase idênticas** da IA\n- Mais de duas repetições seguidas do mesmo padrão (ex: saudação → mesma resposta)\n- Pode sugerir que o usuário não teve avanço na conversa ou que a IA está estagnada\n\nExemplo de loop detectado:\n> - Usuário enviou três variações de saudação (\"oi\", \"olá\", \"bom dia\") e recebeu a mesma resposta da IA — possível loop de saudação ou falta de avanço no atendimento.\n- ...\n\nFoque em para salvar resumo:\n- Informações fornecidas pelo cliente\n- Decisões tomadas\n- Problemas levantados\n- Dúvidas importantes\n- Mudanças de agendamento\n- Progresso na conversa\n\n\n\nFormato de saída:\n**Resumo da Conversa:**\n- ...\n\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        13500,
+        540
+      ],
+      "id": "0408fff9-91c3-476b-a160-11960c60926c",
+      "name": "Cria Resumo",
+      "credentials": {
+        "openAiApi": {
+          "id": "D94cG37buFalyMsb",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "sessoes_de_conversa",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telefone_cliente",
+              "fieldValue": "={{ $('Info').item.json.telefone }}"
+            },
+            {
+              "fieldId": "historico_resumido",
+              "fieldValue": "={{ $('Cria Resumo').item.json.message.content }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        14300,
+        460
+      ],
+      "id": "0e1d7db9-e494-4aa8-a709-62dfb02039e4",
+      "name": "Colocar resumo no banco",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "sessoes_de_conversa",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone_cliente",
+              "condition": "eq",
+              "keyValue": "={{ $('Info').item.json.telefone }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "historico_resumido",
+              "fieldValue": "={{ $('Cria Resumo').item.json.message.content }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        14300,
+        680
+      ],
+      "id": "df5bbf5f-2262-4905-ba9b-60ada964bef2",
+      "name": "Atualizar resumo no banco",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7e9d23d5-99e3-4486-8d98-d75cf2497a16",
+              "name": "name",
+              "value": "={{ JSON.parse($('Separando dados output').item.json.dados_do_lead).nome_completo || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "2a9b9bbd-78eb-4141-ac24-27dce5943351",
+              "name": "email",
+              "value": "={{ JSON.parse($('Separando dados output').item.json.dados_do_lead).email || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "e8409df8-5a14-40fb-9b30-4e0487b894ae",
+              "name": "telefone",
+              "value": "={{ $('Info').item.json.telefone || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "7bc98621-8716-4f1a-92af-c241f583688a",
+              "name": "status_carro",
+              "value": "={{ (JSON.parse($('Separando dados output').item.json.dados_do_lead).status_carro)}}",
+              "type": "string"
+            },
+            {
+              "id": "cd1546c1-ed47-488f-9bd9-fb1f93d9350c",
+              "name": "data_pagamento",
+              "value": "={{ JSON.parse($('Separando dados output').item.json.dados_do_lead).data_pagamento || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "bbd1f849-b206-427d-aa48-9fd379fd3405",
+              "name": "banco",
+              "value": "={{ JSON.parse($('Separando dados output').item.json.dados_do_lead).banco || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "0b52a55a-bee1-4ed2-8d4d-9b5e25077fd1",
+              "name": "renda",
+              "value": "={{ JSON.parse($('Separando dados output').item.json.dados_do_lead).renda || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "0613caa6-59fd-43e4-9793-600fa2fe67f6",
+              "name": "qualificacao",
+              "value": "={{ JSON.parse($('Separando dados output').item.json.dados_do_lead).qualificacao_lead || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "6762c815-f40d-4a63-aff3-633cf149ae48",
+              "name": "nicho",
+              "value": "={{ JSON.parse($('Separando dados output').item.json.dados_do_lead).nicho || 'Defesa em Busca e Apreensão (DBA)' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        14580,
+        600
+      ],
+      "id": "70f0360f-f580-4a6c-a080-94e7febf2adb",
+      "name": "Preparar CRM"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.pipefy.com/graphql",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJQaXBlZnkiLCJpYXQiOjE3NDk1MjczMzUsImp0aSI6IjYxNzIxZGFlLWQyMWEtNGY0ZC1hMmYwLTlmNDI0N2I4ZjgzMiIsInN1YiI6MzA2NzM2OTk1LCJ1c2VyIjp7ImlkIjozMDY3MzY5OTUsImVtYWlsIjoibGlwZS5zc29kcmVAZ21haWwuY29tIn19.U0uzqlKNrnlGWs0x85JWAcwTR8qcxpK5hx-DZZZs3YwhLV2MloUeOmxaVqBcHr9PfdbmvuT7VvyYv_1vI0-fkg"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "=mutation {\n  createCard(input: {\n    pipe_id: \"306533961\",\n    title: \"Filipe\",\n    fields_attributes: [\n      { field_id: \"nome_do_lead\", field_value: \"{{ $('Preparar CRM').item.json.name }}\" },\n      { field_id: \"email\", field_value: \"{{ $('Preparar CRM').item.json.email }}\" },\n      { field_id: \"n_mero_de_telefone\", field_value: \"{{ $('Preparar CRM').item.json.telefone }}\" },\n      { field_id: \"nicho\", field_value: \"{{ $('Preparar CRM').item.json.nicho }}\" },\n      { field_id: \"carro_j_foi_apreendido\", field_value: \"{{ $('Preparar CRM').item.json.status_carro }}\" },\n      { field_id: \"data_do_ltimo_pagamento\", field_value: \"{{ $('Preparar CRM').item.json.data_pagamento }}\" },\n      { field_id: \"institui_o_financeira_banco_do_contrato\", field_value: \"{{ $('Preparar CRM').item.json.banco }}\" },\n      { field_id: \"renda_mensal\", field_value: \"{{ $('Preparar CRM').item.json.renda }}\" },\n      { field_id: \"observa_es\", field_value: \"Lead classificado como: {{ $('Preparar CRM').item.json.qualificacao }}\" }\n    ]\n  }) {\n    card {\n      id\n      title\n    }\n  }\n}\n\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "545b8571-a617-4de6-b366-a425ca0a1c74",
+      "name": "CRIAR CARDS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        14640,
+        1280
+      ],
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "resource": "Conversations",
+        "operation": "Toggle Status Of A Conversation",
+        "account_id": 1,
+        "conversation_id": "={{ $('Enviar texto.').item.json.conversation_id }}",
+        "status": "resolved",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-chatwoot.chatWoot",
+      "typeVersion": 1,
+      "position": [
+        15280,
+        800
+      ],
+      "id": "48333df2-4104-4703-a655-7a8061e7ab54",
+      "name": "Muda Status para Resolved",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Conversations",
+        "operation": "Toggle Status Of A Conversation",
+        "account_id": 1,
+        "conversation_id": "={{ $('Enviar texto.').item.json.conversation_id }}",
+        "status": "resolved",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-chatwoot.chatWoot",
+      "typeVersion": 1,
+      "position": [
+        15280,
+        600
+      ],
+      "id": "f5ff6bd4-ffb1-4c9f-be08-6ca80edb0f63",
+      "name": "Muda Status para Resolved1",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=http://chatwoot-rails:3000/api/v1/accounts/1/contacts/{{ $('Separando dados output').item.json.id_contato_final }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "specifyBody": "=json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={\n  \"custom_attributes\": {\n    \"carro_apreendido\": \"{{ $json.status_carro }}\",\n    \"renda_mensal\": \"{{ $json.renda }}\",\n    \"ultimo_pagamento_carro\": \"{{ $json.data_pagamento }}\",\n    \"banco\": \"{{ $json.banco }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        14760,
+        600
+      ],
+      "id": "1ea8ef86-f99e-4079-ac11-bfd4fb8beff7",
+      "name": "Adiciona Atributos Personalizados ao Chatwoot",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AuNvF619eaPkaBKu",
+          "name": "Header Auth account"
+        },
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Altera Banco de dados\n** Faz alterações no banco de dados para atualizar ou criar resumos da conversa",
+        "height": 800,
+        "width": 640
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        13640,
+        340
+      ],
+      "id": "5acebb07-9a0b-48a8-b59a-d28329096e00",
+      "name": "Sticky Note37"
+    },
+    {
+      "parameters": {
+        "content": "## Finalização do fluxo\n** Arruma dados para o CRM e atributos personalizados do Chatwoot",
+        "height": 800,
+        "width": 940,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        14320,
+        340
+      ],
+      "id": "06a13934-6465-4583-89d3-85d2b2c967fb",
+      "name": "Sticky Note38"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "24306c5f8561f73f351e8e8e69445c7b00b627669498e6759106d03bb4d05841@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Advogada Amanda"
+        },
+        "timeMin": "={{ $json.inicioDoDiaISO }}",
+        "timeMax": "={{ $json.fimDoDiaISO }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        12420,
+        1520
+      ],
+      "id": "6a41241b-3286-4497-a94a-d365f2a3cc8b",
+      "name": "Get many events",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "5lIDilwnp8KI0eYZ",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega a data e hora em que o workflow está rodando\nconst hoje = new Date();\n\n// Define o horário para o início do dia de HOJE (00:00:00)\nconst inicioDoDia = new Date(hoje);\ninicioDoDia.setHours(0, 0, 0, 0);\n\n// Define o horário para o fim do dia de HOJE (23:59:59)\nconst fimDoDia = new Date(hoje);\nfimDoDia.setHours(23, 59, 59, 999);\n\n// Retorna as datas de início e fim no formato ISO, que é o padrão que o Google Calendar espera.\nreturn [{\n  json: {\n    inicioDoDiaISO: inicioDoDia.toISOString(),\n    fimDoDiaISO: fimDoDia.toISOString()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        12220,
+        1520
+      ],
+      "id": "6681ed1b-08f9-4787-b4ab-bd6e0399f8e8",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        12660,
+        1520
+      ],
+      "id": "8fb18bd4-4cef-416f-8157-bc85b6cece77",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1AqlyrpdfFULrq1VtY1vXFsEmkUvz35toFAfc2Q4aa7M",
+          "mode": "list",
+          "cachedResultName": "FAQ - BOT Advocacia",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1AqlyrpdfFULrq1VtY1vXFsEmkUvz35toFAfc2Q4aa7M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1AqlyrpdfFULrq1VtY1vXFsEmkUvz35toFAfc2Q4aa7M/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "Status": "vetorizado"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Pergunta",
+              "displayName": "Pergunta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Resposta",
+              "displayName": "Resposta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Dados operacionais",
+              "displayName": "Dados operacionais",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        13300,
+        3560
+      ],
+      "id": "1edafd82-1d74-4602-9274-4aed2c6b4a5c",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "S32IDmfef8hlZApq",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1AqlyrpdfFULrq1VtY1vXFsEmkUvz35toFAfc2Q4aa7M",
+          "mode": "list",
+          "cachedResultName": "FAQ - BOT Advocacia",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1AqlyrpdfFULrq1VtY1vXFsEmkUvz35toFAfc2Q4aa7M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1AqlyrpdfFULrq1VtY1vXFsEmkUvz35toFAfc2Q4aa7M/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "novo"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        13120,
+        3560
+      ],
+      "id": "7e6a3eee-9312-414b-94b9-d21b5cb4ade1",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "S32IDmfef8hlZApq",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "agendamentos_link",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "google_event_id",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues0_Field_Value', ``, 'string') }}"
+            },
+            {
+              "fieldId": "chatwoot_contact_id",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues1_Field_Value', ``, 'string') }}"
+            },
+            {
+              "fieldId": "telefone_cliente",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues2_Field_Value', ``, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        10700,
+        2000
+      ],
+      "id": "a365f3d7-c2d0-4f0f-a1bb-18101092a6bd",
+      "name": "Salvar_agendamento",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "agendamentos_link",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "google_event_id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        12960,
+        1700
+      ],
+      "id": "f700fbfb-7e54-4446-a0ea-7b9ce9dc2e10",
+      "name": "Localizar evento",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot-rails:3000/api/v1/accounts/1/conversations/{{ $('Verifica se está pendente').item.json.chatwoot_contact_id }}/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $json.mensagem_de_confirmacao }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        13440,
+        1500
+      ],
+      "id": "e887d210-38a8-4d52-84c8-d480cb18f8d6",
+      "name": "Enviar mensagem",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "93fa582d-f255-4f23-b397-e1319a34c545",
+              "name": "mensagem_de_confirmacao",
+              "value": "=Olá, {{ $('Get many events').item.json.summary.split(' - ')[0].replace('Consultoria ', '') }}! Lembrete da sua consulta com a Dra. Amanda hoje às {{ $('Get many events').item.json.start.dateTime.split('T')[1].substring(0, 5) }}. Por favor, responda com 'SIM' para confirmar.",
+              "type": "string"
+            },
+            {
+              "id": "15eb41bc-eaaa-493b-9d59-7a4ed545247f",
+              "name": "nome_cliente",
+              "value": "={{ $('Get many events').item.json.summary.split(' - ')[0].replace('Consultoria ', '') }}",
+              "type": "string"
+            },
+            {
+              "id": "9e16beb4-bd83-4dca-8a92-a59b62d2c7b4",
+              "name": "horario_reuniao",
+              "value": "={{ $('Get many events').item.json.start.dateTime.split('T')[1].substring(0, 5) }}",
+              "type": "string"
+            },
+            {
+              "id": "cfb68804-4b2a-4f98-a723-a1b8bdbe0370",
+              "name": "data_reuniao",
+              "value": "={{ new Date($('Get many events').item.json.start.dateTime || $('Get many events').item.json.start.date).toLocaleDateString(\"pt-BR\").substring(0, 5) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        13240,
+        1500
+      ],
+      "id": "cac021e1-68d4-4b58-b047-47e736b24040",
+      "name": "Criar mensagem de confirmação."
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "sessoes_de_conversa",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone_cliente",
+              "condition": "eq",
+              "keyValue": "={{ $('Verifica se está pendente').item.json.telefone_cliente }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "historico_resumido",
+              "fieldValue": "=Lembrete de confirmação de reunião para consulta de {{ $('Criar mensagem de confirmação.').item.json.nome_cliente }} do dia {{ $('Criar mensagem de confirmação.').item.json.data_reuniao }} no para às {{ $('Criar mensagem de confirmação.').item.json.horario_reuniao }}."
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        13840,
+        1500
+      ],
+      "id": "948d0fb9-e5eb-40ed-9c28-d616e7ac0ba8",
+      "name": "Atualizar resumo no banco1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "agendamentos_link",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "google_event_id",
+              "condition": "eq",
+              "keyValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('conditions0_Field_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status_confirmacao",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues0_Field_Value', ``, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        10860,
+        2000
+      ],
+      "id": "d9c0891c-783b-453c-adad-2aab0c3595d9",
+      "name": "Atualizar_status_agendamento",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Assistente de confirmação de agendamentos - Hora em Hora\n",
+        "height": 600,
+        "width": 2520,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        11960,
+        2060
+      ],
+      "id": "09120fc6-3fa8-4319-9031-5437f5a4908b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "24306c5f8561f73f351e8e8e69445c7b00b627669498e6759106d03bb4d05841@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Advogada Amanda"
+        },
+        "timeMin": "={{ $json.agoraISO }}",
+        "timeMax": "={{ $json.daquiUmaHoraISO }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        12420,
+        2220
+      ],
+      "id": "b78e015e-720a-456a-a787-08d1d8c1c872",
+      "name": "Get many events1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "5lIDilwnp8KI0eYZ",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega a data e hora em que o workflow está rodando\nconst agora = new Date();\n\n// Calcula a data e hora para daqui a 60 minutos\n// (60 minutos * 60 segundos * 1000 milissegundos)\nconst daquiUmaHora = new Date(agora.getTime() + 60 * 60 * 1000);\n\n// Retorna as datas de início e fim no formato ISO, \n// que é o padrão que o Google Calendar espera.\nreturn [{\n  json: {\n    agoraISO: agora.toISOString(),\n    daquiUmaHoraISO: daquiUmaHora.toISOString()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        12220,
+        2220
+      ],
+      "id": "c0d06645-c5f0-4b7c-8c1d-d36e9916ea5b",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        12660,
+        2220
+      ],
+      "id": "5462d778-4acb-4ac6-ae22-f8937c40db2e",
+      "name": "Loop Over Items2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "agendamentos_link",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "google_event_id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        12960,
+        2400
+      ],
+      "id": "05e196a2-b478-4abc-9f50-e162088e7a41",
+      "name": "Localizar evento1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot-rails:3000/api/v1/accounts/1/conversations/{{ $('Verifica se não está cancelado').item.json.chatwoot_contact_id }}/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $json.mensagem_de_confirmacao }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        13840,
+        2120
+      ],
+      "id": "7b39f33f-45f6-49c9-9f16-2da4ab682e80",
+      "name": "Enviar mensagem1",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "93fa582d-f255-4f23-b397-e1319a34c545",
+              "name": "mensagem_de_confirmacao",
+              "value": "=Olá, {{ $('Get many events1').item.json.summary.split(' - ')[0].replace('Consultoria ', '') }}! Apenas um lembrete rápido de que sua consulta é daqui a pouco, às {{ $('Get many events1').item.json.start.dateTime.split('T')[1].substring(0, 5) }}",
+              "type": "string"
+            },
+            {
+              "id": "15eb41bc-eaaa-493b-9d59-7a4ed545247f",
+              "name": "nome_cliente",
+              "value": "={{\n  $('Get many events1').item.json.summary\n    .replace(/^\\[.*?\\]\\s*/, '')\n    .replace('Consultoria ', '')\n    .split(' - ')[0]\n    .trim()\n}}",
+              "type": "string"
+            },
+            {
+              "id": "9e16beb4-bd83-4dca-8a92-a59b62d2c7b4",
+              "name": "horario_reuniao",
+              "value": "={{ $('Get many events1').item.json.start.dateTime.split('T')[1].substring(0, 5) }}",
+              "type": "string"
+            },
+            {
+              "id": "cfb68804-4b2a-4f98-a723-a1b8bdbe0370",
+              "name": "data_reuniao",
+              "value": "={{ new Date($('Get many events1').item.json.start.dateTime || $('Get many events1').item.json.start.date).toLocaleDateString(\"pt-BR\").substring(0, 5) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        13620,
+        2120
+      ],
+      "id": "da7650fc-d9f6-4f80-bc53-70bf569ed721",
+      "name": "Criar mensagem de confirmação.1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "sessoes_de_conversa",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone_cliente",
+              "condition": "eq",
+              "keyValue": "={{ $('Verifica se não está cancelado').item.json.telefone_cliente }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "historico_resumido",
+              "fieldValue": "=Lembrete de confirmação de reunião para consulta de {{ $('Criar mensagem de confirmação.1').item.json.nome_cliente }} do dia {{ $('Criar mensagem de confirmação.1').item.json.data_reuniao }} no para às {{ $('Criar mensagem de confirmação.1').item.json.horario_reuniao }}."
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        14260,
+        2120
+      ],
+      "id": "f9d02798-257c-4182-a3bf-34cc951d639b",
+      "name": "Atualizar resumo no banco2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "agendamentos_link",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "google_event_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Verifica se está pendente').item.json.google_event_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status_confirmacao",
+              "fieldValue": "confirmacao_enviada"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        13640,
+        1500
+      ],
+      "id": "d6425b24-e48d-4cf8-aede-1898b34a701c",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9-17 * * 1-5"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        12000,
+        2220
+      ],
+      "id": "5728874b-cfda-49f7-b084-0f8031dc9ac4",
+      "name": "Gatilho hora em hora"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot-rails:3000/api/v1/accounts/1/conversations/{{ $('Verifica se não está cancelado').item.json.chatwoot_contact_id }}/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $json.mensagem_de_confirmacao }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        13840,
+        2440
+      ],
+      "id": "986a3acf-ddb1-4030-b0f4-404652468268",
+      "name": "Enviar mensagem2",
+      "credentials": {
+        "chatwootApi": {
+          "id": "WStiDtoh4KPp6dXK",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "93fa582d-f255-4f23-b397-e1319a34c545",
+              "name": "mensagem_de_confirmacao",
+              "value": "=Olá, {{ $('Get many events1').item.json.summary.split(' - ')[0].replace('Consultoria ', '') }}, não recebemos sua confirmação para a reunião de hoje com a Dra. Amanda hoje às  {{ $('Get many events1').item.json.start.dateTime.split('T')[1].substring(0, 5) }}. Por favor, responda com 'SIM' se for comparecer.",
+              "type": "string"
+            },
+            {
+              "id": "15eb41bc-eaaa-493b-9d59-7a4ed545247f",
+              "name": "nome_cliente",
+              "value": "={{\n  $('Get many events1').item.json.summary\n    .replace(/^\\[.*?\\]\\s*/, '')\n    .replace('Consultoria ', '')\n    .split(' - ')[0]\n    .trim()\n}}",
+              "type": "string"
+            },
+            {
+              "id": "9e16beb4-bd83-4dca-8a92-a59b62d2c7b4",
+              "name": "horario_reuniao",
+              "value": "={{ $('Get many events1').item.json.start.dateTime.split('T')[1].substring(0, 5) }}",
+              "type": "string"
+            },
+            {
+              "id": "cfb68804-4b2a-4f98-a723-a1b8bdbe0370",
+              "name": "data_reuniao",
+              "value": "={{ new Date($('Get many events1').item.json.start.dateTime || $('Get many events1').item.json.start.date).toLocaleDateString(\"pt-BR\").substring(0, 5) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        13620,
+        2440
+      ],
+      "id": "e4d998c2-3701-441e-9473-0cd022c5dafa",
+      "name": "Criar mensagem de confirmação.2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "sessoes_de_conversa",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone_cliente",
+              "condition": "eq",
+              "keyValue": "={{ $('Verifica se não está cancelado').item.json.telefone_cliente }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "historico_resumido",
+              "fieldValue": "=Lembrete de confirmação de reunião para consulta de {{ $('Criar mensagem de confirmação.2').item.json.nome_cliente }} do dia {{ $('Criar mensagem de confirmação.2').item.json.data_reuniao }} no para às {{ $('Criar mensagem de confirmação.2').item.json.horario_reuniao }}."
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        14260,
+        2440
+      ],
+      "id": "f27b5418-b415-4a6a-9d96-3a90726b58a2",
+      "name": "Atualizar resumo no banco3",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "agendamentos_link",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "google_event_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get many events1').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status_confirmacao",
+              "fieldValue": "lembrete_enviado"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        14040,
+        2440
+      ],
+      "id": "af29c456-21fe-46a2-878a-845b363ca9a1",
+      "name": "Muda status para lembrete enviado",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d2b5e510-cbae-4779-84e7-bb29bcb827d0",
+              "leftValue": "={{ $json.status_confirmacao }}",
+              "rightValue": "confirmado",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        13340,
+        2280
+      ],
+      "id": "6636daee-51b4-4ee4-8154-c6908960f31b",
+      "name": "Verifica se está confirmado"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5959f377-40a2-48a6-9b7c-f6f99ea6a0b5",
+              "leftValue": "={{ $json.status_confirmacao }}",
+              "rightValue": "cancelado",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        12960,
+        2220
+      ],
+      "id": "52a26ad2-ade9-4eb0-8d90-c63963655722",
+      "name": "Verifica se não está cancelado"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5959f377-40a2-48a6-9b7c-f6f99ea6a0b5",
+              "leftValue": "={{ $json.status_confirmacao }}",
+              "rightValue": "pendente",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        12960,
+        1520
+      ],
+      "id": "7ef50d57-4852-4fb5-b302-b37005a45b77",
+      "name": "Verifica se está pendente"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "agendamentos_link",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "google_event_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get many events1').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status_confirmacao",
+              "fieldValue": "lembrete_enviado"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        14040,
+        2120
+      ],
+      "id": "4df0d55c-d8bb-480c-9d87-233d3ab57845",
+      "name": "Muda status para lembrete enviado1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6ttczOqw2xux1vtf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Atualiza o nome de um contato no Chatwoot. Requer os parâmetros 'contact_id' e 'name'.",
+        "workflowId": {
+          "__rl": true,
+          "value": "sE0pBaxluRPBpon1",
+          "mode": "list",
+          "cachedResultName": "Atualizar Contato Chatwoot"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', ``, 'string') }}",
+            "contact_id": "={{ $('Info').item.json.contact_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "contact_id",
+              "displayName": "contact_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        11880,
+        2020
+      ],
+      "id": "96951a2b-34e3-4ada-bce6-9576b9b1128d",
+      "name": "Atualizar_contato_chatwoot"
+    },
+    {
+      "parameters": {
+        "description": "Cria um card no CRM depois de veririficar que o LEAD é qualificado. Requer os parâmetros name, email, telefone, nicho, status_carro, data_pagamento, renda, banco e qualificacao. Todos os dados tirados diretamente das inforamções enviadas pelo LEAD.",
+        "workflowId": {
+          "__rl": true,
+          "value": "LFNEpNyzqWeSE0x1",
+          "mode": "list",
+          "cachedResultName": "Salvar Lead CRM"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', ``, 'string') }}",
+            "email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('email', ``, 'string') }}",
+            "telefone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('telefone', ``, 'string') }}",
+            "nicho": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('nicho', ``, 'string') }}",
+            "status_carro": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('status_carro', ``, 'string') }}",
+            "data_pagamento": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('data_pagamento', ``, 'string') }}",
+            "banco": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('banco', ``, 'string') }}",
+            "renda": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('renda', ``, 'string') }}",
+            "qualificacao": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('qualificacao', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "nicho",
+              "displayName": "nicho",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "status_carro",
+              "displayName": "status_carro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "data_pagamento",
+              "displayName": "data_pagamento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "banco",
+              "displayName": "banco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "renda",
+              "displayName": "renda",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "qualificacao",
+              "displayName": "qualificacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        10560,
+        2000
+      ],
+      "id": "7251e82c-4231-4a49-b884-cb65e051e765",
+      "name": "Salvar Lead CRM"
+    },
+    {
+      "parameters": {
+        "content": "## Configurar variáveis no Info!!!",
+        "height": 80,
+        "width": 250,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1740,
+        640
+      ],
+      "id": "82d6dd9b-1a90-493e-aa83-5b13cb6ead4c",
+      "name": "Sticky Note32"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega a lista de etiquetas atuais que vem do item de entrada.\nconst etiquetasAtuais = items[0].json.etiquetas;\n\n// Garante que 'etiquetasAtuais' é um array antes de tentar filtrar.\nif (!Array.isArray(etiquetasAtuais)) {\n  // Se não for um array, retorna um objeto com uma string vazia.\n  return [{ json: { etiquetas_como_string: \"\" } }];\n}\n\n// Usa o método .filter() para criar uma nova lista com as tags que queremos manter.\nconst etiquetasFiltradas = etiquetasAtuais.filter(tag => tag !== \"aguardando-resposta-lead\");\n\n// --- A MUDANÇA ESTÁ AQUI ---\n// Junta os itens do array filtrado em uma única string, separados por vírgula.\n// Exemplo: [\"dba\", \"nicho-familia\"] se torna \"dba,nicho-familia\"\nconst etiquetasComoString = etiquetasFiltradas.join(',');\n\n// Retorna um novo objeto com a string de etiquetas.\nreturn [{ json: { etiquetas_como_string: etiquetasComoString } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2460,
+        740
+      ],
+      "id": "889ed1cd-117f-43ac-93dd-ece076264a54",
+      "name": "Formatar etiquetas"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3ef655d9-efc0-423a-b1d1-d07f97307e61",
+              "leftValue": "={{ $('Info').item.json.nicho }}",
+              "rightValue": "dba",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "70c2ff8f-5cf5-4d09-b3d3-0fa400121f4c",
+              "leftValue": "={{ $('Formatar etiquetas').item.json.etiquetas_como_string }}",
+              "rightValue": "dba",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4960,
+        1040
+      ],
+      "id": "8a8742c5-c860-40a2-aae1-575eccb55c0e",
+      "name": "If para DBA"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3ef655d9-efc0-423a-b1d1-d07f97307e61",
+              "leftValue": "={{ $('Info').item.json.nicho }}",
+              "rightValue": "golpe-pix",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "fba04505-e394-4720-8a79-5730e8695c58",
+              "leftValue": "={{ $('Formatar etiquetas').item.json.etiquetas_como_string }}",
+              "rightValue": "golpe-pix",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5040,
+        1280
+      ],
+      "id": "1183326b-f7bd-48a9-b743-7004b5538999",
+      "name": "If para GP"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3ef655d9-efc0-423a-b1d1-d07f97307e61",
+              "leftValue": "={{ $('Info').item.json.nicho }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "a55e052e-5024-48d7-97e9-c2096f236e30",
+              "leftValue": "={{ $('Formatar etiquetas').item.json.etiquetas_como_string }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4880,
+        800
+      ],
+      "id": "44a6b2ee-65f8-44e1-aa35-c9f172fb0f7a",
+      "name": "If para atendimento"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        4640,
+        960
+      ],
+      "id": "daf9966a-2bb4-4ef6-9cb4-065c635f719c",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Iv9u5x0q7aNReoxK",
+          "mode": "list",
+          "cachedResultName": "2. Agente Secretária"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_mensagem": "={{ $('Info').item.json.id_mensagem }}",
+            "id_conta": "={{ $('Info').item.json.id_conta }}",
+            "id_conversa": "={{ $('Info').item.json.id_conversa }}",
+            "telefone": "={{ $('Info').item.json.telefone }}",
+            "nome_cliente": "={{ $('Info').item.json.nome }}",
+            "mensagem": "={{ $json.mensagem_especialista }}",
+            "etiquetas": "={{ $('Info').item.json.etiquetas || ''}}",
+            "url_chatwoot": "={{ $('Info').item.json.url_chatwoot }}",
+            "timestamp": "={{ $('Info').item.json.timestamp }}",
+            "contact_id": "={{ $('Info').item.json.contact_id }}",
+            "nicho": "={{ $('Info').item.json.nicho }}",
+            "mensagem_de_audio": "={{ $('Info').item.json.mensagem_de_audio }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_mensagem",
+              "displayName": "id_mensagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "id_conta",
+              "displayName": "id_conta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "id_conversa",
+              "displayName": "id_conversa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "nome_cliente",
+              "displayName": "nome_cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "mensagem",
+              "displayName": "mensagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "etiquetas",
+              "displayName": "etiquetas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "url_chatwoot",
+              "displayName": "url_chatwoot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "contact_id",
+              "displayName": "contact_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "nicho",
+              "displayName": "nicho",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "mensagem_de_audio",
+              "displayName": "mensagem_de_audio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        5380,
+        780
+      ],
+      "id": "37f3bc4f-f29c-4677-bbb4-e69eb5994863",
+      "name": "Chamar agente de atendimento"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "niZ0ciNcPI8JLDzJ",
+          "mode": "list",
+          "cachedResultName": "4. Golpe Pix"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        5380,
+        1260
+      ],
+      "id": "331e7215-54c9-46f6-a5da-ca480f486753",
+      "name": "Chamar agente de GP"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6aa3e3bd-afda-43ff-babd-8b807d6f9197",
+              "name": "mensagem_especialista",
+              "value": "={{ $('Mensagem encavalada?').item.json.mensagem }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4300,
+        740
+      ],
+      "id": "9e905acd-bb70-4039-8e67-752663bcb816",
+      "name": "Pegar mensagem final"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6aa3e3bd-afda-43ff-babd-8b807d6f9197",
+              "name": "mensagem_especialista",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4300,
+        1120
+      ],
+      "id": "4b86190d-0234-4125-9d35-89adb9989931",
+      "name": "Pegar áudio"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "hFaUhRSknD35ElgZ",
+          "mode": "list",
+          "cachedResultName": "3. DBA copy"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_mensagem": "={{ $('Info').item.json.id_mensagem }}",
+            "id_conta": "={{ $('Info').item.json.id_conta }}",
+            "id_conversa": "={{ $('Info').item.json.id_conversa }}",
+            "telefone": "={{ $('Info').item.json.telefone }}",
+            "nome_cliente": "={{ $('Info').item.json.nome }}",
+            "mensagem": "={{ $json.mensagem_especialista }}",
+            "etiquetas": "={{ $('Info').item.json.etiquetas || ''}}",
+            "url_chatwoot": "={{ $('Info').item.json.url_chatwoot }}",
+            "timestamp": "={{ $('Info').item.json.timestamp }}",
+            "contact_id": "={{ $('Info').item.json.contact_id }}",
+            "nicho": "={{ $('Info').item.json.nicho }}",
+            "mensagem_de_audio": "={{ $('Info').item.json.mensagem_de_audio }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_mensagem",
+              "displayName": "id_mensagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "id_conta",
+              "displayName": "id_conta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "id_conversa",
+              "displayName": "id_conversa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "nome_cliente",
+              "displayName": "nome_cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "mensagem",
+              "displayName": "mensagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "etiquetas",
+              "displayName": "etiquetas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "url_chatwoot",
+              "displayName": "url_chatwoot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "contact_id",
+              "displayName": "contact_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "nicho",
+              "displayName": "nicho",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "mensagem_de_audio",
+              "displayName": "mensagem_de_audio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        5380,
+        1020
+      ],
+      "id": "6dbe579c-50e9-42a2-a990-3c55a6b67afb",
+      "name": "Chamar agente de DBA"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Conversation Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query1": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem chegando?": {
+      "main": [
+        [
+          {
+            "node": "Formatar etiquetas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem encavalada?": {
+      "main": [
+        [
+          {
+            "node": "Limpar fila de mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar mensagens": {
+      "main": [
+        [
+          {
+            "node": "Mensagem encavalada?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limpar fila de mensagens": {
+      "main": [
+        [
+          {
+            "node": "Pegar mensagem final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Esperar": {
+      "main": [
+        [
+          {
+            "node": "Buscar mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo de mensagem": {
+      "main": [
+        [
+          {
+            "node": "Enfileirar mensagem.",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download áudio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listar arquivos": {
+      "ai_tool": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar e enviar arquivo": {
+      "ai_tool": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gatilho diário": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Secretária": {
+      "main": [
+        [
+          {
+            "node": "Tipo de mensagem1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo de mensagem1": {
+      "main": [
+        [
+          {
+            "node": "Separando dados output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Refletir": {
+      "ai_tool": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reagir mensagem": {
+      "ai_tool": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enfileirar mensagem.": {
+      "main": [
+        [
+          {
+            "node": "Esperar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marcar como lidas": {
+      "main": [
+        [
+          {
+            "node": "Digitando/Gravando...",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Digitando/Gravando...": {
+      "main": [
+        [
+          {
+            "node": "Set mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set mensagens": {
+      "main": [
+        [
+          {
+            "node": "Buscar Resumo Anterior",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download áudio": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcrever audio": {
+      "main": [
+        [
+          {
+            "node": "Pegar áudio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Transcrever audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resetar status": {
+      "main": [
+        [
+          {
+            "node": "Tipo de mensagem2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar texto.": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo de mensagem2": {
+      "main": [
+        [
+          {
+            "node": "Dividir Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base64 para áudio": {
+      "main": [
+        [
+          {
+            "node": "Enviar áudio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Base64 para áudio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Info": {
+      "main": [
+        [
+          {
+            "node": "Mensagem chegando?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar humano": {
+      "ai_tool": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Details": {
+      "main": [
+        [
+          {
+            "node": "Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "searchFAQ",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "searchFAQ": {
+      "ai_tool": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove etiqueta": {
+      "main": [
+        [
+          {
+            "node": "Tipo de mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reranker Cohere": {
+      "ai_reranker": [
+        [
+          {
+            "node": "searchFAQ",
+            "type": "ai_reranker",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar texto.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dividir Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Secretária",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separando dados output": {
+      "main": [
+        [
+          {
+            "node": "Resetar status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Adiciona etiqueta aguardando lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Muda Status para Resolved1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Muda Status para Resolved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Cria Resumo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Resumo Anterior": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar se Resumo existe": {
+      "main": [
+        [
+          {
+            "node": "Colocar resumo no banco",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Atualizar resumo no banco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Procura Resumo": {
+      "main": [
+        [
+          {
+            "node": "Verificar se Resumo existe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cria Resumo": {
+      "main": [
+        [
+          {
+            "node": "Procura Resumo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Colocar resumo no banco": {
+      "main": [
+        [
+          {
+            "node": "Preparar CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar resumo no banco": {
+      "main": [
+        [
+          {
+            "node": "Preparar CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar CRM": {
+      "main": [
+        [
+          {
+            "node": "Adiciona Atributos Personalizados ao Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adiciona Atributos Personalizados ao Chatwoot": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Get many events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Verifica se está pendente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Localizar evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar_agendamento": {
+      "ai_tool": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Localizar evento": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar mensagem": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar mensagem de confirmação.": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar_status_agendamento": {
+      "ai_tool": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Get many events1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items2": {
+      "main": [
+        [
+          {
+            "node": "Verifica se não está cancelado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Localizar evento1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Localizar evento1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar mensagem1": {
+      "main": [
+        [
+          {
+            "node": "Muda status para lembrete enviado1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar mensagem de confirmação.1": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensagem1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        [
+          {
+            "node": "Atualizar resumo no banco1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gatilho hora em hora": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar mensagem2": {
+      "main": [
+        [
+          {
+            "node": "Muda status para lembrete enviado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar mensagem de confirmação.2": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensagem2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Muda status para lembrete enviado": {
+      "main": [
+        [
+          {
+            "node": "Atualizar resumo no banco3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica se está confirmado": {
+      "main": [
+        [
+          {
+            "node": "Criar mensagem de confirmação.1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar mensagem de confirmação.2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica se não está cancelado": {
+      "main": [
+        [
+          {
+            "node": "Verifica se está confirmado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica se está pendente": {
+      "main": [
+        [
+          {
+            "node": "Criar mensagem de confirmação.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Muda status para lembrete enviado1": {
+      "main": [
+        [
+          {
+            "node": "Atualizar resumo no banco2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar_contato_chatwoot": {
+      "ai_tool": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar Lead CRM": {
+      "ai_tool": [
+        [
+          {
+            "node": "Secretária",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatar etiquetas": {
+      "main": [
+        [
+          {
+            "node": "Remove etiqueta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If para DBA": {
+      "main": [
+        [
+          {
+            "node": "Chamar agente de DBA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If para GP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "If para atendimento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If para GP": {
+      "main": [
+        [
+          {
+            "node": "Chamar agente de GP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "If para atendimento": {
+      "main": [
+        [
+          {
+            "node": "Chamar agente de atendimento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If para DBA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pegar mensagem final": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pegar áudio": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "24153c98-390d-40b5-818d-3582f46b9597",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e2e400441824b6db24f6af0c9b70e2d924e9d21f9a10e30b8b4be3b81da7dbb1"
+  },
+  "id": "s19Ol5toWQBWgQIA",
+  "tags": []
+}

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Truth Commerce | Showreel</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===============================================================
+       CSS DO NOVO SHOWREEL (NÃO OCUPA 100% E FLUIDEZ LERP)
+       =============================================================== */
+
+    :root {
+      --bg-base: #040507;
+      --bg-surface: #0a0c10;
+      --green: #07dd2b;
+      --text-main: #FFFFFF;
+      --text-muted: #A1A1AA;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-base);
+      font-family: 'Inter', sans-serif;
+      color: var(--text-main);
+    }
+
+    /* O Track de Scroll: 500vh para muito tempo de visualização */
+    .sr-scroll-track {
+      position: relative;
+      width: 100vw;
+      height: 500vh; 
+      background: var(--bg-base);
+      background-image: radial-gradient(circle at 50% 50%, rgba(7, 221, 43, 0.04) 0%, transparent 60%);
+    }
+
+    /* O Quadro Fixo: Segura tudo na tela */
+    .sr-sticky-frame {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden; 
+    }
+
+    /* Textos Iniciais */
+    .sr-intro-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 5%;
+      z-index: 1;
+      pointer-events: none;
+      /* Otimização de performance */
+      will-change: opacity, transform;
+    }
+
+    .sr-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      margin-bottom: 24px;
+      transform: translateY(-22vh); 
+    }
+
+    .sr-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin: 0;
+      max-width: 900px;
+      transform: translateY(-20vh);
+    }
+
+    .sr-title .accent {
+      color: var(--green);
+      text-shadow: 0 0 30px rgba(7, 221, 43, 0.2);
+    }
+
+    .sr-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      line-height: 1.6;
+      margin-top: 24px;
+      transform: translateY(22vh);
+    }
+
+    /* O Vídeo e a sua moldura (Não ocupa 100%) */
+    .sr-video-wrap {
+      position: relative;
+      /* Tamanhos Iniciais */
+      width: 45vw;
+      height: 35vh;
+      border-radius: 32px;
+      overflow: hidden;
+      z-index: 5;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.05);
+      will-change: width, height, border-radius, box-shadow;
+      transition: box-shadow 0.4s ease;
+    }
+
+    @media (max-width: 768px) {
+      .sr-video-wrap {
+        width: 80vw;
+        height: 25vh;
+      }
+      .sr-title { transform: translateY(-15vh); }
+      .sr-label { transform: translateY(-15vh); }
+      .sr-desc { transform: translateY(18vh); }
+    }
+
+    .sr-video-wrap:hover {
+      box-shadow: 0 30px 80px rgba(7, 221, 43, 0.15), 0 0 0 1px rgba(255,255,255,0.1);
+    }
+
+    .sr-video-element {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.6;
+      will-change: opacity;
+    }
+
+    /* Interface do Dashboard */
+    .sr-ui-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(20px, 4vw, 40px);
+      opacity: 0;
+      pointer-events: none;
+      /* Fundo escurecido para as extremidades para destacar o UI */
+      background: linear-gradient(to bottom, rgba(4,5,7,0.7) 0%, transparent 20%, transparent 80%, rgba(4,5,7,0.85) 100%);
+      will-change: opacity;
+    }
+
+    .sr-ui-top {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 20px;
+    }
+
+    /* Oculta alguns elementos no mobile para não poluir */
+    .hide-mobile {
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .hide-mobile { display: none; }
+    }
+
+    .sr-ui-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .sr-play-btn {
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      cursor: pointer;
+      color: #fff;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .sr-play-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .sr-play-btn:hover .play-icon-circle {
+      border-color: var(--green);
+      background: rgba(7, 221, 43, 0.1);
+      box-shadow: 0 0 30px rgba(7, 221, 43, 0.4);
+    }
+
+    .play-icon-circle {
+      width: clamp(60px, 8vw, 80px);
+      height: clamp(60px, 8vw, 80px);
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.4s ease;
+    }
+
+    .play-icon-circle svg {
+      width: clamp(20px, 3vw, 24px);
+      height: clamp(20px, 3vw, 24px);
+    }
+
+    .play-text {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 6rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+    }
+
+    .sr-ui-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .sr-ui-bottom p {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+      max-width: 400px;
+      color: rgba(255,255,255,0.7);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .sr-status {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sr-status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(7, 221, 43, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(7, 221, 43, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(7, 221, 43, 0); }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Espaço inicial para simular scroll do site -->
+  <div style="height: 100vh; display: flex; flex-direction: column; align-items:center; justify-content:center; color: #fff; background: #040507;">
+    <h1 style="font-family: 'Sora'; margin-bottom: 20px;">Role para baixo ↓</h1>
+  </div>
+
+  <!-- INÍCIO DA SHOWREEL SECTION -->
+  <section class="sr-scroll-track" id="showreel">
+    <div class="sr-sticky-frame">
+      
+      <!-- Textos Introdutórios -->
+      <div class="sr-intro-layer" id="sr-intro">
+        <span class="sr-label">/ SHOWREEL 2026</span>
+        <h2 class="sr-title">Sistemas que suportam a <span class="accent">pressão da escala.</span></h2>
+        <p class="sr-desc">Veja como transformamos operações engessadas em máquinas de alta performance. De migrações complexas a arquiteturas headless, construímos para a velocidade e estabilidade extrema.</p>
+      </div>
+
+      <!-- O Container do Vídeo (A animação vai atuar aqui) -->
+      <div class="sr-video-wrap" id="sr-video-wrap">
+        
+        <video class="sr-video-element" id="sr-video" autoplay loop muted playsinline>
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-software-developer-working-on-code-4174-large.mp4" type="video/mp4">
+        </video>
+
+        <!-- Interface do Vídeo (Surge no final da expansão) -->
+        <div class="sr-ui-layer" id="sr-ui">
+          
+          <div class="sr-ui-top">
+            <span>[ VOL. 01 ]</span>
+            <span class="hide-mobile">MANIFESTO TRUTH COMMERCE</span>
+            <span>SYSTEM ARCHITECTURE</span>
+          </div>
+
+          <div class="sr-ui-center">
+            <button class="sr-play-btn">
+              <div class="play-icon-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+                </svg>
+              </div>
+              <span class="play-text">PLAY</span>
+            </button>
+          </div>
+
+          <div class="sr-ui-bottom">
+            <p class="hide-mobile">Assista aos bastidores da reconstrução tecnológica das maiores operações de e-commerce.</p>
+            <div class="sr-status">
+              <div class="sr-status-dot"></div>
+              SYSTEMS ONLINE
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+  <!-- FIM DA SHOWREEL SECTION -->
+
+  <!-- Espaço final -->
+  <div style="height: 100vh; background: #040507; display: flex; align-items:center; justify-content:center; color: #fff;">
+    <h1 style="font-family: 'Sora';">Próxima Seção</h1>
+  </div>
+
+  <!-- MOTOR DE ANIMAÇÃO DE ALTA FLUIDEZ (LERP) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const track = document.getElementById('showreel');
+      const videoWrap = document.getElementById('sr-video-wrap');
+      const videoElement = document.getElementById('sr-video');
+      const introLayer = document.getElementById('sr-intro');
+      const uiLayer = document.getElementById('sr-ui');
+
+      // Valores Iniciais (Início do scroll)
+      let startWidth = window.innerWidth > 768 ? 45 : 80; // vw
+      let startHeight = window.innerWidth > 768 ? 35 : 25; // vh
+      let startRadius = 32; // px
+
+      // Valores Finais (O segredo: NÃO é 100vw/100vh)
+      // Mantém uma margem elegante na tela
+      let endWidth = window.innerWidth > 768 ? 85 : 92; // vw
+      let endHeight = window.innerWidth > 768 ? 80 : 70; // vh
+      let endRadius = 24; // px
+
+      window.addEventListener('resize', () => {
+        startWidth = window.innerWidth > 768 ? 45 : 80;
+        startHeight = window.innerWidth > 768 ? 35 : 25;
+        endWidth = window.innerWidth > 768 ? 85 : 92;
+        endHeight = window.innerWidth > 768 ? 80 : 70;
+      });
+
+      // Variáveis para a fluidez (Lerp)
+      let targetProgress = 0;   // Progresso exato do scroll
+      let currentProgress = 0;  // Progresso visual da animação (segue o target suavemente)
+      const ease = 0.08;        // O quão "amanteigada" é a animação (0.05 a 0.1 é o ideal)
+
+      // Captura a posição do scroll em tempo real
+      function captureScroll() {
+        const rect = track.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        // Progresso vai de 0 a 1 em toda a altura do track
+        let raw = -rect.top / (rect.height - windowHeight);
+        targetProgress = Math.min(Math.max(raw, 0), 1);
+      }
+
+      window.addEventListener('scroll', captureScroll);
+      captureScroll(); // Capta o valor inicial
+
+      // Loop de renderização fluida (60 frames por segundo)
+      function renderLoop() {
+        // A matemática da fluidez (Lerp) - move o current em direção ao target aos poucos
+        currentProgress += (targetProgress - currentProgress) * ease;
+
+        // A expansão termina nos primeiros 45% do scroll
+        const animationEndAt = 0.45; 
+        
+        let expansion = Math.min(currentProgress / animationEndAt, 1);
+        
+        // Curva suave adicionada à fluidez
+        const easeProgress = 1 - Math.pow(1 - expansion, 3); 
+
+        // 1. Aplica tamanhos ao Vídeo (Nunca chega a 100%)
+        const currentW = startWidth + (endWidth - startWidth) * easeProgress;
+        const currentH = startHeight + (endHeight - startHeight) * easeProgress;
+        const currentR = startRadius + (endRadius - startRadius) * easeProgress;
+
+        videoWrap.style.width = `${currentW}vw`;
+        videoWrap.style.height = `${currentH}vh`;
+        videoWrap.style.borderRadius = `${currentR}px`;
+
+        // 2. Parallax e Fade Out do Texto Inicial
+        let introFade = Math.min(currentProgress / (animationEndAt * 0.6), 1);
+        introLayer.style.opacity = Math.max(1 - introFade * 1.5, 0);
+        introLayer.style.transform = `translateY(${introFade * 150}px) scale(${1 - introFade * 0.05})`;
+
+        // 3. Clareia o Vídeo
+        videoElement.style.opacity = 0.6 + (0.4 * easeProgress);
+
+        // 4. Surge a Interface (UI) quando atinge o tamanho máximo
+        let uiOpacity = 0;
+        const uiAppearStart = animationEndAt * 0.9; 
+        
+        if (currentProgress > uiAppearStart) {
+          uiOpacity = Math.min((currentProgress - uiAppearStart) / 0.05, 1);
+        }
+        
+        uiLayer.style.opacity = uiOpacity;
+        uiLayer.style.pointerEvents = uiOpacity > 0.5 ? 'auto' : 'none';
+
+        // Mantém o loop sempre a rodar
+        requestAnimationFrame(renderLoop);
+      }
+
+      // Inicia a renderização super fluida
+      requestAnimationFrame(renderLoop);
+    });
+  </script>
+</body>
+</html>

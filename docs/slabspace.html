@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlabSpace — Explore The Universe</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #020408;
+    --bg2: #050b14;
+    --white: #f0f4ff;
+    --dim: #8a9bb8;
+    --accent: #ff4e1a;
+    --accent2: #ffa040;
+    --blue: #1a6fff;
+    --glow: rgba(26,111,255,0.18);
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND SYSTEM ──
+     CANVAS → Hero, Big-Text, Rocket2  (nebulosa procedural)
+     PHOTO  → Explore, Partners, Moon  (imagem NASA real)
+  ── */
+
+  .section-stars {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Nebulosa canvas extra — camada de cor sobre as estrelas */
+  .nebula-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Photo background */
+  .photo-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .photo-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+      rgba(2,4,8,0.62) 0%,
+      rgba(2,4,8,0.38) 40%,
+      rgba(2,4,8,0.65) 100%);
+  }
+
+  /* Badges de identificação */
+  .bg-badge {
+    position: absolute;
+    top: 88px; right: 20px;
+    z-index: 10;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 3px;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .canvas-badge {
+    background: rgba(26,111,255,0.15);
+    border: 1px solid rgba(26,111,255,0.35);
+    color: #7ab8ff;
+  }
+  .photo-badge {
+    background: rgba(255,78,26,0.15);
+    border: 1px solid rgba(255,78,26,0.35);
+    color: #ff9070;
+  }
+  .bg-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+  .canvas-badge .dot { background: #4a9fff; animation: blink 2s infinite; }
+  .photo-badge  .dot { background: #ff6040; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    backdrop-filter: blur(12px);
+    background: rgba(2,4,8,0.6);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .nav-logo {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-logo span {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: inline-block;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 8px 20px;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .nav-cta:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.4);
+  }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ───── HERO ───── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 48px 80px;
+    overflow: hidden;
+  }
+
+  .hero-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-label::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(64px, 9vw, 130px);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    max-width: 700px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.4s forwards;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.4);
+    color: transparent;
+  }
+
+  .hero-sub {
+    margin-top: 28px;
+    max-width: 380px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--dim);
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.6s forwards;
+  }
+
+  .hero-btns {
+    margin-top: 40px;
+    display: flex;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.8s forwards;
+  }
+
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-secondary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.05);
+  }
+
+  .btn-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    background: rgba(255,255,255,0.15);
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+
+  /* Rocket */
+  .hero-rocket {
+    position: absolute;
+    right: 5%;
+    top: 8%;
+    width: min(55%, 580px);
+    opacity: 0;
+    animation: rocketIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.6s forwards;
+    pointer-events: none;
+  }
+
+  @keyframes rocketIn {
+    from { opacity:0; transform: translate(80px,-80px) rotate(-15deg); }
+    to   { opacity:1; transform: translate(0,0) rotate(-12deg); }
+  }
+
+  .rocket-float {
+    animation: rocketFloat 6s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  @keyframes rocketFloat {
+    0%,100% { transform: rotate(-12deg) translateY(0); }
+    50%      { transform: rotate(-12deg) translateY(-22px); }
+  }
+
+  .hero-social {
+    position: absolute;
+    right: 48px;
+    bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 1.2s forwards;
+  }
+
+  .hero-social-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+
+  .hero-social-links {
+    display: flex;
+    gap: 20px;
+  }
+
+  .hero-social-links a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .hero-social-links a:hover { color: var(--white); }
+
+  .scroll-indicator {
+    position: absolute;
+    left: 48px;
+    bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 1.4s forwards;
+  }
+
+  .scroll-line {
+    width: 40px; height: 1px;
+    background: var(--dim);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%; height: 100%;
+    background: var(--white);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollLine {
+    0%   { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  /* ───── EXPLORE SECTION ───── */
+  .explore {
+    padding: 100px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .explore-img {
+    position: relative;
+  }
+
+  .satellite-img {
+    width: 100%;
+    max-width: 420px;
+    filter: drop-shadow(0 0 40px rgba(26,111,255,0.3));
+    animation: floatSat 7s ease-in-out infinite;
+  }
+
+  @keyframes floatSat {
+    0%,100% { transform: translateY(0) rotate(-3deg); }
+    50%      { transform: translateY(-18px) rotate(3deg); }
+  }
+
+  .planet-earth {
+    position: absolute;
+    right: -60px;
+    bottom: -40px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #1a6fff 0%, #0a3a8a 40%, #020d22 80%);
+    box-shadow: inset -30px -20px 60px rgba(0,0,0,0.8), 0 0 60px rgba(26,111,255,0.2);
+    overflow: hidden;
+    animation: earthRotate 20s linear infinite;
+  }
+
+  @keyframes earthRotate {
+    from { filter: hue-rotate(0deg); }
+    to   { filter: hue-rotate(10deg); }
+  }
+
+  .planet-earth::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 80 Q60 60 90 80 Q120 100 150 80' stroke='rgba(255,255,255,0.12)' stroke-width='8' fill='none'/%3E%3Cpath d='M20 120 Q70 100 110 130 Q140 150 180 120' stroke='rgba(255,255,255,0.08)' stroke-width='12' fill='none'/%3E%3C/svg%3E");
+    background-size: cover;
+  }
+
+  .explore-content {}
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  .explore-quote {
+    font-size: clamp(18px, 2.5vw, 26px);
+    line-height: 1.5;
+    color: var(--white);
+    font-weight: 400;
+    quotes: "\201C" "\201D";
+  }
+
+  .explore-quote::before { content: open-quote; color: var(--accent); }
+  .explore-quote::after  { content: close-quote; color: var(--accent); }
+
+  .explore-text {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--dim);
+  }
+
+  /* ───── BIG TEXT SECTION ───── */
+  .big-text-section {
+    padding: 80px 48px 120px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .big-text-section::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(138,0,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .big-title {
+    font-family: var(--font-display);
+    font-size: clamp(60px, 11vw, 160px);
+    line-height: 0.88;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .big-title span {
+    display: block;
+  }
+
+  .big-title .outline {
+    -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+    color: transparent;
+  }
+
+  .astronaut-wrap {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -40%);
+    width: min(30%, 300px);
+    z-index: 2;
+    pointer-events: none;
+    animation: astroFloat 8s ease-in-out infinite;
+  }
+
+  @keyframes astroFloat {
+    0%,100% { transform: translate(-50%,-40%) rotate(-5deg); }
+    50%      { transform: translate(-50%,-50%) rotate(5deg); }
+  }
+
+  .side-quote-left {
+    position: absolute;
+    left: 48px;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: 220px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--dim);
+    font-style: italic;
+    z-index: 3;
+  }
+
+  .big-text-btns {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 48px;
+    position: relative;
+    z-index: 3;
+  }
+
+  /* ───── PARTNERS ───── */
+  .partners {
+    padding: 80px 48px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .partners-label {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+
+  .partners-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .partner-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 24px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    gap: 8px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .partner-item:hover {
+    color: var(--white);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .partner-item:last-child { border-right: none; }
+  .partner-item:nth-child(5) { border-right: none; }
+  .partner-item:nth-child(10) { border-right: none; }
+
+  /* partner icons as shapes */
+  .pi { width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; }
+
+  /* ───── SECOND ROCKET SECTION ───── */
+  .rocket2-section {
+    padding: 100px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .rocket2-content {}
+
+  .rocket2-quote {
+    font-size: clamp(16px, 2vw, 22px);
+    line-height: 1.6;
+    color: var(--white);
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .rocket2-quote::before { content: '\201C'; color: var(--accent); font-style: normal; }
+  .rocket2-quote::after  { content: '\201D'; color: var(--accent); font-style: normal; }
+
+  .rocket2-img-wrap {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .rocket2-img {
+    width: min(100%, 480px);
+    filter: drop-shadow(0 0 50px rgba(255,78,26,0.2));
+    animation: rocketFloat2 5s ease-in-out infinite;
+  }
+
+  @keyframes rocketFloat2 {
+    0%,100% { transform: rotate(12deg) translateY(0); }
+    50%      { transform: rotate(12deg) translateY(-20px); }
+  }
+
+  /* ───── MOON CTA ───── */
+  .moon-cta {
+    padding: 80px 48px 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .moon {
+    position: absolute;
+    bottom: -140px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(90vw, 800px);
+    height: min(90vw, 800px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 30%, #3a3a4a 0%, #1a1a24 40%, #0a0a10 80%);
+    box-shadow: inset -40px -30px 80px rgba(0,0,0,0.9), 0 0 100px rgba(100,100,150,0.1);
+  }
+
+  .moon::before {
+    content: '';
+    position: absolute;
+    top: 15%; left: 20%;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.3);
+    box-shadow: 120px 40px 0 30px rgba(0,0,0,0.2), 200px 100px 0 20px rgba(0,0,0,0.25), 60px 150px 0 40px rgba(0,0,0,0.2);
+  }
+
+  .moon-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding-bottom: 120px;
+  }
+
+  .moon-title {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 7vw, 100px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .moon-title .outline {
+    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+    color: transparent;
+    display: block;
+  }
+
+  /* ───── FOOTER ───── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 28px;
+  }
+
+  .footer-links a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--white); }
+
+  .footer-copy {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(138,155,184,0.5);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(30px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* GRID LINES */
+  .grid-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  /* CURSOR */
+  .cursor {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    mix-blend-mode: screen;
+  }
+
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,78,26,0.4);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.4s ease, width 0.3s, height 0.3s, opacity 0.3s;
+    transform: translate(-13px,-13px);
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span></span>SlabSpace</div>
+  <ul class="nav-links">
+    <li><a href="#launch">Launch</a></li>
+    <li><a href="#crew">Crew</a></li>
+    <li><a href="#community">Community</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+  </ul>
+  <a href="#launch" class="nav-cta">Lens Explorer →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="launch">
+  <canvas class="section-stars" data-density="300" data-size-max="1.6" data-color="200,210,255" data-twinkle="true"></canvas>
+  <canvas class="nebula-layer" data-nebula="purple"></canvas>
+  <div class="bg-badge canvas-badge"><span class="dot"></span>Canvas procedural</div>
+  <div class="grid-lines"></div>
+
+  <div class="hero-label">StarShip Explorer</div>
+
+  <h1 class="hero-title">
+    Explore the<br>
+    Universe<br>
+    <em>and Feel</em><br>
+    the Sensation
+  </h1>
+
+  <p class="hero-sub">
+    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.
+  </p>
+
+  <div class="hero-btns">
+    <a href="#about" class="btn-primary">
+      Watch Space Agency
+      <span class="btn-tag">RT</span>
+    </a>
+    <a href="#launch" class="btn-secondary">
+      Get Ticket
+      <span class="btn-tag">A</span>
+    </a>
+  </div>
+
+  <!-- Rocket SVG -->
+  <div class="hero-rocket">
+    <div class="rocket-float">
+      <svg viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+        <!-- Rocket Body -->
+        <defs>
+          <radialGradient id="bodyGrad" cx="40%" cy="30%">
+            <stop offset="0%" stop-color="#d0d8e8"/>
+            <stop offset="100%" stop-color="#6a7890"/>
+          </radialGradient>
+          <radialGradient id="flameGrad" cx="50%" cy="0%">
+            <stop offset="0%" stop-color="#fff7e0"/>
+            <stop offset="30%" stop-color="#ffa040"/>
+            <stop offset="70%" stop-color="#ff4e1a"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="8" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="flameBlur">
+            <feGaussianBlur stdDeviation="6"/>
+          </filter>
+        </defs>
+
+        <!-- Flame glow -->
+        <ellipse cx="250" cy="610" rx="70" ry="120" fill="rgba(255,78,26,0.2)" filter="url(#flameBlur)"/>
+
+        <!-- Flame -->
+        <path d="M210,560 Q200,620 190,680 Q220,640 250,620 Q280,640 310,680 Q300,620 290,560 Q270,580 250,570 Q230,580 210,560Z"
+              fill="url(#flameGrad)" filter="url(#glow)">
+          <animate attributeName="d" dur="0.12s" repeatCount="indefinite"
+            values="M210,560 Q200,620 190,680 Q220,640 250,620 Q280,640 310,680 Q300,620 290,560 Q270,580 250,570 Q230,580 210,560Z;
+                    M215,558 Q202,618 188,678 Q218,642 250,622 Q282,642 312,678 Q298,618 285,558 Q268,578 250,568 Q232,578 215,558Z;
+                    M210,560 Q200,620 190,680 Q220,640 250,620 Q280,640 310,680 Q300,620 290,560 Q270,580 250,570 Q230,580 210,560Z"/>
+        </path>
+
+        <!-- Booster fins left -->
+        <path d="M185,480 Q160,500 150,560 Q170,540 195,530Z" fill="#8090a8"/>
+        <!-- Booster fins right -->
+        <path d="M315,480 Q340,500 350,560 Q330,540 305,530Z" fill="#8090a8"/>
+
+        <!-- Main body -->
+        <path d="M180,150 Q180,80 250,30 Q320,80 320,150 L320,540 Q310,560 250,565 Q190,560 180,540Z"
+              fill="url(#bodyGrad)"/>
+
+        <!-- Nose cone highlight -->
+        <path d="M220,150 Q220,90 250,50 Q250,90 250,150Z" fill="rgba(255,255,255,0.18)"/>
+
+        <!-- Red stripes -->
+        <rect x="180" y="200" width="140" height="22" rx="2" fill="#cc2200" opacity="0.9"/>
+        <rect x="180" y="300" width="140" height="22" rx="2" fill="#cc2200" opacity="0.9"/>
+        <rect x="180" y="400" width="140" height="22" rx="2" fill="#cc2200" opacity="0.9"/>
+
+        <!-- Windows -->
+        <circle cx="250" cy="265" r="22" fill="#0a1a2e" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+        <circle cx="250" cy="265" r="16" fill="#0d2244"/>
+        <circle cx="244" cy="260" r="5" fill="rgba(255,255,255,0.3)"/>
+
+        <!-- Door/panel lines -->
+        <line x1="195" y1="460" x2="305" y2="460" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+        <line x1="195" y1="480" x2="305" y2="480" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+
+        <!-- Side wings -->
+        <path d="M180,430 L140,510 L165,510 L190,450Z" fill="#7a8a9e"/>
+        <path d="M320,430 L360,510 L335,510 L310,450Z" fill="#7a8a9e"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="hero-social">
+    <div class="hero-social-label">Follow More</div>
+    <div class="hero-social-links">
+      <a href="#">LinkedIn</a>
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- EXPLORE SECTION -->
+<section class="explore" id="about">
+  <div class="photo-bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg/1280px-Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg')"></div>
+  <div class="bg-badge photo-badge"><span class="dot"></span>Foto real — Hubble / Orion</div>
+  <div class="explore-img reveal">
+    <!-- Satellite SVG -->
+    <svg class="satellite-img" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="satBody" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#b0c0d8"/>
+          <stop offset="100%" stop-color="#607080"/>
+        </linearGradient>
+        <linearGradient id="panel" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#1a3a6a"/>
+          <stop offset="50%" stop-color="#0d2244"/>
+          <stop offset="100%" stop-color="#1a3a6a"/>
+        </linearGradient>
+      </defs>
+      <!-- Left solar panel -->
+      <rect x="20" y="110" width="110" height="70" rx="3" fill="url(#panel)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+      <line x1="75" y1="110" x2="75" y2="180" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <line x1="20" y1="145" x2="130" y2="145" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <!-- Arm left -->
+      <rect x="128" y="137" width="42" height="14" fill="#8090a8"/>
+      <!-- Main body -->
+      <rect x="160" y="105" width="80" height="80" rx="5" fill="url(#satBody)"/>
+      <!-- Body details -->
+      <rect x="170" y="115" width="60" height="40" rx="3" fill="rgba(0,0,0,0.2)"/>
+      <rect x="175" y="155" width="50" height="8" rx="2" fill="rgba(255,255,255,0.1)"/>
+      <circle cx="200" cy="135" r="12" fill="#0a1a3a" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+      <circle cx="200" cy="135" r="8" fill="#1a3a6a"/>
+      <!-- Arm right -->
+      <rect x="230" y="137" width="42" height="14" fill="#8090a8"/>
+      <!-- Right solar panel -->
+      <rect x="270" y="110" width="110" height="70" rx="3" fill="url(#panel)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+      <line x1="325" y1="110" x2="325" y2="180" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <line x1="270" y1="145" x2="380" y2="145" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <!-- Antenna -->
+      <line x1="200" y1="105" x2="200" y2="60" stroke="#a0b0c0" stroke-width="2.5"/>
+      <circle cx="200" cy="55" r="8" fill="none" stroke="#a0b0c0" stroke-width="2"/>
+      <circle cx="200" cy="55" r="3" fill="#ffa040"/>
+    </svg>
+    <div class="planet-earth"></div>
+  </div>
+
+  <div class="explore-content reveal">
+    <div class="section-label">Explore more universes</div>
+    <p class="explore-quote">
+      Many go beyond the incredible technological advances that allow you to see them in real time.
+    </p>
+    <p class="explore-text">
+      SlabSpace universe Labs — explore the ultimate space for new experiences based on the services it has provided. Our cutting-edge observatories bring the cosmos to your fingertips.
+    </p>
+    <div style="margin-top: 32px;">
+      <a href="#" class="btn-secondary" style="display:inline-flex">Read more →</a>
+    </div>
+  </div>
+</section>
+
+<!-- BIG TEXT SECTION -->
+<section class="big-text-section" id="crew">
+  <canvas class="section-stars" data-density="240" data-size-max="1.8" data-color="215,195,255" data-twinkle="true"></canvas>
+  <canvas class="nebula-layer" data-nebula="blue-purple"></canvas>
+  <div class="bg-badge canvas-badge"><span class="dot"></span>Canvas procedural</div>
+  <div class="grid-lines"></div>
+
+  <p class="side-quote-left reveal">
+    "It's all about Slabspace universe Labs — explore the ultimate space for new experiences based on the services it has provided."
+  </p>
+
+  <h2 class="big-title reveal">
+    <span>Explore</span>
+    <span>More</span>
+    <span class="outline">Universes</span>
+    <span class="outline">With</span>
+    <span>Extra</span>
+    <span class="outline">ordinary</span>
+    <span>Nuances</span>
+  </h2>
+
+  <!-- Astronaut SVG -->
+  <div class="astronaut-wrap">
+    <svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="suitGrad" cx="40%" cy="30%">
+          <stop offset="0%" stop-color="#e8eef8"/>
+          <stop offset="100%" stop-color="#8090a8"/>
+        </radialGradient>
+        <radialGradient id="helmetGrad" cx="35%" cy="30%">
+          <stop offset="0%" stop-color="rgba(255,200,100,0.5)"/>
+          <stop offset="100%" stop-color="rgba(20,40,80,0.8)"/>
+        </radialGradient>
+      </defs>
+      <!-- Legs -->
+      <rect x="72" y="200" width="24" height="50" rx="12" fill="url(#suitGrad)"/>
+      <rect x="104" y="200" width="24" height="50" rx="12" fill="url(#suitGrad)"/>
+      <!-- Boots -->
+      <rect x="66" y="240" width="36" height="18" rx="8" fill="#607080"/>
+      <rect x="98" y="240" width="36" height="18" rx="8" fill="#607080"/>
+      <!-- Body -->
+      <rect x="62" y="120" width="76" height="90" rx="20" fill="url(#suitGrad)"/>
+      <!-- Chest pack -->
+      <rect x="74" y="135" width="52" height="35" rx="5" fill="rgba(0,0,0,0.2)"/>
+      <rect x="80" y="140" width="16" height="10" rx="2" fill="#1a6fff" opacity="0.7"/>
+      <rect x="104" y="140" width="16" height="10" rx="2" fill="#ff4e1a" opacity="0.7"/>
+      <!-- Arms -->
+      <rect x="32" y="122" width="34" height="22" rx="11" fill="url(#suitGrad)" transform="rotate(20,49,133)"/>
+      <rect x="134" y="122" width="34" height="22" rx="11" fill="url(#suitGrad)" transform="rotate(-20,151,133)"/>
+      <!-- Gloves -->
+      <circle cx="42" cy="155" r="12" fill="#8090a8"/>
+      <circle cx="158" cy="155" r="12" fill="#8090a8"/>
+      <!-- Neck -->
+      <rect x="86" y="108" width="28" height="18" rx="8" fill="#8090a8"/>
+      <!-- Helmet -->
+      <circle cx="100" cy="88" r="44" fill="#9aa8b8"/>
+      <circle cx="100" cy="88" r="38" fill="url(#helmetGrad)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+      <!-- Visor shine -->
+      <ellipse cx="92" cy="78" rx="14" ry="10" fill="rgba(255,255,255,0.2)" transform="rotate(-20,92,78)"/>
+      <!-- Helmet ring -->
+      <circle cx="100" cy="88" r="44" fill="none" stroke="#8090a8" stroke-width="4"/>
+      <!-- Flag patch -->
+      <rect x="68" y="128" width="22" height="14" rx="2" fill="#1a6fff" opacity="0.8"/>
+      <line x1="68" y1="135" x2="90" y2="135" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <div class="big-text-btns reveal">
+    <a href="#" class="btn-primary">Explore Universe</a>
+    <a href="#" class="btn-secondary">Learn More</a>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="partners" id="community">
+  <div class="photo-bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg/800px-Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg'); background-position: center top;"></div>
+  <div class="bg-badge photo-badge"><span class="dot"></span>Foto real — Hubble / Pillars of Creation</div>
+  <div class="partners-label">Our Partners</div>
+  <div class="partners-grid">
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><path d="M2 8 L8 2 L14 8 L8 14Z" fill="currentColor" opacity="0.7"/></svg> NEXTFLOWS</div>
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><rect x="2" y="4" width="12" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg> BestBank</div>
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><line x1="2" y1="12" x2="6" y2="6" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="6" x2="10" y2="9" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="9" x2="14" y2="4" stroke="currentColor" stroke-width="1.5"/></svg> MarketSavy</div>
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><polygon points="8,2 14,14 2,14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg> EpicDev</div>
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg> Globalchart</div>
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><path d="M3 13 L8 3 L13 13" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="5" y1="10" x2="11" y2="10" stroke="currentColor" stroke-width="1.5"/></svg> starsup</div>
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg> TEAMTALK</div>
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" stroke-width="1.5"/><line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" stroke-width="1.5"/></svg> solfast</div>
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><path d="M2 8 Q8 2 14 8 Q8 14 2 8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg> arktico</div>
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="currentColor" opacity="0.7"/><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1"/></svg> overlays</div>
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><line x1="2" y1="5" x2="14" y2="5" stroke="currentColor" stroke-width="1.5"/><line x1="4" y1="9" x2="12" y2="9" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="13" x2="10" y2="13" stroke="currentColor" stroke-width="1.5"/></svg> PAYSCALE</div>
+    <div class="partner-item"><svg class="pi" viewBox="0 0 16 16"><path d="M3 13 L8 3 L13 8 L8 13Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg> ExDone</div>
+  </div>
+</section>
+
+<!-- SECOND ROCKET SECTION -->
+<section class="rocket2-section" id="gallery">
+  <canvas class="section-stars" data-density="200" data-size-max="1.4" data-color="190,225,255" data-twinkle="true"></canvas>
+  <canvas class="nebula-layer" data-nebula="cyan"></canvas>
+  <div class="bg-badge canvas-badge"><span class="dot"></span>Canvas procedural</div>
+  <div class="rocket2-content reveal">
+    <div class="section-label">Explore more universes</div>
+    <p class="rocket2-quote">
+      You can be an astronaut, which focuses on stars, binoculars, galaxies and the universe.
+    </p>
+    <div style="margin-top: 32px;">
+      <a href="#" class="btn-secondary" style="display:inline-flex">Read more →</a>
+    </div>
+  </div>
+
+  <div class="rocket2-img-wrap reveal">
+    <svg class="rocket2-img" viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bodyGrad2" cx="40%" cy="30%">
+          <stop offset="0%" stop-color="#c8d4e4"/>
+          <stop offset="100%" stop-color="#5a6878"/>
+        </radialGradient>
+        <radialGradient id="flameGrad2" cx="50%" cy="0%">
+          <stop offset="0%" stop-color="#fff7e0"/>
+          <stop offset="30%" stop-color="#ffa040"/>
+          <stop offset="70%" stop-color="#ff4e1a"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <filter id="glow2">
+          <feGaussianBlur stdDeviation="10" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <ellipse cx="250" cy="610" rx="80" ry="130" fill="rgba(255,78,26,0.15)" filter="url(#glow2)"/>
+      <path d="M200,560 Q188,625 175,690 Q215,648 250,625 Q285,648 325,690 Q312,625 300,560 Q278,582 250,572 Q222,582 200,560Z" fill="url(#flameGrad2)" filter="url(#glow2)">
+        <animate attributeName="d" dur="0.15s" repeatCount="indefinite"
+          values="M200,560 Q188,625 175,690 Q215,648 250,625 Q285,648 325,690 Q312,625 300,560 Q278,582 250,572 Q222,582 200,560Z;
+                  M205,558 Q190,622 174,688 Q214,650 250,627 Q286,650 326,688 Q310,622 295,558 Q276,580 250,570 Q224,580 205,558Z;
+                  M200,560 Q188,625 175,690 Q215,648 250,625 Q285,648 325,690 Q312,625 300,560 Q278,582 250,572 Q222,582 200,560Z"/>
+      </path>
+      <path d="M175,460 Q148,485 140,560 Q162,538 190,528Z" fill="#7a8a9e"/>
+      <path d="M325,460 Q352,485 360,560 Q338,538 310,528Z" fill="#7a8a9e"/>
+      <path d="M175,145 Q175,72 250,24 Q325,72 325,145 L325,540 Q314,562 250,567 Q186,562 175,540Z" fill="url(#bodyGrad2)"/>
+      <path d="M215,145 Q215,85 250,44 Q250,85 250,145Z" fill="rgba(255,255,255,0.15)"/>
+      <rect x="175" y="195" width="150" height="24" rx="2" fill="#bb1f00" opacity="0.95"/>
+      <rect x="175" y="298" width="150" height="24" rx="2" fill="#bb1f00" opacity="0.95"/>
+      <rect x="175" y="400" width="150" height="24" rx="2" fill="#bb1f00" opacity="0.95"/>
+      <circle cx="250" cy="262" r="24" fill="#0a1a2e" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+      <circle cx="250" cy="262" r="18" fill="#0d2244"/>
+      <circle cx="244" cy="257" r="6" fill="rgba(255,255,255,0.25)"/>
+      <path d="M175,425 L132,510 L160,510 L185,448Z" fill="#7080a0"/>
+      <path d="M325,425 L368,510 L340,510 L315,448Z" fill="#7080a0"/>
+    </svg>
+  </div>
+</section>
+
+<!-- MOON CTA -->
+<section class="moon-cta">
+  <div class="photo-bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Carina_Nebula_by_ESO.jpg/1280px-Carina_Nebula_by_ESO.jpg')"></div>
+  <div class="bg-badge photo-badge"><span class="dot"></span>Foto real — ESO / Carina</div>
+  <div class="moon"></div>
+  <div class="moon-content reveal">
+    <h2 class="moon-title">
+      Join others to<br>
+      <span class="outline">Experience an</span>
+      <span class="outline">Extraordinary</span>
+      Galaxy
+    </h2>
+    <a href="#" class="btn-primary">Start Journey — It's Free Now →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Sitemap</a>
+    <a href="#">Terms of Use</a>
+  </div>
+  <div class="footer-copy">SlabSpace © 2021–2025. All Rights Reserved.</div>
+</footer>
+
+<script>
+// ── Per-section star system ──────────────────────────────────────────────────
+//
+// Each <canvas class="section-stars"> reads config from data attributes:
+//   data-density  → number of stars (scales with section area)
+//   data-size-max → max star radius
+//   data-color    → base RGB  e.g. "200,220,255"
+//   data-twinkle  → "true" | "false"
+//
+// Sections and their personalities:
+//   hero          → dense (320), large (1.6px), cool blue, twinkle ON
+//   explore       → sparse (80),  tiny (1.0px), muted blue, twinkle OFF
+//   big-text      → medium (220), large (1.8px), purple tint, twinkle ON
+//   partners      → very sparse (40), tiny (0.8px), dim,  twinkle OFF
+//   rocket2       → medium (180), medium (1.4px), icy blue, twinkle ON
+//   moon-cta      → dense (260),  small (1.2px),  lavender, twinkle ON
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════════════
+//  BACKGROUND SYSTEM — Híbrido Canvas + Foto
+//
+//  Canvas sections  (Hero, Big-Text, Rocket2):
+//    • .section-stars  → estrelas animadas com twinkle + drift
+//    • .nebula-layer   → nuvens de nebulosa procedurais em loop
+//
+//  Photo sections   (Explore, Partners, Moon CTA):
+//    • .photo-bg via CSS background-image (imagens reais NASA/ESO)
+//    • overlay escuro via ::after para legibilidade
+// ═══════════════════════════════════════════════════════════════════
+
+// ── 1. STARS ─────────────────────────────────────────────────────
+class SectionStars {
+  constructor(canvas) {
+    this.cv  = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.cfg = {
+      density : parseInt(canvas.dataset.density || 150),
+      sizeMax : parseFloat(canvas.dataset.sizeMax || 1.4),
+      color   : canvas.dataset.color || '200,220,255',
+      twinkle : canvas.dataset.twinkle === 'true',
+    };
+    this.stars = [];
+    this.raf   = null;
+    this._init();
+    new ResizeObserver(() => this._init()).observe(canvas.parentElement);
+  }
+  _fit() {
+    const r = this.cv.parentElement.getBoundingClientRect();
+    this.cv.width  = r.width  || window.innerWidth;
+    this.cv.height = r.height || 600;
+  }
+  _init() {
+    this._fit();
+    const { density, sizeMax, color } = this.cfg;
+    this.stars = Array.from({ length: density }, () => ({
+      x: Math.random() * this.cv.width,
+      y: Math.random() * this.cv.height,
+      r: Math.random() * sizeMax + 0.25,
+      o: Math.random() * 0.75 + 0.15,
+      do: (Math.random() - 0.5) * 0.011,
+      dx: (Math.random() - 0.5) * 0.07,
+      dy: (Math.random() - 0.5) * 0.035,
+    }));
+  }
+  _draw() {
+    const { ctx, cv, cfg } = this;
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    this.stars.forEach(s => {
+      if (cfg.twinkle) { s.o += s.do; if (s.o > 0.95 || s.o < 0.08) s.do *= -1; }
+      s.x += s.dx; s.y += s.dy;
+      if (s.x < 0) s.x = cv.width;  if (s.x > cv.width)  s.x = 0;
+      if (s.y < 0) s.y = cv.height; if (s.y > cv.height) s.y = 0;
+      if (s.r > 1.05) {
+        const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 3.5);
+        g.addColorStop(0, `rgba(${cfg.color},${(s.o * 0.55).toFixed(2)})`);
+        g.addColorStop(1, `rgba(${cfg.color},0)`);
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = g; ctx.fill();
+      }
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${cfg.color},${s.o.toFixed(2)})`; ctx.fill();
+    });
+    this.raf = requestAnimationFrame(() => this._draw());
+  }
+  start() { if (!this.raf) this._draw(); }
+}
+
+// ── 2. NEBULA LAYER ──────────────────────────────────────────────
+// Cada seção canvas tem uma paleta de nebulosa diferente.
+// As nuvens surgem, ficam visíveis e somem lentamente (fade loop).
+const NEBULA_PALETTES = {
+  'purple':      [[120,40,200], [80,10,160], [180,60,220], [60,0,140]],
+  'blue-purple': [[20,80,200],  [100,20,180],[40,120,255], [80,0,160]],
+  'cyan':        [[0,160,220],  [20,100,200],[40,200,240], [0,80,180]],
+};
+
+class NebulaLayer {
+  constructor(canvas) {
+    this.cv  = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.palette = NEBULA_PALETTES[canvas.dataset.nebula] || NEBULA_PALETTES['purple'];
+    this.clouds  = [];
+    this.raf     = null;
+    this._init();
+    new ResizeObserver(() => this._init()).observe(canvas.parentElement);
+  }
+  _fit() {
+    const r = this.cv.parentElement.getBoundingClientRect();
+    this.cv.width  = r.width  || window.innerWidth;
+    this.cv.height = r.height || 600;
+  }
+  _mkCloud() {
+    const W = this.cv.width, H = this.cv.height;
+    const col = this.palette[Math.floor(Math.random() * this.palette.length)];
+    return {
+      x  : Math.random() * W,
+      y  : Math.random() * H,
+      rx : 80  + Math.random() * (W * 0.28),
+      ry : 50  + Math.random() * (H * 0.22),
+      rot: Math.random() * Math.PI,
+      a  : 0,                            // current opacity
+      ta : 0.04 + Math.random() * 0.10,  // target opacity
+      da : 0.0003 + Math.random() * 0.0004, // fade speed
+      dir: 1,                            // 1 = fade in, -1 = fade out
+      r  : col[0] + (Math.random()-0.5)*25,
+      g  : col[1] + (Math.random()-0.5)*15,
+      b  : col[2] + (Math.random()-0.5)*25,
+    };
+  }
+  _init() {
+    this._fit();
+    // 7–10 persistent clouds
+    this.clouds = Array.from({ length: 9 }, () => {
+      const c = this._mkCloud();
+      c.a = Math.random() * c.ta; // start at random phase
+      return c;
+    });
+  }
+  _draw() {
+    const { ctx, cv } = this;
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    this.clouds.forEach((cl, i) => {
+      // Animate opacity
+      cl.a += cl.da * cl.dir;
+      if (cl.dir === 1 && cl.a >= cl.ta) { cl.dir = -1; }
+      if (cl.dir === -1 && cl.a <= 0)    { this.clouds[i] = this._mkCloud(); return; }
+
+      ctx.save();
+      ctx.translate(cl.x, cl.y);
+      ctx.rotate(cl.rot);
+      ctx.scale(cl.rx / Math.max(cl.rx, cl.ry), cl.ry / Math.max(cl.rx, cl.ry));
+      const R = Math.max(cl.rx, cl.ry);
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, R);
+      g.addColorStop(0,   `rgba(${cl.r|0},${cl.g|0},${cl.b|0},${cl.a.toFixed(3)})`);
+      g.addColorStop(0.35,`rgba(${cl.r|0},${cl.g|0},${cl.b|0},${(cl.a*0.65).toFixed(3)})`);
+      g.addColorStop(0.65,`rgba(${cl.r|0},${cl.g|0},${cl.b|0},${(cl.a*0.25).toFixed(3)})`);
+      g.addColorStop(1,   `rgba(${cl.r|0},${cl.g|0},${cl.b|0},0)`);
+      ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2);
+      ctx.fillStyle = g; ctx.fill();
+      ctx.restore();
+    });
+    this.raf = requestAnimationFrame(() => this._draw());
+  }
+  start() { if (!this.raf) this._draw(); }
+}
+
+// ── Mount all canvas backgrounds ─────────────────────────────────
+document.querySelectorAll('.section-stars').forEach(c => new SectionStars(c).start());
+document.querySelectorAll('.nebula-layer').forEach(c => new NebulaLayer(c).start());
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+reveals.forEach(r => observer.observe(r));
+
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX;
+  my = e.clientY;
+  cursor.style.left = (mx - 5) + 'px';
+  cursor.style.top = (my - 5) + 'px';
+});
+
+function animRing() {
+  rx += (mx - rx - 18) * 0.12;
+  ry += (my - ry - 18) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'scale(2.5)';
+    ring.style.width = '60px';
+    ring.style.height = '60px';
+    ring.style.opacity = '0.5';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'scale(1)';
+    ring.style.width = '36px';
+    ring.style.height = '36px';
+    ring.style.opacity = '1';
+  });
+});
+</script>
+</body>
+</html>

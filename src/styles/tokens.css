@@ -1,0 +1,27 @@
+/* =========================================
+   DESIGN TOKENS — Truth Commerce
+   Mirror dos valores do legacy CSS
+========================================= */
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Brand Colors */
+  --green: #07dd2b;
+  --green-glow: rgba(7, 221, 43, 0.12);
+
+  /* Backgrounds */
+  --bg-base: #040507;
+  --bg-surface: #0a0c10;
+
+  /* Text */
+  --text-main: #ffffff;
+  --text-muted: #a1a1aa;
+
+  /* Borders */
+  --border-light: rgba(255, 255, 255, 0.06);
+
+  /* Motion */
+  --ease-snappy: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}
