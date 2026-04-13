@@ -1,28 +1,28 @@
 import { useRef, useMemo, useEffect } from 'react'
 import { useFrame, useThree, useLoader } from '@react-three/fiber'
+import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import createGlowTexture from './GlowTexture'
+import sampleGLB from './sampleGLB'
 
 const CASES = [
-  { t: 'SOPY', img: '/assets/images/sopy-print.png' },
-  { t: 'MP DISTRIBUIDORA', img: '/assets/images/mp-print.png' },
-  { t: 'NEXT EVENTOS', img: '/assets/images/next-print.png' },
-  { t: 'JOHNNY COOKER', img: '/assets/images/johny-print.png' },
-  { t: 'HYPE KBEAUTY', img: '/assets/images/kbeauty-print.png' },
-  { t: 'CAFE CARANDAI', img: '/assets/images/cafe-print.png' },
+  { t: 'SOPY',           img: '/assets/images/sopy-print.png'    },
+  { t: 'MP DISTRIBUIDORA', img: '/assets/images/mp-print.png'    },
+  { t: 'NEXT EVENTOS',   img: '/assets/images/next-print.png'    },
+  { t: 'JOHNNY COOKER',  img: '/assets/images/johny-print.png'   },
+  { t: 'HYPE KBEAUTY',   img: '/assets/images/kbeauty-print.png' },
+  { t: 'CAFE CARANDAI',  img: '/assets/images/cafe-print.png'    },
 ]
 
-// Only duplicate once (12 cards) instead of 3x (18) — reduces texture loads
-const FULL_CASES = [...CASES, ...CASES]
-const TOTAL = FULL_CASES.length
+// 6 cases × 3 = 18 cards on the ring
+const FULL_CASES = [...CASES, ...CASES, ...CASES]
+const TOTAL      = FULL_CASES.length
+const RADIUS     = 3500
+const CARD_W     = 1100
+const CARD_H     = 620
+const SAT_N      = 20000
+const SAT_SCALE  = 1500 / 5.5  // normalize sampleGLB height (5.5) → 1500 Three.js units
 
-const RADIUS = 3500
-const CARD_W = 1100
-const CARD_H = 620
-const SAT_N = 8000
-const SAT_SCATTER = 1200
-
-// Vertex shader for cylinder cards
 const vertShader = `
 varying vec2 vUv;
 void main() {
@@ -31,7 +31,8 @@ void main() {
 }
 `
 
-// Fragment shader — darkened front face with texture
+// Front face: image at 15% brightness (dark)
+// Back face:  image at full brightness
 const fragShader = `
 uniform sampler2D map;
 varying vec2 vUv;
@@ -45,120 +46,114 @@ void main() {
 }
 `
 
-export default function Carousel3D({ scrollProgress }) {
-  const groupRef = useRef()
-  const satRef = useRef()
-  const { camera, scene } = useThree()
+export default function Carousel3D({ scrollProgressRef, onCardClick }) {
+  const groupRef     = useRef()
+  const satGroupRef  = useRef()
+  const satPointsRef = useRef()
+  const { camera, scene, gl } = useThree()
 
-  const ringRotRef = useRef(0)
-  const targetRotRef = useRef(0)
-  const dragRef = useRef({ active: false, startX: 0 })
+  const ringRotRef    = useRef(0)
+  const targetRotRef  = useRef(0)
+  const hudOpacityRef = useRef(0)
+  const dragRef       = useRef({ active: false, startX: 0 })
+  const mouseRef      = useRef(new THREE.Vector2(-999, -999))
+  const raycaster     = useMemo(() => new THREE.Raycaster(), [])
+  const cardMeshesRef = useRef([])
 
-  // Load textures
-  const textures = useLoader(
-    THREE.TextureLoader,
-    FULL_CASES.map((c) => c.img)
-  )
+  // ── Models ───────────────────────────────────────────────────
+  const satelliteGltf = useGLTF('/assets/models/satellite.glb')
 
-  // Build cylinder card meshes
+  // 6 unique textures shared across 18 card slots
+  const baseTextures = useLoader(THREE.TextureLoader, CASES.map(c => c.img))
+
+  // ── Cylinder card meshes ─────────────────────────────────────
   const cardMeshes = useMemo(() => {
-    return FULL_CASES.map((c, i) => {
-      const angle = (i / TOTAL) * Math.PI * 2
+    const meshes = FULL_CASES.map((c, i) => {
+      const angle    = (i / TOTAL) * Math.PI * 2
       const thetaLen = CARD_W / RADIUS
 
       const geo = new THREE.CylinderGeometry(
         RADIUS, RADIUS, CARD_H,
         32, 1, true,
-        angle - thetaLen / 2, thetaLen
+        angle - thetaLen / 2,
+        thetaLen,
       )
 
       const mat = new THREE.ShaderMaterial({
         vertexShader: vertShader,
         fragmentShader: fragShader,
-        uniforms: { map: { value: textures[i] } },
+        uniforms: { map: { value: baseTextures[i % CASES.length] } },
         side: THREE.DoubleSide,
         transparent: true,
       })
 
       const mesh = new THREE.Mesh(geo, mat)
-      mesh.userData = { ...c, index: i }
+      mesh.userData = { ...c, index: i % CASES.length }
       return mesh
     })
-  }, [textures])
 
-  // Satellite particles
-  const { satPositions, satColors, satBasePos, satNoise, satVelocities, satCurrentPos } = useMemo(() => {
-    const positions = new Float32Array(SAT_N * 3)
-    const colors = new Float32Array(SAT_N * 3)
-    const basePos = new Float32Array(SAT_N * 3)
-    const noise = new Float32Array(SAT_N * 3)
-    const velocities = new Float32Array(SAT_N * 3)
+    cardMeshesRef.current = meshes
+    return meshes
+  }, [baseTextures])
+
+  // ── Satellite particle cloud ─────────────────────────────────
+  const { satCurrentPos, satNoise, satBasePos, satColors } = useMemo(() => {
+    const rawPos     = sampleGLB(satelliteGltf, SAT_N)
+    const basePos    = new Float32Array(SAT_N * 3)
+    const noise      = new Float32Array(SAT_N * 3)
     const currentPos = new Float32Array(SAT_N * 3)
-
-    const green = new THREE.Color('#07dd2b')
+    const colors     = new Float32Array(SAT_N * 3)
+    const green      = new THREE.Color('#07dd2b')
 
     for (let i = 0; i < SAT_N; i++) {
       const ix = i * 3
-      // Distribute on sphere surface (r ~800)
-      const theta = Math.random() * Math.PI * 2
-      const phi = Math.acos(2 * Math.random() - 1)
-      const r = 600 + Math.random() * 400
+      // Scale from sampleGLB-normalized height (5.5) to 1500 world units
+      basePos[ix]     = rawPos[ix]     * SAT_SCALE
+      basePos[ix + 1] = rawPos[ix + 1] * SAT_SCALE
+      basePos[ix + 2] = rawPos[ix + 2] * SAT_SCALE
 
-      positions[ix] = r * Math.sin(phi) * Math.cos(theta)
-      positions[ix + 1] = r * Math.sin(phi) * Math.sin(theta)
-      positions[ix + 2] = r * Math.cos(phi)
+      currentPos[ix]     = basePos[ix]
+      currentPos[ix + 1] = basePos[ix + 1]
+      currentPos[ix + 2] = basePos[ix + 2]
 
-      basePos[ix] = positions[ix]
-      basePos[ix + 1] = positions[ix + 1]
-      basePos[ix + 2] = positions[ix + 2]
-
-      currentPos[ix] = positions[ix]
-      currentPos[ix + 1] = positions[ix + 1]
-      currentPos[ix + 2] = positions[ix + 2]
-
-      noise[ix] = (Math.random() - 0.5) * 2
+      noise[ix]     = (Math.random() - 0.5) * 2
       noise[ix + 1] = (Math.random() - 0.5) * 2
       noise[ix + 2] = (Math.random() - 0.5) * 2
 
-      velocities[ix] = (Math.random() - 0.5) * 0.3
-      velocities[ix + 1] = (Math.random() - 0.5) * 0.3
-      velocities[ix + 2] = (Math.random() - 0.5) * 0.3
-
-      // Colors: mostly white, 15% green accents
+      // 15% green accents, 85% white/silver
       if (Math.random() > 0.85) {
-        const intensity = 0.6 + Math.random() * 0.4
-        colors[ix] = green.r * intensity
-        colors[ix + 1] = green.g * intensity
-        colors[ix + 2] = green.b * intensity
+        const v = 0.6 + Math.random() * 0.4
+        colors[ix] = green.r * v; colors[ix + 1] = green.g * v; colors[ix + 2] = green.b * v
       } else {
         const w = 0.85 + Math.random() * 0.15
-        colors[ix] = w
-        colors[ix + 1] = w
-        colors[ix + 2] = w
+        colors[ix] = w; colors[ix + 1] = w; colors[ix + 2] = w
       }
     }
 
-    return { satPositions: positions, satColors: colors, satBasePos: basePos, satNoise: noise, satVelocities: velocities, satCurrentPos: currentPos }
-  }, [])
+    return { satCurrentPos: currentPos, satNoise: noise, satBasePos: basePos, satColors: colors }
+  }, [satelliteGltf])
 
   const glowTex = useMemo(() => createGlowTexture(), [])
 
-  // Wheel + drag interaction
+  // ── Interaction ───────────────────────────────────────────────
   useEffect(() => {
+    const canvas = gl.domElement
+
     const onWheel = (e) => {
-      if (scrollProgress.current > 0.2 && scrollProgress.current < 0.8) {
+      if (hudOpacityRef.current > 0.5) {
         targetRotRef.current += e.deltaY * 0.0008
       }
     }
 
     const onDown = (e) => {
-      if (scrollProgress.current > 0.2 && scrollProgress.current < 0.8) {
-        dragRef.current.active = true
-        dragRef.current.startX = e.clientX
+      if (hudOpacityRef.current > 0.5) {
+        dragRef.current = { active: true, startX: e.clientX }
       }
     }
 
     const onMove = (e) => {
+      mouseRef.current.x =  (e.clientX / window.innerWidth)  * 2 - 1
+      mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1
       if (dragRef.current.active) {
         targetRotRef.current += (e.clientX - dragRef.current.startX) * 0.002
         dragRef.current.startX = e.clientX
@@ -167,121 +162,125 @@ export default function Carousel3D({ scrollProgress }) {
 
     const onUp = () => { dragRef.current.active = false }
 
-    window.addEventListener('wheel', onWheel, { passive: true })
+    const onClick = () => {
+      if (hudOpacityRef.current < 0.5) return
+      raycaster.setFromCamera(mouseRef.current, camera)
+      const hits = raycaster.intersectObjects(cardMeshesRef.current)
+      if (hits.length > 0 && onCardClick) {
+        onCardClick(hits[0].object.userData)
+      }
+    }
+
+    window.addEventListener('wheel',     onWheel,  { passive: true })
     window.addEventListener('mousedown', onDown)
-    window.addEventListener('mousemove', onMove)
-    window.addEventListener('mouseup', onUp)
+    window.addEventListener('mousemove', onMove,   { passive: true })
+    window.addEventListener('mouseup',   onUp)
+    canvas.addEventListener('click',     onClick)
 
     return () => {
-      window.removeEventListener('wheel', onWheel)
+      window.removeEventListener('wheel',     onWheel)
       window.removeEventListener('mousedown', onDown)
       window.removeEventListener('mousemove', onMove)
-      window.removeEventListener('mouseup', onUp)
+      window.removeEventListener('mouseup',   onUp)
+      canvas.removeEventListener('click',     onClick)
     }
-  }, [scrollProgress])
+  }, [camera, gl, onCardClick, raycaster])
 
-  // Animation loop
+  // ── Render loop ───────────────────────────────────────────────
   useFrame(() => {
-    const p = scrollProgress.current || 0
+    const p = scrollProgressRef.current || 0
 
-    // 3-phase camera proxy interpolation
-    let camY, camZ, lookY, lookZ, tilt, hudOpacity
+    let camY, camZ, lookZ, tilt, hudOpacity
 
-    if (p < 0.33) {
-      // Phase 1: Dive in
-      const t = p / 0.33
-      const ease = t * t * (3 - 2 * t) // smoothstep
-      camY = 4000 + (0 - 4000) * ease
-      camZ = 8000 + (-500 - 8000) * ease
-      lookY = 0
-      lookZ = 0 + (-4000 - 0) * ease
-      tilt = 0.20 + (0 - 0.20) * ease
+    if (p < 0.5) {
+      // Phase 1: dive into the ring
+      const t    = p * 2
+      const ease = t * t * (3 - 2 * t)  // smoothstep
+      camY       = 4000 * (1 - ease)
+      camZ       = 8000 + (-500 - 8000) * ease  // 8000 → -500
+      lookZ      = -4000 * ease                  // 0 → -4000
+      tilt       = 0.20 * (1 - ease)
       hudOpacity = ease
-    } else if (p < 0.66) {
-      // Phase 2: Exploration
-      camY = 0
-      camZ = -500
-      lookY = 0
-      lookZ = -4000
-      tilt = 0
-      hudOpacity = 1
+    } else if (p < 0.75) {
+      // Phase 2: exploration — camera stable inside ring
+      camY = 0; camZ = -500; lookZ = -4000; tilt = 0; hudOpacity = 1
     } else {
-      // Phase 3: Exit
-      const t = (p - 0.66) / 0.34
-      const ease = t * t * (3 - 2 * t)
-      camY = 0 + (4000 - 0) * ease
-      camZ = -500 + (8000 - (-500)) * ease
-      lookY = 0
-      lookZ = -4000 + (0 - (-4000)) * ease
-      tilt = 0 + 0.20 * ease
+      // Phase 3: exit
+      const t    = (p - 0.75) * 4
+      const e    = Math.min(1, t)
+      const ease = e * e * (3 - 2 * e)
+      camY       = 4000 * ease
+      camZ       = -500 + 8500 * ease   // -500 → 8000
+      lookZ      = -4000 * (1 - ease)   // -4000 → 0
+      tilt       = 0.20 * ease
       hudOpacity = 1 - ease
     }
 
-    camera.position.set(0, camY, camZ)
-    camera.lookAt(0, lookY, lookZ)
+    hudOpacityRef.current = hudOpacity
 
-    // Fog density
+    camera.position.set(0, camY, camZ)
+    camera.lookAt(0, 0, lookZ)
+
+    // Fog: tight when inside ring, open when outside
     if (scene.fog) {
-      scene.fog.near = hudOpacity > 0.5 ? 100 : 0
-      scene.fog.far = hudOpacity > 0.5 ? 15000 : 100000
+      scene.fog.near = hudOpacity > 0.5 ? 100    : 0
+      scene.fog.far  = hudOpacity > 0.5 ? 15000  : 100000
     }
 
-    // Carousel group rotation
+    // Ring: tilt + auto-spin + drag
     if (groupRef.current) {
       groupRef.current.rotation.x = tilt
 
-      // Auto-spin
-      const autoSpeed = hudOpacity > 0.8 ? 0.0003 : 0.003
       if (!dragRef.current.active) {
-        targetRotRef.current -= autoSpeed
+        targetRotRef.current -= hudOpacity > 0.8 ? 0.0003 : 0.003
       }
       ringRotRef.current += (targetRotRef.current - ringRotRef.current) * 0.06
       groupRef.current.rotation.y = ringRotRef.current
     }
 
-    // Satellite particles
-    if (satRef.current) {
-      const satGeo = satRef.current.geometry
-      const satMat = satRef.current.material
-      const posAttr = satGeo.getAttribute('position')
-      const posArr = posAttr.array
+    // Satellite: formed when outside, scattered when camera enters
+    // satScatter = hudOpacity * 1200 → 0 = formed, 1200 = fully scattered
+    const satScatter  = hudOpacity * 1200
+    const satOpacity  = Math.max(0, 1 - hudOpacity * 2)  // gone by hudOpacity=0.5
 
-      const scatter = hudOpacity * SAT_SCATTER
-      const satOpacity = 1.0 - Math.max(0, (hudOpacity - 0.6) * 2.5)
-      satMat.opacity = Math.max(0, Math.min(1, satOpacity))
+    if (satPointsRef.current) {
+      satPointsRef.current.material.opacity = satOpacity
 
-      satRef.current.parent.rotation.y += 0.002
+      if (satOpacity > 0.01) {
+        const posAttr = satPointsRef.current.geometry.getAttribute('position')
+        const posArr  = posAttr.array
 
-      for (let i = 0; i < SAT_N; i++) {
-        const ix = i * 3
-        const iy = ix + 1
-        const iz = ix + 2
+        for (let i = 0; i < SAT_N; i++) {
+          const ix = i * 3
+          const tx = satBasePos[ix]     + satNoise[ix]     * satScatter
+          const ty = satBasePos[ix + 1] + satNoise[ix + 1] * satScatter
+          const tz = satBasePos[ix + 2] + satNoise[ix + 2] * satScatter
 
-        // Target with scatter
-        const tx = satBasePos[ix] + satNoise[ix] * scatter
-        const ty = satBasePos[iy] + satNoise[iy] * scatter
-        const tz = satBasePos[iz] + satNoise[iz] * scatter
+          satCurrentPos[ix]     += (tx - satCurrentPos[ix])     * 0.04
+          satCurrentPos[ix + 1] += (ty - satCurrentPos[ix + 1]) * 0.04
+          satCurrentPos[ix + 2] += (tz - satCurrentPos[ix + 2]) * 0.04
 
-        // Drift
-        let cx = satCurrentPos[ix] + satVelocities[ix]
-        let cy = satCurrentPos[iy] + satVelocities[iy]
-        let cz = satCurrentPos[iz] + satVelocities[iz]
+          posArr[ix]     = satCurrentPos[ix]
+          posArr[ix + 1] = satCurrentPos[ix + 1]
+          posArr[ix + 2] = satCurrentPos[ix + 2]
+        }
 
-        // Spring
-        cx += (tx - cx) * 0.04
-        cy += (ty - cy) * 0.04
-        cz += (tz - cz) * 0.04
-
-        satCurrentPos[ix] = cx
-        satCurrentPos[iy] = cy
-        satCurrentPos[iz] = cz
-
-        posArr[ix] = cx
-        posArr[iy] = cy
-        posArr[iz] = cz
+        posAttr.needsUpdate = true
       }
+    }
 
-      posAttr.needsUpdate = true
+    // Satellite group: slow rotation
+    if (satGroupRef.current) {
+      satGroupRef.current.rotation.y += 0.002
+    }
+
+    // Hover cursor
+    if (hudOpacity > 0.5) {
+      raycaster.setFromCamera(mouseRef.current, camera)
+      const hits = raycaster.intersectObjects(cardMeshesRef.current)
+      gl.domElement.style.cursor = hits.length > 0 ? 'pointer' : 'default'
+    } else {
+      gl.domElement.style.cursor = 'default'
     }
   })
 
@@ -294,13 +293,13 @@ export default function Carousel3D({ scrollProgress }) {
         ))}
       </group>
 
-      {/* Satellite particles */}
-      <group>
-        <points ref={satRef}>
+      {/* Satellite particle cloud */}
+      <group ref={satGroupRef}>
+        <points ref={satPointsRef}>
           <bufferGeometry>
             <bufferAttribute
               attach="attributes-position"
-              array={satPositions}
+              array={satCurrentPos}
               count={SAT_N}
               itemSize={3}
             />
@@ -326,3 +325,5 @@ export default function Carousel3D({ scrollProgress }) {
     </>
   )
 }
+
+useGLTF.preload('/assets/models/satellite.glb')

@@ -10,7 +10,7 @@ import sampleGLB from './sampleGLB'
 gsap.registerPlugin(ScrollTrigger)
 
 const N = 50000
-const HOVER_RADIUS = 0.8
+const HOVER_RADIUS = 0.35
 const PUSH_STRENGTH = 0.25
 const GREEN = new THREE.Color('#07dd2b')
 
@@ -58,7 +58,7 @@ export default function AstronautCloud() {
       const ix = i * 3
       const normalizedY = (astronautPos[ix + 1] + 2.75) / 5.5
       const rand = Math.random()
-      if (normalizedY > 0.65 && normalizedY < 0.85 && rand < 0.3) {
+      if (normalizedY > 0.65 && normalizedY < 0.85 && rand > 0.3) {
         const intensity = 0.6 + Math.random() * 0.4
         c[ix] = GREEN.r * intensity
         c[ix + 1] = GREEN.g * intensity
@@ -175,8 +175,7 @@ export default function AstronautCloud() {
     const my = localMouseRef.current.y
     const t = timeRef.current
 
-    const springK = 8.0
-    const springFactor = 1.0 - Math.exp(-springK * dt)
+    const springFactor = Math.min(0.04 * 60 * dt, 1.0)
 
     const posAttr = geo.getAttribute('position')
     const posArr = posAttr.array
@@ -266,7 +265,7 @@ export default function AstronautCloud() {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.05}
+          size={0.09}
           vertexColors
           transparent
           opacity={0}

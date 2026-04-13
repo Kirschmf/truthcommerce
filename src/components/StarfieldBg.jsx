@@ -1,5 +1,10 @@
 import { useRef, useEffect } from 'react'
 
+const NEBULA_COLORS = [
+  [7, 221, 43], [5, 160, 30], [10, 255, 70],
+  [3, 120, 20], [20, 200, 100], [30, 230, 80],
+]
+
 export default function StarfieldBg() {
   const canvasRef = useRef(null)
 
@@ -10,219 +15,205 @@ export default function StarfieldBg() {
     const ctx = canvas.getContext('2d')
     let raf
     let W, H
+    let totalH = 0
     let dpr = Math.min(window.devicePixelRatio || 1, 2)
     let scrollY = 0
+    let lastNow = 0
 
-    // ── Parallax star layers ──────────────────────────────
-    // 3 depth layers: far (slow, dim, small), mid, near (fast, bright, large)
     const layers = [
-      { stars: [], speed: 0.02, drift: 0.008, sizeMin: 0.3, sizeMax: 0.7, opMin: 0.15, opMax: 0.4, parallax: 0.02 },
-      { stars: [], speed: 0.04, drift: 0.015, sizeMin: 0.5, sizeMax: 1.1, opMin: 0.25, opMax: 0.65, parallax: 0.05 },
-      { stars: [], speed: 0.07, drift: 0.025, sizeMin: 0.8, sizeMax: 1.6, opMin: 0.4, opMax: 0.9, parallax: 0.10 },
+      { stars: [], drift: 0.008, sizeMin: 0.3, sizeMax: 0.7,  opMin: 0.15, opMax: 0.4,  parallax: 0.02 },
+      { stars: [], drift: 0.015, sizeMin: 0.5, sizeMax: 1.1,  opMin: 0.25, opMax: 0.65, parallax: 0.05 },
+      { stars: [], drift: 0.025, sizeMin: 0.8, sizeMax: 1.6,  opMin: 0.4,  opMax: 0.9,  parallax: 0.10 },
     ]
-
-    // Bright accent stars that pulse with a glow
-    const glowStars = []
-
-    // ── Nebula clouds ─────────────────────────────────────
     const nebulae = []
+
+    function getPageHeight() {
+      return Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        window.innerHeight,
+      )
+    }
 
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2)
       W = window.innerWidth
       H = window.innerHeight
-      canvas.width = W * dpr
+      canvas.width  = W * dpr
       canvas.height = H * dpr
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
-    function createStars() {
-      const area = W * H
+    // ── Star helpers ──────────────────────────────────────────
+    function makeStarProps(layer, yMin, yMax) {
+      return {
+        x: Math.random() * W,
+        y: yMin + Math.random() * (yMax - yMin),
+        r: layer.sizeMin + Math.random() * (layer.sizeMax - layer.sizeMin),
+        o: layer.opMin  + Math.random() * (layer.opMax  - layer.opMin),
+        dx: (Math.random() - 0.5) * layer.drift,
+        dy: (Math.random() - 0.5) * layer.drift * 0.4,
+        phase:        Math.random() * Math.PI * 2,
+        twinkleSpeed: 0.3 + Math.random() * 1.2,
+        twinkleAmp:   0.15 + Math.random() * 0.25,
+      }
+    }
 
-      // Populate depth layers
-      const counts = [
-        Math.min(500, Math.round(area / 5000)),   // far — many small
-        Math.min(300, Math.round(area / 8000)),    // mid
-        Math.min(150, Math.round(area / 14000)),   // near — fewer large
+    function starCounts(pageH) {
+      const area = W * pageH
+      return [
+        Math.min(3000, Math.round(area / 5000)),
+        Math.min(2000, Math.round(area / 8000)),
+        Math.min(1000, Math.round(area / 14000)),
       ]
+    }
+
+    // ── Nebula helpers ────────────────────────────────────────
+    function makeNebula(yMin, yMax) {
+      const color = NEBULA_COLORS[Math.floor(Math.random() * NEBULA_COLORS.length)]
+      return {
+        x:          Math.random() * W,
+        y:          yMin + Math.random() * (yMax - yMin),
+        rx:         (200 + Math.random() * 300) * (W / 1920),
+        ry:         (150 + Math.random() * 200) * (H / 1080),
+        color,
+        op:         0,
+        targetOp:   0.05 + Math.random() * 0.05,
+        rising:     true,
+        riseSpeed:  0.00015 + Math.random() * 0.0001,
+        fallSpeed:  0.00008 + Math.random() * 0.00006,
+        drift:      (Math.random() - 0.5) * 0.0004,
+      }
+    }
+
+    // ── Full init ─────────────────────────────────────────────
+    function createAll() {
+      totalH = getPageHeight()
+      const counts = starCounts(totalH)
 
       layers.forEach((layer, li) => {
         layer.stars.length = 0
-        const count = counts[li]
-        for (let i = 0; i < count; i++) {
-          layer.stars.push({
-            x: Math.random() * W,
-            y: Math.random() * H,
-            r: layer.sizeMin + Math.random() * (layer.sizeMax - layer.sizeMin),
-            o: layer.opMin + Math.random() * (layer.opMax - layer.opMin),
-            dx: (Math.random() - 0.5) * layer.drift,
-            dy: (Math.random() - 0.5) * layer.drift * 0.4,
-            // Twinkle
-            phase: Math.random() * Math.PI * 2,
-            twinkleSpeed: 0.3 + Math.random() * 1.2,
-            twinkleAmp: 0.15 + Math.random() * 0.25,
-          })
+        for (let i = 0; i < counts[li]; i++) {
+          layer.stars.push(makeStarProps(layer, 0, totalH))
         }
       })
 
-      // Glow stars — bright with colored halo
-      glowStars.length = 0
-      const glowCount = Math.min(25, Math.round(area / 80000))
-      const glowColors = [
-        { r: 7, g: 221, b: 43 },     // brand green
-        { r: 80, g: 160, b: 255 },    // blue
-        { r: 160, g: 120, b: 255 },   // purple
-        { r: 255, g: 255, b: 255 },   // white
-      ]
-      for (let i = 0; i < glowCount; i++) {
-        const color = glowColors[Math.floor(Math.random() * glowColors.length)]
-        glowStars.push({
-          x: Math.random() * W,
-          y: Math.random() * H,
-          coreR: 1.0 + Math.random() * 1.0,
-          glowR: 8 + Math.random() * 16,
-          color,
-          phase: Math.random() * Math.PI * 2,
-          pulseSpeed: 0.2 + Math.random() * 0.6,
-          baseOp: 0.3 + Math.random() * 0.4,
-          parallax: 0.03 + Math.random() * 0.07,
-        })
-      }
-
-      // Nebulae — large soft gradient blobs
       nebulae.length = 0
-      const nebulaConfigs = [
-        { cx: 0.15, cy: 0.2, rx: 400, ry: 250, color: [7, 221, 43], op: 0.025, drift: 0.0003 },
-        { cx: 0.8, cy: 0.35, rx: 350, ry: 300, color: [80, 60, 200], op: 0.03, drift: -0.0002 },
-        { cx: 0.5, cy: 0.7, rx: 500, ry: 200, color: [30, 100, 255], op: 0.02, drift: 0.00015 },
-        { cx: 0.25, cy: 0.85, rx: 300, ry: 350, color: [120, 40, 180], op: 0.022, drift: -0.00025 },
-        { cx: 0.7, cy: 0.1, rx: 280, ry: 180, color: [7, 180, 60], op: 0.018, drift: 0.0002 },
-      ]
-      nebulaConfigs.forEach((cfg) => {
-        nebulae.push({
-          x: cfg.cx * W,
-          y: cfg.cy * H,
-          rx: cfg.rx * (W / 1920),
-          ry: cfg.ry * (H / 1080),
-          color: cfg.color,
-          baseOp: cfg.op,
-          phase: Math.random() * Math.PI * 2,
-          breathSpeed: 0.1 + Math.random() * 0.15,
-          drift: cfg.drift,
-          parallax: 0.015 + Math.random() * 0.03,
-        })
-      })
+      const nebulaCount = Math.max(8, Math.round((totalH / H) * 2.5))
+      for (let i = 0; i < nebulaCount; i++) {
+        const n = makeNebula(0, totalH)
+        // Stagger initial opacity so they don't all appear at once
+        n.op     = Math.random() * n.targetOp
+        n.rising = Math.random() > 0.5
+        nebulae.push(n)
+      }
     }
 
-    // Throttle to ~30fps
-    let lastTime = 0
-    const FRAME_INTERVAL = 1000 / 30
-    let elapsed = 0
+    // ── Extend when page grows after Three.js/GSAP expand DOM ─
+    function extendIfGrown() {
+      const newH = getPageHeight()
+      if (newH <= totalH + 50) return
+      const oldH = totalH
+      totalH = newH
 
+      const counts = starCounts(newH)
+      layers.forEach((layer, li) => {
+        const extra = Math.round(counts[li] * (newH - oldH) / newH)
+        for (let i = 0; i < extra; i++) {
+          layer.stars.push(makeStarProps(layer, oldH, newH))
+        }
+      })
+
+      const extraNebulae = Math.round((newH - oldH) / H * 2.5)
+      for (let i = 0; i < extraNebulae; i++) {
+        nebulae.push(makeNebula(oldH, newH))
+      }
+    }
+
+    // ── Draw loop ─────────────────────────────────────────────
     function draw(now) {
       raf = requestAnimationFrame(draw)
-
-      const dt = now - lastTime
-      if (dt < FRAME_INTERVAL) return
-      lastTime = now
-      elapsed += dt * 0.001
+      const dt      = Math.min((now - lastNow) * 0.001, 0.05)
+      lastNow       = now
+      const elapsed = now * 0.001
 
       ctx.clearRect(0, 0, W, H)
-
-      // Base background
       ctx.fillStyle = '#040507'
       ctx.fillRect(0, 0, W, H)
 
-      // ── Draw nebulae (soft glowing clouds) ──────────────
-      ctx.globalCompositeOperation = 'screen'
+      // ── Nebulae (source-over, all green variants) ──────────
       for (const n of nebulae) {
-        const breathe = Math.sin(elapsed * n.breathSpeed + n.phase) * 0.4 + 0.6
-        const op = n.baseOp * breathe
-        const offsetY = scrollY * n.parallax
+        const drawY = n.y - scrollY
 
-        const grd = ctx.createRadialGradient(
-          n.x, n.y - offsetY, 0,
-          n.x, n.y - offsetY, Math.max(n.rx, n.ry)
-        )
-        grd.addColorStop(0, `rgba(${n.color[0]},${n.color[1]},${n.color[2]},${op})`)
-        grd.addColorStop(0.4, `rgba(${n.color[0]},${n.color[1]},${n.color[2]},${op * 0.4})`)
-        grd.addColorStop(1, 'rgba(0,0,0,0)')
+        if (drawY > -n.ry * 3 && drawY < H + n.ry * 3) {
+          const grd = ctx.createRadialGradient(n.x, drawY, 0, n.x, drawY, Math.max(n.rx, n.ry))
+          grd.addColorStop(0,   `rgba(${n.color[0]},${n.color[1]},${n.color[2]},${n.op})`)
+          grd.addColorStop(0.4, `rgba(${n.color[0]},${n.color[1]},${n.color[2]},${n.op * 0.4})`)
+          grd.addColorStop(1,   'rgba(0,0,0,0)')
+          ctx.fillStyle = grd
+          ctx.beginPath()
+          ctx.ellipse(n.x, drawY, n.rx, n.ry, 0, 0, Math.PI * 2)
+          ctx.fill()
+        }
 
-        ctx.fillStyle = grd
-        ctx.beginPath()
-        ctx.ellipse(n.x, n.y - offsetY, n.rx, n.ry, 0, 0, Math.PI * 2)
-        ctx.fill()
+        // Fade in → out → reposition
+        if (n.rising) {
+          n.op += n.riseSpeed
+          if (n.op >= n.targetOp) { n.op = n.targetOp; n.rising = false }
+        } else {
+          n.op -= n.fallSpeed
+          if (n.op <= 0) {
+            Object.assign(n, makeNebula(0, totalH))
+          }
+        }
 
-        // Slow drift
-        n.x += n.drift * W * (dt * 0.001)
+        // Slow horizontal drift
+        n.x += n.drift * W * dt
         if (n.x < -n.rx) n.x = W + n.rx
         if (n.x > W + n.rx) n.x = -n.rx
       }
-      ctx.globalCompositeOperation = 'source-over'
 
-      // ── Draw star layers (back to front) ────────────────
+      // ── Star layers (back → front) ─────────────────────────
       for (const layer of layers) {
-        const offsetY = scrollY * layer.parallax
+        for (const s of layer.stars) {
+          // Drift
+          s.x += s.dx
+          s.y += s.dy
 
-        for (const s of stars_loop(layer, elapsed, offsetY)) {
+          // Wrap X
+          if (s.x < -2) s.x = W + 2
+          if (s.x > W + 2) s.x = -2
+          // Wrap Y across full page height
+          if (s.y < 0)       s.y = totalH
+          if (s.y > totalH)  s.y = 0
+
+          // Screen Y: far layers lag slightly behind scroll (depth parallax)
+          const drawY = s.y - scrollY * (1 - layer.parallax)
+
+          // Cull off-screen
+          if (drawY < -2 || drawY > H + 2) continue
+
+          // Twinkle
+          const twinkle = Math.sin(elapsed * s.twinkleSpeed + s.phase) * s.twinkleAmp
+          const drawOp  = Math.max(0.05, Math.min(1, s.o + twinkle))
+
+          // Halo for larger stars (white-blue, source-over)
+          if (s.r > 1.0) {
+            const haloR = s.r * 4
+            const grad  = ctx.createRadialGradient(s.x, drawY, 0, s.x, drawY, haloR)
+            grad.addColorStop(0, `rgba(200,215,255,${drawOp * 0.35})`)
+            grad.addColorStop(1, 'rgba(200,215,255,0)')
+            ctx.fillStyle = grad
+            ctx.beginPath()
+            ctx.arc(s.x, drawY, haloR, 0, Math.PI * 2)
+            ctx.fill()
+          }
+
           // Core dot
           ctx.beginPath()
-          ctx.arc(s.drawX, s.drawY, s.r, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(255,255,255,${s.drawOp})`
+          ctx.arc(s.x, drawY, s.r, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(255,255,255,${drawOp})`
           ctx.fill()
-        }
-      }
-
-      // ── Draw glow stars ─────────────────────────────────
-      ctx.globalCompositeOperation = 'screen'
-      for (const g of glowStars) {
-        const pulse = Math.sin(elapsed * g.pulseSpeed + g.phase) * 0.35 + 0.65
-        const op = g.baseOp * pulse
-        const offsetY = scrollY * g.parallax
-
-        const drawX = g.x
-        const drawY = g.y - offsetY
-
-        // Outer glow
-        const grad = ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, g.glowR * pulse)
-        grad.addColorStop(0, `rgba(${g.color.r},${g.color.g},${g.color.b},${op * 0.6})`)
-        grad.addColorStop(0.3, `rgba(${g.color.r},${g.color.g},${g.color.b},${op * 0.15})`)
-        grad.addColorStop(1, 'rgba(0,0,0,0)')
-        ctx.fillStyle = grad
-        ctx.beginPath()
-        ctx.arc(drawX, drawY, g.glowR * pulse, 0, Math.PI * 2)
-        ctx.fill()
-
-        // Bright core
-        ctx.beginPath()
-        ctx.arc(drawX, drawY, g.coreR, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255,255,255,${Math.min(1, op * 1.8)})`
-        ctx.fill()
-      }
-      ctx.globalCompositeOperation = 'source-over'
-    }
-
-    // Helper: iterate a layer's stars, update positions & return draw data
-    function* stars_loop(layer, time, offsetY) {
-      for (const s of layer.stars) {
-        s.x += s.dx
-        s.y += s.dy
-
-        // Wrap edges
-        if (s.x < -2) s.x = W + 2
-        if (s.x > W + 2) s.x = -2
-        if (s.y < -2) s.y = H + 2
-        if (s.y > H + 2) s.y = -2
-
-        // Twinkle
-        const twinkle = Math.sin(time * s.twinkleSpeed + s.phase) * s.twinkleAmp
-        const drawOp = Math.max(0.05, Math.min(1, s.o + twinkle))
-
-        yield {
-          drawX: s.x,
-          drawY: s.y - offsetY,
-          r: s.r,
-          drawOp,
         }
       }
     }
@@ -233,17 +224,24 @@ export default function StarfieldBg() {
 
     function init() {
       resize()
-      createStars()
+      createAll()
       onScroll()
       raf = requestAnimationFrame(draw)
+
+      // Lenis smooth-scroll integration
+      if (window.__lenis) {
+        window.__lenis.on('scroll', ({ scroll }) => { scrollY = scroll })
+      }
+
+      // Extend field after Three.js/GSAP finish expanding the DOM
+      setTimeout(extendIfGrown, 400)
+      setTimeout(extendIfGrown, 1200)
+      setTimeout(extendIfGrown, 3000)
     }
 
     init()
 
-    const onResize = () => {
-      resize()
-      createStars()
-    }
+    const onResize = () => { resize(); createAll() }
     window.addEventListener('resize', onResize)
     window.addEventListener('scroll', onScroll, { passive: true })
 

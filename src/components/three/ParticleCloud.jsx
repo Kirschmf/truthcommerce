@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 const N = 40000
 const GREEN = new THREE.Color('#07dd2b')
-const HOVER_RADIUS = 2.0
+const HOVER_RADIUS = 0.9
 const PUSH_STRENGTH = 0.4
 const TILT_Z = -Math.PI / 5.2
 
@@ -95,7 +95,7 @@ export default function ParticleCloud() {
       const ix = i * 3
       const ny = (astronautShape[ix + 1] + 2.75) / 5.5
       const rand = Math.random()
-      if (ny > 0.65 && ny < 0.85 && rand < 0.3) {
+      if (ny > 0.65 && ny < 0.85 && rand > 0.3) {
         const v = 0.6 + Math.random() * 0.4
         c[ix] = GREEN.r * v; c[ix + 1] = GREEN.g * v; c[ix + 2] = GREEN.b * v
       } else if (rand < 0.08) {
@@ -124,9 +124,10 @@ export default function ParticleCloud() {
   useEffect(() => {
     const st = ScrollTrigger.create({
       trigger: '.hero-wrapper',
-      start: '25% top',
-      end: '75% top',
-      scrub: 0.8,
+      start: 'top top',
+      endTrigger: '#alerta',
+      end: 'center center',
+      scrub: 1.0,
       onUpdate: (self) => {
         progressRef.current.morph = self.progress
       },
@@ -209,8 +210,7 @@ export default function ParticleCloud() {
     const my = localMouseRef.current.y
     const hoverRadSq = HOVER_RADIUS * HOVER_RADIUS
 
-    const springK = 6.0
-    const springFactor = 1.0 - Math.exp(-springK * dt)
+    const springFactor = Math.min(0.04 * 60 * dt, 1.0)
 
     for (let i = 0; i < N; i++) {
       const ix = i * 3
@@ -230,9 +230,9 @@ export default function ParticleCloud() {
 
       // Scatter during entrance or mid-morph
       const scatterAmt = Math.max(entranceScatter, morphScatter)
-      const scX = offsets[ix] * scatterAmt * 3.0
-      const scY = offsets[iy] * scatterAmt * 3.0
-      const scZ = offsets[iz] * scatterAmt * 2.0
+      const scX = offsets[ix] * scatterAmt * 8.0
+      const scY = offsets[iy] * scatterAmt * 8.0
+      const scZ = offsets[iz] * scatterAmt * 5.0
 
       const finalTx = targetX + scX
       const finalTy = targetY + scY
@@ -280,6 +280,13 @@ export default function ParticleCloud() {
 
     // Opacity
     pts.material.opacity = ent
+
+    // Blending: aditivo no foguete, normal no astronauta
+    const targetBlending = morph > 0.5 ? THREE.NormalBlending : THREE.AdditiveBlending
+    if (pts.material.blending !== targetBlending) {
+      pts.material.blending = targetBlending
+      pts.material.needsUpdate = true
+    }
   })
 
   return (
@@ -300,7 +307,7 @@ export default function ParticleCloud() {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.05}
+          size={0.09}
           vertexColors
           transparent
           opacity={0}

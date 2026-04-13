@@ -322,7 +322,7 @@ export default function Depoimentos() {
 
       <style>{`
         .dep-section {
-          background: #09090b;
+          background: transparent;
         }
 
         .dep-container {

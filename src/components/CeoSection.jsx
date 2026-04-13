@@ -205,7 +205,7 @@ export default function CeoSection() {
 
       <style>{`
         .ceo-section {
-          background: #09090b;
+          background: transparent;
         }
 
         /* ===== BG Text ===== */

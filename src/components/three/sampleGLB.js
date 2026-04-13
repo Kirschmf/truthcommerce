@@ -17,6 +17,14 @@ export default function sampleGLB(gltf, count) {
     geo.applyMatrix4(child.matrixWorld)
     if (geo.index) geo = geo.toNonIndexed()
 
+    geo.computeBoundingBox()
+    const bb = geo.boundingBox
+    const extX = bb.max.x - bb.min.x
+    const extY = bb.max.y - bb.min.y
+    const extZ = bb.max.z - bb.min.z
+    const maxHoriz = Math.max(extX, extZ)
+    if (maxHoriz > 20 || extY > 20) { geo.dispose(); return }
+
     const pos = geo.getAttribute('position')
     const vA = new THREE.Vector3()
     const vB = new THREE.Vector3()
