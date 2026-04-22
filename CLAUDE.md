@@ -32,7 +32,8 @@ No linter or formatter is configured (no ESLint, Prettier, or similar).
 - **Three.js + React Three Fiber v9 + @react-three/drei** for 3D particle clouds
 - **Lenis** for smooth scroll (singleton via `useLenis` hook, exposed as `window.__lenis`)
 - **Framer Motion** for component transitions
-- **Vitest + Testing Library + jsdom** for tests
+- **Vitest 4 + Testing Library + jsdom** for unit tests
+- **Playwright** for E2E tests (Chromium)
 
 ### App Structure
 `src/main.jsx` → `<App />` renders all sections in order:
@@ -76,11 +77,19 @@ archive/                 # Deprecated legacy files — NEVER delete
 - Fonts: Sora (headings), Inter (body), Space Mono (mono) — Google Fonts
 - Theme tokens defined in two places: CSS custom properties in `tokens.css` and Tailwind `@theme` block in `global.css`
 - Everything is dark theme
+- `body::before` in `global.css` renders an SVG noise texture overlay at `z-index: 1` with `pointer-events: none` — be careful with z-index stacking
+
+### Scroll Architecture
+- `useLenis` hook (called once in `App`) creates a singleton Lenis instance and bridges it to GSAP: `lenisInstance.on('scroll', ScrollTrigger.update)` + `gsap.ticker.add` drives Lenis RAF
+- All scroll-driven GSAP animations depend on this bridge — removing or reordering it breaks ScrollTrigger timing
+- Lenis instance is exposed as `window.__lenis` for imperative access (e.g., `window.__lenis.scrollTo()`)
 
 ### Testing
 - Vitest config lives in `vite.config.js` (`test` key), not a separate file
 - `test.globals: true` — Vitest globals (`describe`, `it`, `expect`) are available without imports
 - Test setup in `src/test/setup.js` mocks `matchMedia`, `ResizeObserver`, and canvas contexts (2D + WebGL) for jsdom compatibility with Three.js/R3F
+- Playwright config (`playwright.config.js`) auto-starts `npm run dev` on port 5173 — no need to start a separate dev server for E2E tests
+- E2E tests run only in Chromium (`projects` config)
 
 ## Code Conventions
 - Components: PascalCase files, one per file, default export

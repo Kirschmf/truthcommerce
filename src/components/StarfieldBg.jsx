@@ -1,8 +1,8 @@
 import { useRef, useEffect } from 'react'
 
 const NEBULA_COLORS = [
-  [7, 221, 43], [5, 160, 30], [10, 255, 70],
-  [3, 120, 20], [20, 200, 100], [30, 230, 80],
+  [7, 180, 40], [5, 140, 30], [10, 160, 50],
+  [3, 100, 20], [15, 130, 60],
 ]
 
 export default function StarfieldBg() {
@@ -74,15 +74,15 @@ export default function StarfieldBg() {
       return {
         x:          Math.random() * W,
         y:          yMin + Math.random() * (yMax - yMin),
-        rx:         (200 + Math.random() * 300) * (W / 1920),
-        ry:         (150 + Math.random() * 200) * (H / 1080),
+        rx:         (300 + Math.random() * 400) * (W / 1920),
+        ry:         (250 + Math.random() * 300) * (H / 1080),
         color,
         op:         0,
-        targetOp:   0.05 + Math.random() * 0.05,
+        targetOp:   0.02 + Math.random() * 0.025,
         rising:     true,
-        riseSpeed:  0.00015 + Math.random() * 0.0001,
-        fallSpeed:  0.00008 + Math.random() * 0.00006,
-        drift:      (Math.random() - 0.5) * 0.0004,
+        riseSpeed:  0.0001 + Math.random() * 0.00006,
+        fallSpeed:  0.00005 + Math.random() * 0.00004,
+        drift:      (Math.random() - 0.5) * 0.0003,
       }
     }
 
@@ -146,10 +146,14 @@ export default function StarfieldBg() {
         const drawY = n.y - scrollY
 
         if (drawY > -n.ry * 3 && drawY < H + n.ry * 3) {
-          const grd = ctx.createRadialGradient(n.x, drawY, 0, n.x, drawY, Math.max(n.rx, n.ry))
-          grd.addColorStop(0,   `rgba(${n.color[0]},${n.color[1]},${n.color[2]},${n.op})`)
-          grd.addColorStop(0.4, `rgba(${n.color[0]},${n.color[1]},${n.color[2]},${n.op * 0.4})`)
-          grd.addColorStop(1,   'rgba(0,0,0,0)')
+          const r = Math.max(n.rx, n.ry)
+          const [cr, cg, cb] = n.color
+          const grd = ctx.createRadialGradient(n.x, drawY, 0, n.x, drawY, r)
+          grd.addColorStop(0,    `rgba(${cr},${cg},${cb},${n.op * 0.6})`)
+          grd.addColorStop(0.15, `rgba(${cr},${cg},${cb},${n.op * 0.4})`)
+          grd.addColorStop(0.4,  `rgba(${cr},${cg},${cb},${n.op * 0.15})`)
+          grd.addColorStop(0.7,  `rgba(${cr},${cg},${cb},${n.op * 0.04})`)
+          grd.addColorStop(1,    'rgba(0,0,0,0)')
           ctx.fillStyle = grd
           ctx.beginPath()
           ctx.ellipse(n.x, drawY, n.rx, n.ry, 0, 0, Math.PI * 2)

@@ -1,6 +1,15 @@
 import { useState, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+
 const logo = '/assets/images/Logo Branca.png'
+
+function smoothScrollTo(e) {
+  const href = e.currentTarget.getAttribute('href')
+  if (href?.startsWith('#') && window.__lenis) {
+    e.preventDefault()
+    window.__lenis.scrollTo(href, { duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) })
+  }
+}
 
 const NAV_LINKS = [
   { label: 'Metodologia', href: '#metodo' },
@@ -44,6 +53,7 @@ export default function Header() {
                 <li key={href}>
                   <a
                     href={href}
+                    onClick={smoothScrollTo}
                     className="text-white/65 text-[13.5px] font-medium no-underline whitespace-nowrap transition-colors duration-200 hover:text-white"
                   >
                     {label}
@@ -109,7 +119,7 @@ export default function Header() {
                 <motion.a
                   key={href}
                   href={href}
-                  onClick={closeMenu}
+                  onClick={(e) => { closeMenu(); smoothScrollTo(e) }}
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 + i * 0.07, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
