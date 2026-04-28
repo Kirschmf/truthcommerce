@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -135,6 +135,8 @@ export default function CarrosselCases() {
     typeof window !== 'undefined' && window.innerWidth < 768
   )
 
+  const handleCloseCase = useCallback(() => setActiveCase(null), [])
+
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
     window.addEventListener('resize', check)
@@ -143,6 +145,8 @@ export default function CarrosselCases() {
 
   useGSAP(() => {
     if (isMobile) return
+
+    let hudOpacitySet = null
 
     ScrollTrigger.create({
       trigger: sectionRef.current,
@@ -164,7 +168,10 @@ export default function CarrosselCases() {
         } else {
           hud = Math.max(0, 1 - (p - 0.95) * 20)
         }
-        if (hudRef.current) hudRef.current.style.opacity = hud
+        if (!hudOpacitySet && hudRef.current) {
+          hudOpacitySet = gsap.quickSetter(hudRef.current, 'opacity')
+        }
+        if (hudOpacitySet) hudOpacitySet(hud)
 
         // Overlay opacity: smoothstep 0.45 → 0.6 (after zoom max settles)
         const ot = Math.min(1, Math.max(0, (p - 0.45) / 0.15))
@@ -243,7 +250,7 @@ export default function CarrosselCases() {
       )}
 
       {activeCase && (
-        <CaseDetailPanel caseData={activeCase} onClose={() => setActiveCase(null)} />
+        <CaseDetailPanel caseData={activeCase} onClose={handleCloseCase} />
       )}
     </>
   )

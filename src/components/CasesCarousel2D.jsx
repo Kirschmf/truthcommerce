@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import gsap from 'gsap'
 import { CASES } from '../data/cases'
 
 function CornerBrackets() {
@@ -74,9 +75,9 @@ export default function CasesCarousel2D({ activeOpacityRef, activeRef, onCaseCli
     setIndex((i) => (i - 1 + CASES.length) % CASES.length)
   }, [])
 
-  // Drive opacity + visibility via ref each frame (no React re-render per scroll tick)
+  // Drive opacity + visibility via gsap.ticker (already running for ScrollTrigger)
+  // — avoids spinning up a separate requestAnimationFrame loop.
   useEffect(() => {
-    let raf = 0
     const tick = () => {
       const op = activeOpacityRef?.current ?? 0
       const el = containerRef.current
@@ -85,10 +86,9 @@ export default function CasesCarousel2D({ activeOpacityRef, activeRef, onCaseCli
         // Block interactions until the overlay is mostly visible
         el.style.pointerEvents = op > 0.5 ? 'auto' : 'none'
       }
-      raf = requestAnimationFrame(tick)
     }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
+    gsap.ticker.add(tick)
+    return () => gsap.ticker.remove(tick)
   }, [activeOpacityRef])
 
   // Keyboard navigation only while overlay is active

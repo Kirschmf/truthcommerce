@@ -14,7 +14,7 @@ const TOTAL      = FULL_CASES.length
 const RADIUS     = 3500
 const CARD_W     = 1100
 const CARD_H     = 620
-const SAT_N      = 20000
+const SAT_N      = 6000
 const SAT_SCALE  = 1500 / 5.5  // normalize sampleGLB height (5.5) → 1500 Three.js units
 
 const vertShader = `
@@ -278,10 +278,11 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
       groupRef.current.rotation.y = ringRotRef.current
     }
 
-    // Satellite: formed when outside, scattered when camera enters
-    // satScatter = hudOpacity * 1200 → 0 = formed, 1200 = fully scattered
-    const satScatter  = hudOpacity * 1200
-    const satOpacity  = Math.max(0, 1 - hudOpacity * 2)  // gone by hudOpacity=0.5
+    // Satellite: visible at start, scatters and fades during the dive, then stays gone
+    // for the rest of the section (does not return when HUD fades out at the very end).
+    const satFade     = p < 0.225 ? 1 - (p / 0.225) : 0
+    const satOpacity  = satFade
+    const satScatter  = (1 - satFade) * 1200
 
     if (satPointsRef.current) {
       satPointsRef.current.material.opacity = satOpacity

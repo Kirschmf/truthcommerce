@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -14,90 +14,38 @@ const METRICS = [
 
 export default function CeoSection() {
   const sectionRef = useRef(null)
-  const bgTextRef = useRef(null)
-  const photoRef = useRef(null)
+  const contentRef = useRef(null)
   const metricsRef = useRef(null)
   const counterRefs = useRef([])
 
   useGSAP(() => {
-    // 1. BG text reveal
-    gsap.from(bgTextRef.current, {
-      opacity: 0,
-      scale: 0.8,
-      duration: 1.5,
-      ease: 'power3.out',
+    // Bidirectional fade in/out tied to scroll progress (same pattern as AlertaCritico).
+    // 0%→30% fade in, 30%→70% fully visible, 70%→100% fade out — reverses naturally on scroll-up.
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: 'top 60%',
-        once: true,
+        start: 'top 90%',
+        end: 'bottom 15%',
+        scrub: 1,
       },
     })
+    tl.fromTo(contentRef.current,
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, ease: 'none', duration: 0.3 }
+    )
+    tl.to(contentRef.current, { opacity: 1, y: 0, duration: 0.4 })
+    tl.to(contentRef.current,
+      { opacity: 0, y: -40, ease: 'none', duration: 0.3 }
+    )
 
-    // 2. BG text parallax
-    gsap.to(bgTextRef.current, {
-      yPercent: -20,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: true,
-      },
-    })
-
-    // 3. Left column stagger
-    const leftEls = sectionRef.current.querySelectorAll('.reveal-left')
-    gsap.from(leftEls, {
-      opacity: 0,
-      y: 50,
-      stagger: 0.1,
-      duration: 0.8,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top 70%',
-        once: true,
-      },
-    })
-
-    // 4. Photo enter from right
-    gsap.from(photoRef.current, {
-      opacity: 0,
-      x: 60,
-      duration: 1,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top 65%',
-        once: true,
-      },
-    })
-
-    // 5. Metric cards fade up
-    const metricCards = metricsRef.current.querySelectorAll('.metric-card')
-    gsap.from(metricCards, {
-      opacity: 0,
-      y: 30,
-      stagger: 0.1,
-      duration: 0.6,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: metricsRef.current,
-        start: 'top 85%',
-        once: true,
-      },
-    })
-
-    // 6. Counter animation
+    // Counters: one-shot, kept independent so numbers don't unwind when scrolling back up
     counterRefs.current.forEach((el, i) => {
       if (!el || !METRICS[i].animate) return
-
       const target = METRICS[i].value
       const obj = { val: 0 }
-
       gsap.to(obj, {
         val: target,
-        duration: 2,
+        duration: 1.6,
         ease: 'power2.out',
         snap: { val: 1 },
         scrollTrigger: {
@@ -116,75 +64,49 @@ export default function CeoSection() {
     <section
       id="ceo"
       ref={sectionRef}
-      className="ceo-section w-full px-[5%] py-20 md:py-32 relative overflow-hidden"
+      className="ceo-section w-full px-[5%] py-20 md:py-28 relative"
     >
-      {/* BG text */}
-      <div
-        ref={bgTextRef}
-        className="ceo-bg-text"
-        aria-hidden="true"
-      >
-        ANILO
-      </div>
+      <div ref={contentRef} className="ceo-container" style={{ opacity: 0 }}>
+        <span className="ceo-eyebrow">/ A MENTE POR TRÁS DA MÁQUINA</span>
 
-      <div className="max-w-[1100px] mx-auto relative z-[2]">
         <div className="ceo-grid">
+          {/* Photo column (sticky no desktop) */}
+          <div className="ceo-photo-col">
+            <div className="ceo-photo-wrapper">
+              <img
+                src="/assets/images/anilo.png"
+                alt="Anilo Foppa — CEO Truth Commerce"
+                className="ceo-photo"
+                loading="lazy"
+              />
+              <div className="ceo-photo-tag">
+                <span className="ceo-tag-dot" aria-hidden="true" />
+                <span className="ceo-tag-text">Anilo Foppa · CEO & Fundador</span>
+              </div>
+            </div>
+          </div>
 
-          {/* Left column */}
-          <div className="ceo-left">
-            <span className="reveal-left ceo-eyebrow">
-              / A MENTE POR TRÁS DA MÁQUINA
-            </span>
-
-            <h2 className="reveal-left ceo-name">
-              ANILO
-              <br />
-              <span className="ceo-name-accent">FOPPA</span>
+          {/* Content column */}
+          <div className="ceo-content-col">
+            <h2 className="ceo-name">
+              ANILO <span className="ceo-name-accent">FOPPA</span>
             </h2>
+            <p className="ceo-role">CEO &amp; Fundador · Truth Commerce</p>
 
-            <span className="reveal-left ceo-role">CEO & FUNDADOR</span>
-
-            <div className="reveal-left ceo-separator" />
-
-            <p className="reveal-left ceo-text">
+            <p className="ceo-bio">
               Com mais de uma década construindo infraestruturas de e-commerce,
               a Truth Commerce nasceu de uma convicção: crescimento sustentável
               exige uma fundação cirúrgica.
             </p>
 
-            <blockquote className="reveal-left ceo-quote">
-              "Não vendemos tráfego. Construímos a máquina que aguenta
-              o tráfego."
+            <blockquote className="ceo-quote">
+              <span aria-hidden="true" className="ceo-quote-bar" />
+              <p>"Não vendemos tráfego. Construímos a máquina que aguenta o tráfego."</p>
             </blockquote>
 
-            <a href="#contato" className="reveal-left ceo-cta">
-              Iniciar diagnóstico →
-            </a>
-          </div>
-
-          {/* Right column */}
-          <div className="ceo-right">
-            {/* Photo */}
-            <div ref={photoRef} className="ceo-photo-wrapper">
-              <img
-                src="/assets/images/anilo.png"
-                alt="Anilo Foppa – CEO Truth Commerce"
-                className="ceo-photo"
-                loading="lazy"
-              />
-              <div className="ceo-photo-overlay" />
-
-              {/* Badge */}
-              <div className="ceo-photo-badge">
-                <span className="ceo-badge-name">Anilo Foppa</span>
-                <span className="ceo-badge-role">CEO & Fundador</span>
-              </div>
-            </div>
-
-            {/* Metrics grid */}
             <div ref={metricsRef} className="ceo-metrics">
               {METRICS.map((m, i) => (
-                <div key={m.label} className="metric-card">
+                <div key={m.label} className="metric">
                   <div className="metric-value">
                     {m.prefix && <span className="metric-accent">{m.prefix}</span>}
                     {m.animate ? (
@@ -198,8 +120,13 @@ export default function CeoSection() {
                 </div>
               ))}
             </div>
-          </div>
 
+            <a href="#contato" className="ceo-cta">
+              <span className="ceo-cta-dot" aria-hidden="true" />
+              Iniciar diagnóstico
+              <span className="ceo-cta-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -208,48 +135,100 @@ export default function CeoSection() {
           background: transparent;
         }
 
-        /* ===== BG Text ===== */
-        .ceo-bg-text {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          font-family: var(--font-heading, 'Sora', sans-serif);
-          font-size: clamp(140px, 20vw, 220px);
-          font-weight: 900;
-          color: #07dd2b;
-          opacity: 0.03;
-          white-space: nowrap;
-          pointer-events: none;
-          z-index: 1;
-          user-select: none;
-          line-height: 1;
+        .ceo-container {
+          max-width: 1100px;
+          margin: 0 auto;
+          position: relative;
+          z-index: 2;
         }
 
-        /* ===== Grid ===== */
-        .ceo-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 48px;
-        }
-
-        /* ===== Left Column ===== */
         .ceo-eyebrow {
           display: block;
           font-family: var(--font-mono, 'Space Mono', monospace);
           font-size: 11px;
           color: #07dd2b;
-          letter-spacing: 0.15em;
-          margin-bottom: 20px;
+          letter-spacing: 0.18em;
+          font-weight: 700;
+          margin-bottom: 32px;
+        }
+
+        /* ===== Grid base (mobile) ===== */
+        .ceo-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 32px;
+          align-items: start;
+        }
+
+        /* ===== Photo ===== */
+        .ceo-photo-col {
+          width: 100%;
+          max-width: 320px;
+        }
+
+        .ceo-photo-wrapper {
+          position: relative;
+          aspect-ratio: 4 / 5;
+          border-radius: 14px;
+          overflow: hidden;
+          background: #0d0d10;
+          border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .ceo-photo {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: top center;
+          transition: transform 0.6s ease;
+        }
+
+        .ceo-photo-tag {
+          position: absolute;
+          left: 12px;
+          bottom: 12px;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 14px;
+          border-radius: 999px;
+          background: rgba(8, 9, 11, 0.78);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          border: 1px solid rgba(7, 221, 43, 0.3);
+        }
+
+        .ceo-tag-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #07dd2b;
+          box-shadow: 0 0 8px rgba(7, 221, 43, 0.7);
+        }
+
+        .ceo-tag-text {
+          font-family: var(--font-mono, 'Space Mono', monospace);
+          font-size: 11px;
+          color: #fff;
+          letter-spacing: 0.06em;
+          white-space: nowrap;
+        }
+
+        /* ===== Content ===== */
+        .ceo-content-col {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
         }
 
         .ceo-name {
           font-family: var(--font-heading, 'Sora', sans-serif);
-          font-size: clamp(40px, 6vw, 72px);
+          font-size: 38px;
           font-weight: 800;
           color: #fff;
           line-height: 1;
-          margin: 0;
+          letter-spacing: -0.02em;
+          margin: 0 0 8px 0;
         }
 
         .ceo-name-accent {
@@ -257,124 +236,71 @@ export default function CeoSection() {
         }
 
         .ceo-role {
-          display: block;
           font-family: var(--font-mono, 'Space Mono', monospace);
           font-size: 12px;
-          color: #444;
-          letter-spacing: 0.12em;
-          margin-top: 8px;
-        }
-
-        .ceo-separator {
-          height: 1px;
-          background: #1a1a1a;
-          margin: 24px 0;
-        }
-
-        .ceo-text {
-          font-size: 14px;
-          color: #666;
-          line-height: 1.8;
+          color: #888;
+          letter-spacing: 0.1em;
           margin: 0 0 24px 0;
         }
 
+        .ceo-bio {
+          font-family: var(--font-body, 'Inter', sans-serif);
+          font-size: 16px;
+          line-height: 1.65;
+          color: #cfd2d6;
+          margin: 0 0 28px 0;
+        }
+
         .ceo-quote {
-          border-left: 2px solid #07dd2b;
-          padding-left: 16px;
-          margin: 0 0 32px 0;
-          font-style: italic;
-          font-size: 14px;
-          color: #888;
-          line-height: 1.7;
-        }
-
-        .ceo-cta {
-          display: inline-block;
-          border: 1px solid rgba(7, 221, 43, 0.3);
-          color: #07dd2b;
-          padding: 10px 20px;
-          border-radius: 6px;
-          font-size: 12px;
-          font-weight: 600;
-          letter-spacing: 0.05em;
-          text-decoration: none;
-          transition: background 0.3s ease, border-color 0.3s ease;
-        }
-
-        /* ===== Photo ===== */
-        .ceo-photo-wrapper {
           position: relative;
-          border-radius: 16px;
-          overflow: hidden;
-          aspect-ratio: 3 / 4;
-          max-width: 340px;
-          background: #0d0d10;
+          margin: 0 0 32px 0;
+          padding: 0 0 0 20px;
         }
 
-        .ceo-photo {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: top;
-          transition: transform 0.5s ease;
-        }
-
-        .ceo-photo-overlay {
+        .ceo-quote-bar {
           position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 40%);
-          pointer-events: none;
+          left: 0;
+          top: 4px;
+          bottom: 4px;
+          width: 2px;
+          background: #07dd2b;
+          border-radius: 2px;
         }
 
-        .ceo-photo-badge {
-          position: absolute;
-          bottom: 20px;
-          left: 20px;
-          background: rgba(0, 0, 0, 0.7);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          border: 1px solid rgba(7, 221, 43, 0.3);
-          border-radius: 10px;
-          padding: 12px 16px;
-        }
-
-        .ceo-badge-name {
-          display: block;
-          color: #fff;
-          font-size: 13px;
+        .ceo-quote p {
+          font-family: var(--font-heading, 'Sora', sans-serif);
+          font-size: 18px;
           font-weight: 600;
+          line-height: 1.4;
+          color: #ffffff;
+          letter-spacing: -0.01em;
+          margin: 0;
         }
 
-        .ceo-badge-role {
-          display: block;
-          color: #07dd2b;
-          font-size: 11px;
-          margin-top: 2px;
-        }
-
-        /* ===== Metrics ===== */
+        /* ===== Metrics (mobile: 2x2 grid) ===== */
         .ceo-metrics {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 12px;
-          margin-top: 16px;
-          max-width: 340px;
+          gap: 20px 24px;
+          margin: 0 0 32px 0;
+          padding: 24px 0;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .metric-card {
-          background: #0d0d10;
-          border: 1px solid #1a1a1a;
-          border-radius: 10px;
-          padding: 16px;
-          transition: border-color 0.3s ease, transform 0.3s ease;
+        .metric {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
         }
 
         .metric-value {
           font-family: var(--font-heading, 'Sora', sans-serif);
-          font-size: 28px;
-          font-weight: 700;
+          font-size: 30px;
+          font-weight: 800;
           color: #fff;
           line-height: 1;
+          letter-spacing: -0.02em;
         }
 
         .metric-accent {
@@ -382,88 +308,106 @@ export default function CeoSection() {
         }
 
         .metric-label {
-          font-size: 9px;
-          color: #444;
+          font-family: var(--font-mono, 'Space Mono', monospace);
+          font-size: 10px;
+          color: #888;
           letter-spacing: 0.12em;
-          margin-top: 4px;
           font-weight: 600;
         }
 
-        /* ===== Hover (pointer only) ===== */
+        /* ===== CTA ===== */
+        .ceo-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          align-self: flex-start;
+          padding: 14px 22px;
+          border-radius: 999px;
+          border: 1px solid rgba(7, 221, 43, 0.4);
+          background: rgba(7, 221, 43, 0.06);
+          color: #fff;
+          font-family: var(--font-body, 'Inter', sans-serif);
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: 0.02em;
+          text-decoration: none;
+          transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .ceo-cta-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #07dd2b;
+          box-shadow: 0 0 10px rgba(7, 221, 43, 0.7);
+        }
+
+        .ceo-cta-arrow {
+          color: #07dd2b;
+          transition: transform 0.3s ease;
+        }
+
         @media (hover: hover) {
           .ceo-cta:hover {
-            background: rgba(7, 221, 43, 0.08);
+            background: rgba(7, 221, 43, 0.12);
             border-color: #07dd2b;
           }
-
-          .ceo-photo-wrapper:hover .ceo-photo {
-            transform: scale(1.02);
+          .ceo-cta:hover .ceo-cta-arrow {
+            transform: translateX(4px);
           }
-
-          .metric-card:hover {
-            border-color: rgba(7, 221, 43, 0.25);
-            transform: translateY(-2px);
+          .ceo-photo-wrapper:hover .ceo-photo {
+            transform: scale(1.03);
           }
         }
 
-        /* ===== Mobile (< 768px) ===== */
-        @media (max-width: 767px) {
-          .ceo-bg-text {
-            font-size: 72px;
+        /* ===== Mobile pequeno: CTA full width ===== */
+        @media (max-width: 480px) {
+          .ceo-cta {
+            justify-content: center;
+            align-self: stretch;
+            padding: 16px 22px;
+          }
+        }
+
+        /* ===== Tablet (>=768px) ===== */
+        @media (min-width: 768px) {
+          .ceo-name {
+            font-size: 44px;
+          }
+
+          .ceo-bio {
+            font-size: 17px;
+          }
+
+          .ceo-quote p {
+            font-size: 20px;
+          }
+
+          .ceo-metrics {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+          }
+
+          .metric-value {
+            font-size: 32px;
+          }
+        }
+
+        /* ===== Desktop (>=1025px): split + foto sticky ===== */
+        @media (min-width: 1025px) {
+          .ceo-grid {
+            grid-template-columns: minmax(280px, 360px) 1fr;
+            gap: 64px;
+          }
+
+          .ceo-photo-col {
+            position: sticky;
+            top: 96px;
+            max-width: 360px;
           }
 
           .ceo-name {
-            font-size: 40px;
-          }
-
-          .ceo-photo-wrapper {
-            aspect-ratio: 4 / 5;
-            border-radius: 12px;
-            max-width: 100%;
-          }
-
-          .ceo-metrics {
-            max-width: 100%;
-          }
-
-          .metric-card {
-            padding: 12px;
-          }
-
-          .ceo-cta {
-            width: 100%;
-            text-align: center;
-          }
-        }
-
-        /* ===== Tablet (768px – 1024px) ===== */
-        @media (min-width: 768px) and (max-width: 1024px) {
-          .ceo-bg-text {
-            font-size: 100px;
-          }
-
-          .ceo-photo-wrapper {
-            max-width: 280px;
-            margin: 0 auto;
-          }
-
-          .ceo-metrics {
-            max-width: 280px;
-            margin-left: auto;
-            margin-right: auto;
-          }
-        }
-
-        /* ===== Desktop (> 1024px) ===== */
-        @media (min-width: 1025px) {
-          .ceo-grid {
-            grid-template-columns: 55% 45%;
-            gap: 64px;
-            align-items: start;
-          }
-
-          .ceo-left {
-            padding-top: 24px;
+            font-size: 48px;
           }
         }
       `}</style>

@@ -49,8 +49,7 @@ No linter or formatter is configured (no ESLint, Prettier, or similar).
 9. `CarrosselCases` — **lazy-loaded** (`React.lazy`), Three.js cylinder carousel + satellite particles
 10. `Depoimentos` — testimonials section
 11. `FaqSection` — GSAP accordion
-12. `TunnelSection` — space warp tunnel visual
-13. `Footer` — CTA + parallax background
+12. `Footer` — CTA + parallax background
 
 ### Key Directories
 ```

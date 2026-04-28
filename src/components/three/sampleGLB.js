@@ -1,11 +1,21 @@
 import * as THREE from 'three'
 
+// Per-(gltf.scene, count) cache. Treated as immutable across consumers — every
+// caller in the project reads the array without mutating it.
+const sampleCache = new WeakMap()
+
 /**
  * Sample N points on the surface of a GLTF model.
  * Returns Float32Array of length N*3 with xyz positions.
  * Faithfully replicates legacy algorithm: area-weighted CDF + barycentric sampling.
  */
 export default function sampleGLB(gltf, count) {
+  const key = gltf?.scene
+  if (key) {
+    const perCount = sampleCache.get(key)
+    if (perCount && perCount.has(count)) return perCount.get(count)
+  }
+
   const triangles = []
   let totalArea = 0
 
@@ -94,6 +104,15 @@ export default function sampleGLB(gltf, count) {
     positions[ix]     = (tri.vA.x * w + tri.vB.x * u + tri.vC.x * v - center.x) * scale
     positions[ix + 1] = (tri.vA.y * w + tri.vB.y * u + tri.vC.y * v - center.y) * scale
     positions[ix + 2] = (tri.vA.z * w + tri.vB.z * u + tri.vC.z * v - center.z) * scale
+  }
+
+  if (key) {
+    let perCount = sampleCache.get(key)
+    if (!perCount) {
+      perCount = new Map()
+      sampleCache.set(key, perCount)
+    }
+    perCount.set(count, positions)
   }
 
   return positions

@@ -9,7 +9,7 @@ import sampleGLB from './sampleGLB'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const N = 40000
+const N = 12000
 const GREEN = new THREE.Color('#07dd2b')
 const HOVER_RADIUS = 0.9
 const PUSH_STRENGTH = 0.4

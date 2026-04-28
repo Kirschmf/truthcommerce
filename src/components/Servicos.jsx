@@ -53,10 +53,10 @@ export default function Servicos() {
         gsap.set(img, { zIndex: 2 })
         gsap.fromTo(img,
           { opacity: 0, scale: 1.05 },
-          { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
+          { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out', overwrite: 'auto' }
         )
       } else if (i === prev) {
-        gsap.to(img, { opacity: 0, duration: 0.4, zIndex: 1 })
+        gsap.to(img, { opacity: 0, duration: 0.4, zIndex: 1, overwrite: 'auto' })
       } else {
         gsap.set(img, { opacity: 0, zIndex: 0 })
       }
@@ -68,6 +68,7 @@ export default function Servicos() {
       x: 8,
       duration: 0.4,
       ease: 'power2.out',
+      overwrite: 'auto',
     })
 
     // 3. Active description
@@ -77,6 +78,7 @@ export default function Servicos() {
       height: 'auto',
       duration: 0.4,
       ease: 'power2.out',
+      overwrite: 'auto',
     })
 
     // 4. Inactive items
@@ -87,6 +89,7 @@ export default function Servicos() {
         x: 0,
         duration: 0.4,
         ease: 'power2.out',
+        overwrite: 'auto',
       })
     })
 
@@ -99,6 +102,7 @@ export default function Servicos() {
         height: 0,
         duration: 0.3,
         ease: 'power2.out',
+        overwrite: 'auto',
       })
     })
 
@@ -108,10 +112,10 @@ export default function Servicos() {
       if (i === index) {
         gsap.fromTo(line,
           { scaleX: 0 },
-          { scaleX: 1, duration: 0.5, ease: 'power3.out', transformOrigin: 'left' }
+          { scaleX: 1, duration: 0.5, ease: 'power3.out', transformOrigin: 'left', overwrite: 'auto' }
         )
       } else {
-        gsap.to(line, { scaleX: 0, duration: 0.3 })
+        gsap.to(line, { scaleX: 0, duration: 0.3, overwrite: 'auto' })
       }
     })
 
@@ -236,7 +240,7 @@ export default function Servicos() {
             {PILARES.map((pilar, i) => (
               <div
                 key={pilar.title}
-                className="pilar-item"
+                className={`pilar-item ${activeIndex === i ? 'is-active' : ''}`}
                 onMouseEnter={() => handlePilarEnter(i)}
               >
                 <div className="pilar-number">
@@ -311,6 +315,7 @@ export default function Servicos() {
         .pilares-image-col {
           display: none;
         }
+          
 
         .pilares-image-container {
           position: relative;
@@ -372,17 +377,21 @@ export default function Servicos() {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          gap: 16px;
+          min-height: 28px;
         }
 
         .pilar-title {
           font-family: var(--font-heading, 'Sora', sans-serif);
-          font-size: 28px;
+          font-size: 26px;
           font-weight: 800;
           text-transform: uppercase;
-          line-height: 1;
+          line-height: 1.15;
           color: #2a2a2a;
           margin: 0;
           transition: none;
+          flex: 1;
+          min-width: 0;
         }
 
         .pilar-arrow {
@@ -391,11 +400,9 @@ export default function Servicos() {
           opacity: 0;
           transition: opacity 0.3s ease;
           flex-shrink: 0;
-          margin-left: 16px;
         }
 
-        .pilar-item:hover .pilar-arrow,
-        .pilar-item:first-child .pilar-arrow {
+        .pilar-item.is-active .pilar-arrow {
           opacity: 1;
         }
 
@@ -406,9 +413,9 @@ export default function Servicos() {
         }
 
         .pilar-desc p {
-          font-size: 13px;
-          color: #555;
-          margin: 8px 0 0 0;
+          font-size: 18px;
+          color: #ebebeb;
+          margin: 10px 0 0 0;
           line-height: 1.6;
         }
 
@@ -455,8 +462,12 @@ export default function Servicos() {
 
         /* ===== Tablet (768px–1024px) ===== */
         @media (min-width: 768px) {
+          .pilar-title-row {
+            min-height: 32px;
+          }
+
           .pilar-title {
-            font-size: clamp(28px, 5vw, 40px);
+            font-size: 26px;
           }
 
           .pilar-mobile-image {
@@ -498,7 +509,7 @@ export default function Servicos() {
           }
 
           .pilar-title {
-            font-size: clamp(22px, 2.5vw, 32px);
+            font-size: 26px;
           }
         }
       `}</style>
