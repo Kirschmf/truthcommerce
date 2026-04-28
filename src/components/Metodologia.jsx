@@ -22,7 +22,7 @@ const STEPS = [
     number: '03',
     title: 'Integração Sistêmica',
     description:
-      'Conectamos sua operação de ponta a ponta. Plugamos o seu ERP/PDV às plataformas e canais de venda, garantindo que estoque, preços e logística conversem em tempo real, sem falhas.',
+      'Verificamos sua estrutura e, juntamente com um ERP parceiro, conectamos sua operação de ponta a ponta: integrando às plataformas e canais de venda, fazendo com que estoque, preços e logística conversem em tempo real, sem falhas.',
   },
   {
     number: '04',

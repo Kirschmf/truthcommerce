@@ -6,7 +6,6 @@ import AlertaCritico from './components/AlertaCritico'
 import Metodologia from './components/Metodologia'
 import LogoMarquee from './components/LogoMarquee'
 import CeoSection from './components/CeoSection'
-import TunnelSection from './components/TunnelSection'
 import Servicos from './components/Servicos'
 import Depoimentos from './components/Depoimentos'
 import FaqSection from './components/FaqSection'
@@ -34,7 +33,6 @@ export default function App() {
         </Suspense>
         <Depoimentos />
         <FaqSection />
-        <TunnelSection />
       </main>
       <Footer />
     </div>

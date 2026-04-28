@@ -4,15 +4,9 @@ import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import createGlowTexture from './GlowTexture'
 import sampleGLB from './sampleGLB'
+import { CASES as CASE_DATA } from '../../data/cases'
 
-const CASES = [
-  { t: 'SOPY',           img: '/assets/images/sopy-print.png'    },
-  { t: 'MP DISTRIBUIDORA', img: '/assets/images/mp-print.png'    },
-  { t: 'NEXT EVENTOS',   img: '/assets/images/next-print.png'    },
-  { t: 'JOHNNY COOKER',  img: '/assets/images/johny-print.png'   },
-  { t: 'HYPE KBEAUTY',   img: '/assets/images/kbeauty-print.png' },
-  { t: 'CAFE CARANDAI',  img: '/assets/images/cafe-print.png'    },
-]
+const CASES = CASE_DATA
 
 // 6 cases × 3 = 18 cards on the ring
 const FULL_CASES = [...CASES, ...CASES, ...CASES]
@@ -33,8 +27,10 @@ void main() {
 
 // Front face: image at 15% brightness (dark)
 // Back face:  image at full brightness
+// uDim: extra global dim multiplier (used when 2D overlay takes over and the ring becomes backdrop)
 const fragShader = `
 uniform sampler2D map;
+uniform float uDim;
 varying vec2 vUv;
 void main() {
   vec2 uv = vUv;
@@ -42,11 +38,12 @@ void main() {
   vec4 tex = texture2D(map, uv);
   vec3 col = tex.rgb;
   if (gl_FrontFacing) col *= 0.15;
+  col *= uDim;
   gl_FragColor = vec4(col, 1.0);
 }
 `
 
-export default function Carousel3D({ scrollProgressRef, onCardClick }) {
+export default function Carousel3D({ scrollProgressRef, onCardClick, interactive3DRef }) {
   const groupRef     = useRef()
   const satGroupRef  = useRef()
   const satPointsRef = useRef()
@@ -55,7 +52,7 @@ export default function Carousel3D({ scrollProgressRef, onCardClick }) {
   const ringRotRef    = useRef(0)
   const targetRotRef  = useRef(0)
   const hudOpacityRef = useRef(0)
-  const dragRef       = useRef({ active: false, startX: 0 })
+  const dragRef       = useRef({ active: false, startX: 0, moved: 0 })
   const mouseRef      = useRef(new THREE.Vector2(-999, -999))
   const raycaster     = useMemo(() => new THREE.Raycaster(), [])
   const cardMeshesRef = useRef([])
@@ -82,13 +79,16 @@ export default function Carousel3D({ scrollProgressRef, onCardClick }) {
       const mat = new THREE.ShaderMaterial({
         vertexShader: vertShader,
         fragmentShader: fragShader,
-        uniforms: { map: { value: baseTextures[i % CASES.length] } },
+        uniforms: {
+          map: { value: baseTextures[i % CASES.length] },
+          uDim: { value: 1.0 },
+        },
         side: THREE.DoubleSide,
         transparent: true,
       })
 
       const mesh = new THREE.Mesh(geo, mat)
-      mesh.userData = { ...c, index: i % CASES.length }
+      mesh.userData.caseIndex = i % CASES.length
       return mesh
     })
 
@@ -136,38 +136,62 @@ export default function Carousel3D({ scrollProgressRef, onCardClick }) {
   const glowTex = useMemo(() => createGlowTexture(), [])
 
   // ── Interaction ───────────────────────────────────────────────
+  const isInteractive = () => interactive3DRef ? interactive3DRef.current !== false : true
+
   useEffect(() => {
     const canvas = gl.domElement
 
     const onWheel = (e) => {
+      if (!isInteractive()) return
       if (hudOpacityRef.current > 0.5) {
         targetRotRef.current += e.deltaY * 0.0008
       }
     }
 
     const onDown = (e) => {
+      if (!isInteractive()) return
       if (hudOpacityRef.current > 0.5) {
-        dragRef.current = { active: true, startX: e.clientX }
+        dragRef.current = { active: true, startX: e.clientX, moved: 0 }
       }
     }
 
     const onMove = (e) => {
-      mouseRef.current.x =  (e.clientX / window.innerWidth)  * 2 - 1
-      mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1
-      if (dragRef.current.active) {
-        targetRotRef.current += (e.clientX - dragRef.current.startX) * 0.002
+      const rect = canvas.getBoundingClientRect()
+      mouseRef.current.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1
+      mouseRef.current.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1
+      if (dragRef.current.active && isInteractive()) {
+        const dx = e.clientX - dragRef.current.startX
+        targetRotRef.current += dx * 0.002
+        dragRef.current.moved += Math.abs(dx)
         dragRef.current.startX = e.clientX
       }
     }
 
     const onUp = () => { dragRef.current.active = false }
 
-    const onClick = () => {
+    const onClick = (e) => {
+      if (!isInteractive()) return
       if (hudOpacityRef.current < 0.5) return
-      raycaster.setFromCamera(mouseRef.current, camera)
-      const hits = raycaster.intersectObjects(cardMeshesRef.current)
+      // Ignore clicks that were really drags (>6px movement)
+      if (dragRef.current.moved > 6) return
+
+      const rect = canvas.getBoundingClientRect()
+      const ndc = {
+        x:  ((e.clientX - rect.left) / rect.width)  * 2 - 1,
+        y: -((e.clientY - rect.top)  / rect.height) * 2 + 1,
+      }
+
+      // Force matrices to current values before raycasting (ring rotates per frame)
+      if (groupRef.current) groupRef.current.updateMatrixWorld(true)
+
+      raycaster.setFromCamera(ndc, camera)
+      const hits = raycaster.intersectObjects(cardMeshesRef.current, false)
       if (hits.length > 0 && onCardClick) {
-        onCardClick(hits[0].object.userData)
+        // Resolve case via indexOf in the live mesh array — bulletproof against stale userData
+        const meshIdx = cardMeshesRef.current.indexOf(hits[0].object)
+        const idx = meshIdx >= 0 ? meshIdx % CASES.length : hits[0].object.userData.caseIndex
+        const picked = CASES[idx]
+        onCardClick(picked)
       }
     }
 
@@ -190,30 +214,26 @@ export default function Carousel3D({ scrollProgressRef, onCardClick }) {
   useFrame(() => {
     const p = scrollProgressRef.current || 0
 
-    let camY, camZ, lookZ, tilt, hudOpacity
+    let camY, camZ, lookZ, tilt, hudOpacity, backdrop
 
-    if (p < 0.5) {
+    if (p < 0.45) {
       // Phase 1: dive into the ring
-      const t    = p * 2
+      const t    = p / 0.45
       const ease = t * t * (3 - 2 * t)  // smoothstep
       camY       = 4000 * (1 - ease)
       camZ       = 8000 + (-500 - 8000) * ease  // 8000 → -500
       lookZ      = -4000 * ease                  // 0 → -4000
       tilt       = 0.20 * (1 - ease)
       hudOpacity = ease
-    } else if (p < 0.75) {
-      // Phase 2: exploration — camera stable inside ring
-      camY = 0; camZ = -500; lookZ = -4000; tilt = 0; hudOpacity = 1
+      backdrop   = 0
     } else {
-      // Phase 3: exit
-      const t    = (p - 0.75) * 4
-      const e    = Math.min(1, t)
-      const ease = e * e * (3 - 2 * e)
-      camY       = 4000 * ease
-      camZ       = -500 + 8500 * ease   // -500 → 8000
-      lookZ      = -4000 * (1 - ease)   // -4000 → 0
-      tilt       = 0.20 * ease
-      hudOpacity = 1 - ease
+      // Phase 2: HOLD at zoom max — camera stable, ring becomes cinematic backdrop
+      // backdrop ramps 0→1 across 0.45 → 0.6 (matches CarrosselCases overlay opacity curve)
+      const t = Math.min(1, Math.max(0, (p - 0.45) / 0.15))
+      backdrop = t * t * (3 - 2 * t)
+      camY = 0; camZ = -500; lookZ = -4000; tilt = 0
+      // HUD stays visible during hold; soft fade only at the very end (p > 0.95)
+      hudOpacity = p < 0.95 ? 1 : Math.max(0, 1 - (p - 0.95) * 20)
     }
 
     hudOpacityRef.current = hudOpacity
@@ -221,10 +241,26 @@ export default function Carousel3D({ scrollProgressRef, onCardClick }) {
     camera.position.set(0, camY, camZ)
     camera.lookAt(0, 0, lookZ)
 
-    // Fog: tight when inside ring, open when outside
+    // Fog: tight when inside ring (hud > 0.5), wider/darker when overlay active
     if (scene.fog) {
-      scene.fog.near = hudOpacity > 0.5 ? 100    : 0
-      scene.fog.far  = hudOpacity > 0.5 ? 15000  : 100000
+      if (hudOpacity > 0.5) {
+        // Pull fog closer as backdrop ramps up → cards sink into atmosphere
+        scene.fog.near = 100
+        scene.fog.far  = 15000 - backdrop * 8000  // 15000 → 7000
+      } else {
+        scene.fog.near = 0
+        scene.fog.far  = 100000
+      }
+    }
+
+    // Card brightness: dim when overlay active so the 2D card is unambiguously the foreground
+    // 1.0 (normal) → 0.35 (dim) over backdrop 0→1
+    const dim = 1 - backdrop * 0.65
+    for (let i = 0; i < cardMeshesRef.current.length; i++) {
+      const m = cardMeshesRef.current[i]
+      if (m && m.material && m.material.uniforms && m.material.uniforms.uDim) {
+        m.material.uniforms.uDim.value = dim
+      }
     }
 
     // Ring: tilt + auto-spin + drag
@@ -232,7 +268,11 @@ export default function Carousel3D({ scrollProgressRef, onCardClick }) {
       groupRef.current.rotation.x = tilt
 
       if (!dragRef.current.active) {
-        targetRotRef.current -= hudOpacity > 0.8 ? 0.0003 : 0.003
+        // Slower spin when in hold/backdrop mode; original 0.003 during dive-in
+        const spin = hudOpacity > 0.8
+          ? (0.0003 + backdrop * 0.0005)  // 0.0003 → 0.0008 as backdrop ramps
+          : 0.003
+        targetRotRef.current -= spin
       }
       ringRotRef.current += (targetRotRef.current - ringRotRef.current) * 0.06
       groupRef.current.rotation.y = ringRotRef.current
@@ -274,8 +314,8 @@ export default function Carousel3D({ scrollProgressRef, onCardClick }) {
       satGroupRef.current.rotation.y += 0.002
     }
 
-    // Hover cursor
-    if (hudOpacity > 0.5) {
+    // Hover cursor — only when 3D is the active interaction layer
+    if (hudOpacity > 0.5 && isInteractive()) {
       raycaster.setFromCamera(mouseRef.current, camera)
       const hits = raycaster.intersectObjects(cardMeshesRef.current)
       gl.domElement.style.cursor = hits.length > 0 ? 'pointer' : 'default'
