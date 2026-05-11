@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(head:*)",
-      "Bash(timeout 10 npx vite --port 5173)"
+      "Bash(timeout 10 npx vite --port 5173)",
+      "Bash(npm run *)"
     ]
   },
   "enabledPlugins": {

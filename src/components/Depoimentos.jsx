@@ -642,14 +642,13 @@ export default function Depoimentos() {
         /* ===== Mobile ===== */
         @media (max-width: 767px) {
           .dep-slider {
-            height: 460px;
+            height: 620px;
             perspective: none;
           }
 
           .dep-card {
-            width: 80vw;
-            max-width: 280px;
-            margin-left: calc(-40vw);
+            width: 280px;
+            margin-left: -140px;
           }
 
           .dep-drag-hint {

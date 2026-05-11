@@ -15,9 +15,8 @@ const HOVER_RADIUS = 0.9
 const PUSH_STRENGTH = 0.4
 const TILT_Z = -Math.PI / 5.2
 
-function isMobile() {
-  return window.innerWidth <= 768
-}
+function isMobile() { return window.innerWidth <= 768 }
+function isNotebook() { return window.innerWidth < 1500 }
 
 export default function ParticleCloud() {
   const pointsRef = useRef()
@@ -35,14 +34,31 @@ export default function ParticleCloud() {
   const astronautGltf = useGLTF('/assets/models/astronaut.glb')
 
   const mobile = useMemo(() => isMobile(), [])
+  const notebook = useMemo(() => !isMobile() && isNotebook(), [])
 
-  // Rocket: right side with tilt
-  const rocketPos3 = useMemo(() => (mobile ? [1.8, -2.8, 0] : [4.5, -0.6, 0]), [mobile])
-  const rocketScale = useMemo(() => (mobile ? 1.0 : 1.6), [mobile])
+  // Rocket: right side with tilt — positions tuned per viewport
+  const rocketPos3 = useMemo(() => {
+    if (mobile) return [0, -3.2, 0]
+    if (notebook) return [4.5, -0.6, 0]
+    return [4.5, -0.6, 0]
+  }, [mobile, notebook])
+  const rocketScale = useMemo(() => {
+    if (mobile) return 0.8
+    if (notebook) return 1.6
+    return 1.6
+  }, [mobile, notebook])
 
-  // Astronaut: left-center (same as the old AlertaCanvas placement)
-  const astroPos3 = useMemo(() => (mobile ? [0, 0, 0] : [-3.5, 0, 0]), [mobile])
-  const astroScale = useMemo(() => (mobile ? 0.9 : 1.4), [mobile])
+  // Astronaut: left-center on desktop, below text on mobile/notebook
+  const astroPos3 = useMemo(() => {
+    if (mobile) return [0, -3.5, 0]
+    if (notebook) return [-5.5, -0.1, 0]
+    return [-3.5, 0, 0]
+  }, [mobile, notebook])
+  const astroScale = useMemo(() => {
+    if (mobile) return 0.65
+    if (notebook) return 1.4
+    return 1.4
+  }, [mobile, notebook])
 
   // Sample both models — sampleGLB normalizes both to height 5.5, centered at origin
   const { rocketShape, astronautShape, offsets, idlePhase, currentPos } = useMemo(() => {
@@ -110,15 +126,15 @@ export default function ParticleCloud() {
 
   const glowTexture = useMemo(() => createGlowTexture(), [])
 
-  // Entrance animation
+  // Entrance animation — faster on mobile so rocket is fully visible before user scrolls
   useEffect(() => {
     gsap.to(progressRef.current, {
       entrance: 1,
-      duration: 3.0,
+      duration: mobile ? 1.2 : 3.0,
       ease: 'power2.out',
       delay: 0.4,
     })
-  }, [])
+  }, [mobile])
 
   // Scroll morph trigger
   useEffect(() => {

@@ -17,8 +17,10 @@ export default function StarfieldBg() {
     let W, H
     let totalH = 0
     let dpr = Math.min(window.devicePixelRatio || 1, 2)
-    let scrollY = 0
+    let targetScrollY = 0
+    let scrollY = 0        // smoothed render value
     let lastNow = 0
+    let lenisAttached = false
 
     const layers = [
       { stars: [], drift: 0.008, sizeMin: 0.3, sizeMax: 0.7,  opMin: 0.15, opMax: 0.4,  parallax: 0.02 },
@@ -131,11 +133,22 @@ export default function StarfieldBg() {
     }
 
     // ── Draw loop ─────────────────────────────────────────────
+    function tryAttachLenis() {
+      if (lenisAttached || !window.__lenis) return
+      window.__lenis.on('scroll', ({ scroll }) => { targetScrollY = scroll })
+      lenisAttached = true
+    }
+
     function draw(now) {
       raf = requestAnimationFrame(draw)
       const dt      = Math.min((now - lastNow) * 0.001, 0.05)
       lastNow       = now
       const elapsed = now * 0.001
+
+      // Lazy Lenis attachment (Lenis initializes after StarfieldBg mounts)
+      if (!lenisAttached) tryAttachLenis()
+
+      scrollY = targetScrollY
 
       ctx.clearRect(0, 0, W, H)
       ctx.fillStyle = '#040507'
@@ -223,7 +236,7 @@ export default function StarfieldBg() {
     }
 
     function onScroll() {
-      scrollY = window.scrollY || window.pageYOffset || 0
+      targetScrollY = window.scrollY || window.pageYOffset || 0
     }
 
     function init() {
@@ -232,10 +245,8 @@ export default function StarfieldBg() {
       onScroll()
       raf = requestAnimationFrame(draw)
 
-      // Lenis smooth-scroll integration
-      if (window.__lenis) {
-        window.__lenis.on('scroll', ({ scroll }) => { scrollY = scroll })
-      }
+      // Lenis may not be ready yet — tryAttachLenis() retries every frame until connected
+      tryAttachLenis()
 
       // Extend field after Three.js/GSAP finish expanding the DOM
       setTimeout(extendIfGrown, 400)
@@ -245,7 +256,13 @@ export default function StarfieldBg() {
 
     init()
 
-    const onResize = () => { resize(); createAll() }
+    const onResize = () => {
+      const prevW = W
+      resize()
+      // Only rebuild stars on width changes (orientation). Height-only = mobile browser
+      // chrome hiding/showing — rebuilding there causes the visible starfield jump.
+      if (Math.abs(W - prevW) > 10) createAll()
+    }
     window.addEventListener('resize', onResize)
     window.addEventListener('scroll', onScroll, { passive: true })
 

@@ -45,7 +45,7 @@ export default function AlertaCritico() {
       className="relative w-full px-[5%] min-h-screen flex items-center"
     >
       {/* Text content — right-of-center on desktop, vertically centered */}
-      <div ref={contentRef} className="relative z-10 max-w-[680px] w-full md:ml-auto md:mr-[8%] py-20" style={{ opacity: 0 }}>
+      <div ref={contentRef} className="relative z-10 max-w-[680px] w-full md:ml-auto md:mr-[8%] pt-20 pb-[220px] md:pb-20" style={{ opacity: 0 }}>
 
         <span className="inline-block font-mono text-[9px] md:text-[10px] text-green uppercase tracking-[0.14em] border border-green/20 px-3 py-1.5 md:px-3.5 rounded-full mb-5 md:mb-6 bg-green/[0.04] font-bold">
           [ Alerta Crítico ]

@@ -66,11 +66,11 @@ function MagneticButton({ href, children }) {
 
     gsap.killTweensOf([fill, textRef.current, btnRef.current])
     gsap.set(fill, { width: size, height: size, left: x, top: y, scale: 0 })
-    gsap.to(fill, { scale: 1, duration: 1.1, ease: 'expo.out' })
+    gsap.to(fill, { scale: 1, duration: 1.8, ease: 'power2.out' })
     gsap.to(textRef.current, {
       color: '#ffffff',
-      duration: 0.7,
-      delay: 0.15,
+      duration: 1.0,
+      delay: 0,
       ease: 'power2.out',
     })
     gsap.to(btnRef.current, {
