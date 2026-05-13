@@ -2,24 +2,34 @@ import { useState, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const logo = '/assets/images/Logo Branca.png'
+const CTA_HREF = 'https://wa.me/SEUNUMEROAQUI'
 
-function smoothScrollTo(e) {
-  const href = e.currentTarget.getAttribute('href')
-  if (href?.startsWith('#') && window.__lenis) {
-    e.preventDefault()
+function scrollToTarget(href) {
+  if (!href?.startsWith('#')) return false
+
+  if (window.__lenis) {
     window.__lenis.scrollTo(href, { duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) })
+    return true
+  }
+
+  const target = document.querySelector(href)
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    return true
+  }
+
+  return false
+}
+
+function scrollToTop() {
+  if (window.__lenis) {
+    window.__lenis.scrollTo(0, { immediate: true })
+  } else {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }
 }
 
-const NAV_LINKS = [
-  { label: 'Metodologia', href: '#metodo' },
-  { label: 'Infraestrutura Ativa', href: '#projetos' },
-  { label: 'Perguntas Frequentes', href: '#faq' },
-]
-
-const CTA_HREF = 'https://wa.me/SEUNUMEROAQUI'
-
-export default function Header() {
+export default function Header({ navLinks = [], onNavigate, currentPath = '/' }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const openMenu = useCallback(() => {
@@ -32,13 +42,28 @@ export default function Header() {
     document.body.style.overflow = ''
   }, [])
 
+  const handleNavigate = useCallback((href, { close = false } = {}) => (e) => {
+    if (close) closeMenu()
+
+    if (href.startsWith('#')) {
+      e.preventDefault()
+      scrollToTarget(href)
+      return
+    }
+
+    e.preventDefault()
+    if (href === currentPath) {
+      scrollToTop()
+      return
+    }
+    onNavigate?.(href)
+  }, [closeMenu, currentPath, onNavigate])
+
   return (
     <>
       <header className="absolute top-0 left-0 w-full z-[1000] pt-4">
         <div className="max-w-[1300px] mx-auto px-[5%] h-[68px] flex items-center justify-between gap-8">
-
-          {/* Logo */}
-          <a href="#" className="flex items-center shrink-0">
+          <a href="/" onClick={handleNavigate('/')} className="flex items-center shrink-0">
             <img
               src={logo}
               alt="Truth Commerce"
@@ -46,14 +71,13 @@ export default function Header() {
             />
           </a>
 
-          {/* Nav — hidden on mobile, visible md+ */}
           <nav className="hidden md:block">
             <ul className="flex items-center gap-9 list-none m-0 p-0">
-              {NAV_LINKS.map(({ label, href }) => (
-                <li key={href}>
+              {navLinks.map(({ label, href }) => (
+                <li key={`${label}-${href}`}>
                   <a
                     href={href}
-                    onClick={smoothScrollTo}
+                    onClick={handleNavigate(href)}
                     className="text-white/65 text-[13.5px] font-medium no-underline whitespace-nowrap transition-colors duration-200 hover:text-white"
                   >
                     {label}
@@ -63,9 +87,7 @@ export default function Header() {
             </ul>
           </nav>
 
-          {/* Actions */}
           <div className="flex items-center gap-4 shrink-0">
-            {/* CTA — hidden on mobile */}
             <a
               href={CTA_HREF}
               target="_blank"
@@ -76,7 +98,6 @@ export default function Header() {
               <span className="transition-transform duration-250 group-hover:translate-x-[3px]">→</span>
             </a>
 
-            {/* Hamburger — visible on mobile only */}
             <button
               onClick={openMenu}
               className="flex md:hidden flex-col justify-center gap-[5px] w-9 h-9 bg-transparent border-none cursor-pointer p-1"
@@ -87,11 +108,9 @@ export default function Header() {
               <span className="block h-[1.5px] w-full bg-white rounded-sm" />
             </button>
           </div>
-
         </div>
       </header>
 
-      {/* Mobile Overlay */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -101,9 +120,10 @@ export default function Header() {
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[1001] bg-black flex flex-col"
           >
-            {/* Top bar */}
             <div className="flex items-center justify-between px-[6%] h-[68px] shrink-0 border-b border-white/[0.07]">
-              <img src={logo} alt="Truth Commerce" className="h-11 w-auto" />
+              <a href="/" onClick={handleNavigate('/', { close: true })}>
+                <img src={logo} alt="Truth Commerce" className="h-11 w-auto" />
+              </a>
               <button
                 onClick={closeMenu}
                 className="bg-transparent border-none text-white text-[28px] leading-none cursor-pointer px-2 py-1 opacity-80 transition-opacity duration-200 hover:opacity-100"
@@ -113,13 +133,12 @@ export default function Header() {
               </button>
             </div>
 
-            {/* Nav links */}
             <nav className="flex-1 flex flex-col justify-center px-[8%]">
-              {NAV_LINKS.map(({ label, href }, i) => (
+              {navLinks.map(({ label, href }, i) => (
                 <motion.a
-                  key={href}
+                  key={`${label}-${href}`}
                   href={href}
-                  onClick={(e) => { closeMenu(); smoothScrollTo(e) }}
+                  onClick={handleNavigate(href, { close: true })}
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 + i * 0.07, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -130,7 +149,6 @@ export default function Header() {
               ))}
             </nav>
 
-            {/* Footer CTA */}
             <div className="px-[8%] py-7 shrink-0">
               <motion.a
                 href={CTA_HREF}

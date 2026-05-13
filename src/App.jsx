@@ -1,40 +1,69 @@
-import { lazy, Suspense } from 'react'
-import useLenis from './hooks/useLenis'
+import { useEffect, useMemo } from 'react'
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import Header from './components/Header'
-import HeroSection from './components/HeroSection'
-import AlertaCritico from './components/AlertaCritico'
-import Metodologia from './components/Metodologia'
-import LogoMarquee from './components/LogoMarquee'
-import CeoSection from './components/CeoSection'
-import Servicos from './components/Servicos'
-import Depoimentos from './components/Depoimentos'
-import FaqSection from './components/FaqSection'
 import Footer from './components/Footer'
 import StarfieldBg from './components/StarfieldBg'
+import HomePage from './pages/HomePage'
+import NossosServicosPage from './pages/NossosServicosPage'
 
-const CarrosselCases = lazy(() => import('./components/CarrosselCases'))
+function scrollToTop() {
+  if (window.__lenis) {
+    window.__lenis.scrollTo(0, { immediate: true })
+  } else {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }
+}
 
 export default function App() {
-  useLenis()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const isServicesPage = location.pathname === '/nossos-servicos'
+
+  useEffect(() => {
+    scrollToTop()
+  }, [location.pathname])
+
+  const navLinks = useMemo(() => (
+    isServicesPage
+      ? [
+          { label: 'Início', href: '/' },
+          { label: 'Nossos Serviços', href: '/nossos-servicos' },
+          { label: 'Falar com especialista', href: '#footer' },
+        ]
+      : [
+          { label: 'Início', href: '/' },
+          { label: 'Nossos Serviços', href: '/nossos-servicos' },
+          { label: 'Metodologia', href: '#metodo' },
+          { label: 'Infraestrutura Ativa', href: '#depoimentos' },
+          { label: 'Perguntas Frequentes', href: '#faq' },
+        ]
+  ), [isServicesPage])
+
+  const footerLinks = useMemo(() => (
+    isServicesPage
+      ? [
+          { label: 'Início', href: '/' },
+          { label: 'Nossos Serviços', href: '/nossos-servicos' },
+          { label: 'Contato', href: '#footer' },
+        ]
+      : [
+          { label: 'Início', href: '/' },
+          { label: 'Metodologia', href: '#metodo' },
+          { label: 'Infraestrutura Ativa', href: '#depoimentos' },
+          { label: 'Perguntas Frequentes', href: '#faq' },
+        ]
+  ), [isServicesPage])
 
   return (
     <div className="relative min-h-screen text-text-main">
       <StarfieldBg />
-      <Header />
-      <main>
-        <HeroSection />
-        <AlertaCritico />
-        <Metodologia />
-        <LogoMarquee />
-        <CeoSection />
-        <Servicos />
-        <Suspense fallback={<div className="h-screen" />}>
-          <CarrosselCases />
-        </Suspense>
-        <Depoimentos />
-        <FaqSection />
-      </main>
-      <Footer />
+      <Header navLinks={navLinks} onNavigate={navigate} currentPath={location.pathname} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/nossos-servicos" element={<NossosServicosPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+      <Footer navLinks={footerLinks} onNavigate={navigate} currentPath={location.pathname} />
     </div>
   )
 }

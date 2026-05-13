@@ -11,36 +11,22 @@ const INSTAGRAM_URL = 'https://www.instagram.com/truth.commerce/'
 const LINKEDIN_URL = 'https://www.linkedin.com/company/truth-commerce/'
 const EMAIL = 'contato@truthcommerce.com.br'
 
-const FOOTER_COLS = [
-  {
-    index: '01',
-    title: 'SISTEMAS',
-    links: [
-      { label: 'Setup E-commerce', href: '#' },
-      { label: 'Expansão Marketplaces', href: '#' },
-      { label: 'Integração ERP/PDV', href: '#' },
-      { label: 'PIM (Catálogo)', href: '#' },
-    ],
-  },
-  {
-    index: '02',
-    title: 'EMPRESA',
-    links: [
-      { label: 'Protocolo', href: '#metodo' },
-      { label: 'Infraestrutura Ativa', href: '#projetos' },
-      { label: 'Dados Técnicos', href: '#faq' },
-    ],
-  },
-  {
-    index: '03',
-    title: 'CONEXÃO',
-    links: [
-      { label: 'WhatsApp', href: CTA_HREF, external: true },
-      { label: 'Instagram', href: INSTAGRAM_URL, external: true },
-      { label: 'LinkedIn', href: LINKEDIN_URL, external: true },
-    ],
-  },
-]
+function scrollToTarget(href) {
+  if (!href?.startsWith('#')) return false
+
+  if (window.__lenis) {
+    window.__lenis.scrollTo(href, { duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) })
+    return true
+  }
+
+  const target = document.querySelector(href)
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    return true
+  }
+
+  return false
+}
 
 function MagneticButton({ href, children }) {
   const btnRef = useRef(null)
@@ -190,8 +176,56 @@ function LinkedInIcon() {
   )
 }
 
-export default function Footer() {
+export default function Footer({ navLinks = [], onNavigate, currentPath = '/' }) {
   const sectionRef = useRef(null)
+
+  const footerCols = [
+    {
+      index: '01',
+      title: 'SISTEMAS',
+      links: [
+        { label: 'Setup E-commerce', href: '/nossos-servicos' },
+        { label: 'Expansão Marketplaces', href: '/nossos-servicos' },
+        { label: 'Integração ERP/PDV', href: '/nossos-servicos' },
+        { label: 'PIM (Catálogo)', href: '/nossos-servicos' },
+      ],
+    },
+    {
+      index: '02',
+      title: 'EMPRESA',
+      links: navLinks,
+    },
+    {
+      index: '03',
+      title: 'CONEXÃO',
+      links: [
+        { label: 'WhatsApp', href: CTA_HREF, external: true },
+        { label: 'Instagram', href: INSTAGRAM_URL, external: true },
+        { label: 'LinkedIn', href: LINKEDIN_URL, external: true },
+      ],
+    },
+  ]
+
+  const handleLinkClick = useCallback((link) => (e) => {
+    if (link.external) return
+
+    if (link.href.startsWith('#')) {
+      e.preventDefault()
+      scrollToTarget(link.href)
+      return
+    }
+
+    e.preventDefault()
+    if (link.href === currentPath) {
+      if (window.__lenis) {
+        window.__lenis.scrollTo(0, { immediate: true })
+      } else {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+      }
+      return
+    }
+    onNavigate?.(link.href)
+  }, [currentPath, onNavigate])
 
   useGSAP(() => {
     const els = sectionRef.current.querySelectorAll('.reveal')
@@ -298,7 +332,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {FOOTER_COLS.map((col) => (
+          {footerCols.map((col) => (
             <div key={col.title}>
               <h4 className="flex items-baseline gap-2 font-mono text-[12px] uppercase tracking-[0.18em] mb-5">
                 <span className="text-[var(--green)]">{col.index}</span>
@@ -312,6 +346,7 @@ export default function Footer() {
                       href={link.href}
                       target={link.external ? '_blank' : undefined}
                       rel={link.external ? 'noopener noreferrer' : undefined}
+                      onClick={handleLinkClick(link)}
                       className="group inline-flex items-center text-text-muted text-[14px] md:text-[15px] hover:text-text-main transition-colors duration-200"
                     >
                       <span className="inline-block w-0 group-hover:w-4 overflow-hidden text-[var(--green)] transition-[width] duration-300 whitespace-nowrap">

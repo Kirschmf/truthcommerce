@@ -19,8 +19,44 @@ test.describe('Home Page', () => {
   })
 
   test('nav links are present', async ({ page }) => {
-    await expect(page.getByText('Metodologia')).toBeVisible()
-    await expect(page.getByText('Perguntas Frequentes')).toBeVisible()
+    await expect(page.getByRole('banner').getByRole('link', { name: 'Início', exact: true })).toBeVisible()
+    await expect(page.getByRole('banner').getByRole('link', { name: 'Nossos Serviços', exact: true })).toBeVisible()
+    await expect(page.getByRole('banner').getByRole('link', { name: 'Perguntas Frequentes', exact: true })).toBeVisible()
+  })
+
+  test('navigates to services page and back home', async ({ page }) => {
+    await page.getByText('Nossos Serviços').first().click()
+    await expect(page).toHaveURL(/\/nossos-servicos$/)
+    await expect(page.getByRole('heading', { name: 'Conheça as soluções premium que oferecemos para sua empresa' })).toBeVisible()
+
+    await page.getByText('Início').first().click()
+    await expect(page).toHaveURL(/\/$/)
+    await expect(page.locator('h1').first()).toBeVisible()
+  })
+
+  test('loads services page directly and returns via logo', async ({ page }) => {
+    await page.goto('/nossos-servicos')
+    await expect(page).toHaveURL(/\/nossos-servicos$/)
+    await expect(page.getByRole('heading', { name: 'Conheça as soluções premium que oferecemos para sua empresa' })).toBeVisible()
+
+    await page.getByAltText('Truth Commerce').first().click()
+    await expect(page).toHaveURL(/\/$/)
+    await expect(page.locator('h1').first()).toBeVisible()
+  })
+
+  test('mobile menu navigates between home and services', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/')
+
+    await page.getByRole('button', { name: 'Abrir menu' }).click()
+    await page.locator('nav').filter({ has: page.getByRole('link', { name: 'Nossos Serviços', exact: true }) }).getByRole('link', { name: 'Nossos Serviços', exact: true }).click()
+    await expect(page).toHaveURL(/\/nossos-servicos$/)
+    await expect(page.getByRole('heading', { name: 'Conheça as soluções premium que oferecemos para sua empresa' })).toBeVisible()
+
+    await page.getByRole('button', { name: 'Abrir menu' }).click()
+    await page.locator('nav').filter({ has: page.getByRole('link', { name: 'Início', exact: true }) }).last().getByRole('link', { name: 'Início', exact: true }).click()
+    await expect(page).toHaveURL(/\/$/)
+    await expect(page.locator('h1').first()).toBeVisible()
   })
 
   test('sections become visible on scroll', async ({ page }) => {

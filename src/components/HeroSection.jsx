@@ -123,7 +123,7 @@ export default function HeroSection() {
               Conhecer a estrutura
             </a>
             <a
-              href="#contato"
+              href="#footer"
               className="flex-1 md:flex-none inline-flex items-center justify-center px-3 py-2.5 md:px-[30px] md:py-[15px] bg-transparent text-text-main text-[12px] md:text-[13px] font-medium rounded-full border border-white/[0.14] tracking-[0.02em] transition-all duration-300 ease-smooth hover:bg-white/[0.06] hover:border-white/[0.28] hover:-translate-y-px whitespace-nowrap"
             >
               Falar com especialista
