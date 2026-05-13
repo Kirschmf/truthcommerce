@@ -6,9 +6,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 const METRICS = [
-  { value: 120, prefix: '+', suffix: '', label: 'OPERAÇÕES BLINDADAS', animate: true },
+  { value: 4000, prefix: '+', suffix: '', label: 'PROJETOS ENTREGUES', animate: true },
   { value: 98, prefix: '', suffix: '%', label: 'TAXA DE RETENÇÃO', animate: true },
-  { value: 10, prefix: '', suffix: '+', label: 'ANOS DE EXPERIÊNCIA', animate: true },
+  { value: 14, prefix: '', suffix: '+', label: 'ANOS DE EXPERIÊNCIA', animate: true },
   { value: null, display: 'B2B', prefix: '', suffix: '', label: 'FOCO EXCLUSIVO', animate: false },
 ]
 
@@ -121,7 +121,7 @@ export default function CeoSection() {
               ))}
             </div>
 
-            <a href="#contato" className="ceo-cta">
+            <a href="#footer" className="ceo-cta">
               <span className="ceo-cta-dot" aria-hidden="true" />
               Iniciar diagnóstico
               <span className="ceo-cta-arrow" aria-hidden="true">→</span>
