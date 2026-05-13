@@ -1,44 +1,45 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-/**
- * Typewriter hook with multiple phrases cycling:
- * type → hold → erase → type next → hold → erase → loop
- *
- * @param {string[]} phrases - Array of phrases to cycle through
- * @param {object} opts
- * @param {number} opts.typeSpeed   - ms per character typing (default 40)
- * @param {number} opts.eraseSpeed  - ms per character erasing (default 30)
- * @param {number} opts.holdDelay   - ms to hold after typing completes (default 2000)
- * @param {number} opts.startDelay  - ms before first phrase starts (default 300)
- * @param {boolean} opts.enabled
- */
+export interface TypewriterOptions {
+  typeSpeed?: number
+  eraseSpeed?: number
+  holdDelay?: number
+  startDelay?: number
+  enabled?: boolean
+}
+
 export default function useTypewriter(
-  phrases,
-  { typeSpeed = 40, eraseSpeed = 30, holdDelay = 2000, startDelay = 300, enabled = true } = {}
+  phrases: string[],
+  {
+    typeSpeed = 40,
+    eraseSpeed = 30,
+    holdDelay = 2000,
+    startDelay = 300,
+    enabled = true,
+  }: TypewriterOptions = {},
 ) {
   const [displayed, setDisplayed] = useState('')
   const [phraseIndex, setPhraseIndex] = useState(0)
-  const [phase, setPhase] = useState('idle') // idle | typing | holding | erasing
-  const timerRef = useRef(null)
+  const [phase, setPhase] = useState<'idle' | 'typing' | 'holding' | 'erasing'>('idle')
+  const timerRef = useRef<number | null>(null)
   const indexRef = useRef(0)
 
   const clear = useCallback(() => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current)
-      clearTimeout(timerRef.current)
+    if (timerRef.current !== null) {
+      window.clearTimeout(timerRef.current)
+      window.clearInterval(timerRef.current)
       timerRef.current = null
     }
   }, [])
 
   useEffect(() => {
-    if (!enabled || !phrases.length) return
+    if (!enabled || phrases.length === 0) return
     clear()
 
-    const text = phrases[phraseIndex]
+    const text = phrases[phraseIndex] ?? ''
 
     if (phase === 'idle') {
-      // Wait startDelay then begin typing
-      timerRef.current = setTimeout(() => {
+      timerRef.current = window.setTimeout(() => {
         indexRef.current = 0
         setPhase('typing')
       }, startDelay)
@@ -46,7 +47,7 @@ export default function useTypewriter(
 
     if (phase === 'typing') {
       indexRef.current = 0
-      timerRef.current = setInterval(() => {
+      timerRef.current = window.setInterval(() => {
         indexRef.current += 1
         if (indexRef.current >= text.length) {
           setDisplayed(text)
@@ -59,7 +60,7 @@ export default function useTypewriter(
     }
 
     if (phase === 'holding') {
-      timerRef.current = setTimeout(() => {
+      timerRef.current = window.setTimeout(() => {
         indexRef.current = text.length
         setPhase('erasing')
       }, holdDelay)
@@ -67,12 +68,11 @@ export default function useTypewriter(
 
     if (phase === 'erasing') {
       indexRef.current = text.length
-      timerRef.current = setInterval(() => {
+      timerRef.current = window.setInterval(() => {
         indexRef.current -= 1
         if (indexRef.current <= 0) {
           setDisplayed('')
           clear()
-          // Move to next phrase
           setPhraseIndex((prev) => (prev + 1) % phrases.length)
           setPhase('typing')
         } else {

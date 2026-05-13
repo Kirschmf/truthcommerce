@@ -1,25 +1,26 @@
-import { useRef, useCallback } from 'react'
+import { useCallback, useRef, type MouseEvent, type ReactNode } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-const logo = '/assets/images/Logo Branca.png'
+import { PRIMARY_CONTACT_HREF, SITE_CONTACT } from '../config/site'
+import type { NavLinkItem } from '../types/site'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const CTA_HREF = 'https://wa.me/SEUNUMEROAQUI'
-const INSTAGRAM_URL = 'https://www.instagram.com/truth.commerce/'
-const LINKEDIN_URL = 'https://www.linkedin.com/company/truth-commerce/'
-const EMAIL = 'contato@truthcommerce.com.br'
+const logo = '/assets/images/Logo Branca.png'
 
-function scrollToTarget(href) {
-  if (!href?.startsWith('#')) return false
+function scrollToTarget(href: string) {
+  if (!href.startsWith('#')) return false
 
   if (window.__lenis) {
-    window.__lenis.scrollTo(href, { duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) })
+    window.__lenis.scrollTo(href, {
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    })
     return true
   }
 
-  const target = document.querySelector(href)
+  const target = document.querySelector<HTMLElement>(href)
   if (target) {
     target.scrollIntoView({ behavior: 'smooth', block: 'start' })
     return true
@@ -28,10 +29,18 @@ function scrollToTarget(href) {
   return false
 }
 
-function MagneticButton({ href, children }) {
-  const btnRef = useRef(null)
-  const fillRef = useRef(null)
-  const textRef = useRef(null)
+function scrollToTop() {
+  if (window.__lenis) {
+    window.__lenis.scrollTo(0, { immediate: true })
+  } else {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }
+}
+
+function MagneticButton({ href, children }: { href: string; children: ReactNode }) {
+  const btnRef = useRef<HTMLAnchorElement | null>(null)
+  const fillRef = useRef<HTMLSpanElement | null>(null)
+  const textRef = useRef<HTMLSpanElement | null>(null)
 
   useGSAP(() => {
     gsap.set(fillRef.current, {
@@ -43,80 +52,50 @@ function MagneticButton({ href, children }) {
     })
   }, { scope: btnRef })
 
-  const handleEnter = useCallback((e) => {
+  const handleEnter = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+    if (!btnRef.current || !fillRef.current || !textRef.current) return
+
     const rect = btnRef.current.getBoundingClientRect()
-    const fill = fillRef.current
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
     const size = Math.max(rect.width, rect.height) * 2.6
 
-    gsap.killTweensOf([fill, textRef.current, btnRef.current])
-    gsap.set(fill, { width: size, height: size, left: x, top: y, scale: 0 })
-    gsap.to(fill, { scale: 1, duration: 1.8, ease: 'power2.out' })
-    gsap.to(textRef.current, {
-      color: '#ffffff',
-      duration: 1.0,
-      delay: 0,
-      ease: 'power2.out',
-    })
-    gsap.to(btnRef.current, {
-      y: -3,
-      duration: 0.6,
-      ease: 'power3.out',
-    })
+    gsap.killTweensOf([fillRef.current, textRef.current, btnRef.current])
+    gsap.set(fillRef.current, { width: size, height: size, left: x, top: y, scale: 0 })
+    gsap.to(fillRef.current, { scale: 1, duration: 1.8, ease: 'power2.out' })
+    gsap.to(textRef.current, { color: '#ffffff', duration: 1, ease: 'power2.out' })
+    gsap.to(btnRef.current, { y: -3, duration: 0.6, ease: 'power3.out' })
   }, [])
 
-  const handleLeave = useCallback((e) => {
-    const rect = btnRef.current.getBoundingClientRect()
-    const fill = fillRef.current
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
+  const handleLeave = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+    if (!btnRef.current || !fillRef.current || !textRef.current) return
 
-    gsap.killTweensOf([fill, textRef.current, btnRef.current])
-    gsap.set(fill, { left: x, top: y })
-    gsap.to(fill, { scale: 0, duration: 0.85, ease: 'expo.in' })
-    gsap.to(textRef.current, {
-      color: '#050505',
-      duration: 0.45,
-      ease: 'power2.in',
-    })
-    gsap.to(btnRef.current, {
-      y: 0,
-      duration: 0.6,
-      ease: 'power3.out',
-    })
+    const rect = btnRef.current.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+
+    gsap.killTweensOf([fillRef.current, textRef.current, btnRef.current])
+    gsap.set(fillRef.current, { left: x, top: y })
+    gsap.to(fillRef.current, { scale: 0, duration: 0.85, ease: 'expo.in' })
+    gsap.to(textRef.current, { color: '#050505', duration: 0.45, ease: 'power2.in' })
+    gsap.to(btnRef.current, { y: 0, duration: 0.6, ease: 'power3.out' })
   }, [])
 
   return (
     <a
       ref={btnRef}
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+      target={href.startsWith('https://') ? '_blank' : undefined}
+      rel={href.startsWith('https://') ? 'noopener noreferrer' : undefined}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       className="group relative inline-flex items-center gap-3 px-12 py-5 md:px-16 md:py-[26px] bg-[#EBEBEB] text-[15px] md:text-base font-medium tracking-[0.01em] rounded-full overflow-hidden shadow-[0_10px_28px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.05)] hover:shadow-[0_20px_50px_rgba(7,221,43,0.45),0_0_0_1px_rgba(7,221,43,0.55)] transition-shadow duration-[900ms] ease-out"
     >
-      <span
-        ref={fillRef}
-        className="pointer-events-none absolute rounded-full"
-        style={{ backgroundColor: 'var(--green)' }}
-        aria-hidden="true"
-      />
-      <span
-        ref={textRef}
-        className="relative z-[1] inline-flex items-center gap-3"
-        style={{ color: '#050505' }}
-      >
+      <span ref={fillRef} className="pointer-events-none absolute rounded-full" style={{ backgroundColor: 'var(--green)' }} aria-hidden="true" />
+      <span ref={textRef} className="relative z-[1] inline-flex items-center gap-3" style={{ color: '#050505' }}>
         {children}
         <svg width="16" height="16" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-          <path
-            d="M5 2l5 5-5 5"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M5 2l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </span>
     </a>
@@ -144,7 +123,7 @@ function CornerBrackets() {
   )
 }
 
-function SocialButton({ href, label, children }) {
+function SocialButton({ href, label, children }: { href: string; label: string; children: ReactNode }) {
   return (
     <a
       href={href}
@@ -176,10 +155,16 @@ function LinkedInIcon() {
   )
 }
 
-export default function Footer({ navLinks = [], onNavigate, currentPath = '/' }) {
-  const sectionRef = useRef(null)
+interface FooterProps {
+  navLinks: NavLinkItem[]
+  onNavigate: (href: string) => void
+  currentPath: string
+}
 
-  const footerCols = [
+export default function Footer({ navLinks, onNavigate, currentPath }: FooterProps) {
+  const sectionRef = useRef<HTMLElement | null>(null)
+
+  const footerCols: Array<{ index: string; title: string; links: NavLinkItem[] }> = [
     {
       index: '01',
       title: 'SISTEMAS',
@@ -190,47 +175,44 @@ export default function Footer({ navLinks = [], onNavigate, currentPath = '/' })
         { label: 'PIM (Catálogo)', href: '/nossos-servicos' },
       ],
     },
-    {
-      index: '02',
-      title: 'EMPRESA',
-      links: navLinks,
-    },
+    { index: '02', title: 'EMPRESA', links: navLinks },
     {
       index: '03',
       title: 'CONEXÃO',
       links: [
-        { label: 'WhatsApp', href: CTA_HREF, external: true },
-        { label: 'Instagram', href: INSTAGRAM_URL, external: true },
-        { label: 'LinkedIn', href: LINKEDIN_URL, external: true },
+        { label: 'WhatsApp', href: PRIMARY_CONTACT_HREF, external: PRIMARY_CONTACT_HREF.startsWith('https://') },
+        { label: 'Instagram', href: SITE_CONTACT.instagramUrl, external: true },
+        { label: 'LinkedIn', href: SITE_CONTACT.linkedinUrl, external: true },
       ],
     },
   ]
 
-  const handleLinkClick = useCallback((link) => (e) => {
+  const handleLinkClick = useCallback((link: NavLinkItem) => (event: MouseEvent<HTMLAnchorElement>) => {
     if (link.external) return
 
     if (link.href.startsWith('#')) {
-      e.preventDefault()
+      event.preventDefault()
       scrollToTarget(link.href)
       return
     }
 
-    e.preventDefault()
-    if (link.href === currentPath) {
-      if (window.__lenis) {
-        window.__lenis.scrollTo(0, { immediate: true })
-      } else {
-        window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-      }
+    if (link.href.startsWith('mailto:')) {
       return
     }
-    onNavigate?.(link.href)
+
+    event.preventDefault()
+    if (link.href === currentPath) {
+      scrollToTop()
+      return
+    }
+    onNavigate(link.href)
   }, [currentPath, onNavigate])
 
   useGSAP(() => {
-    const els = sectionRef.current.querySelectorAll('.reveal')
+    const elements = sectionRef.current?.querySelectorAll('.reveal')
+    if (!elements || elements.length === 0) return
 
-    gsap.from(els, {
+    gsap.from(elements, {
       y: 30,
       opacity: 0,
       duration: 0.7,
@@ -245,22 +227,16 @@ export default function Footer({ navLinks = [], onNavigate, currentPath = '/' })
   }, { scope: sectionRef })
 
   return (
-    <footer
-      id="footer"
-      ref={sectionRef}
-      className="relative w-full px-[5%] pt-12 md:pt-20 pb-8 border-t border-white/[0.06]"
-    >
+    <footer id="footer" ref={sectionRef} className="relative w-full px-[5%] pt-12 md:pt-20 pb-8 border-t border-white/[0.06]">
       <div className="max-w-[1280px] mx-auto">
-
-        {/* Top status bar */}
         <div className="reveal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-10 md:pb-16 border-b border-white/[0.06] font-mono text-[11px] md:text-[12px] uppercase tracking-[0.18em] text-text-muted">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
             <span className="inline-flex items-center gap-2">
               <StatusDot />
-              <span>STATUS: ONLINE</span>
+              <span>Status: Online</span>
             </span>
             <span className="opacity-30">/</span>
-            <span>BASE: SÃO PAULO · BR</span>
+            <span>Base: São Paulo · BR</span>
           </div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 opacity-80">
             <span>UTC −03:00</span>
@@ -269,57 +245,38 @@ export default function Footer({ navLinks = [], onNavigate, currentPath = '/' })
           </div>
         </div>
 
-        {/* CTA Block */}
         <div className="reveal relative text-center my-14 md:my-24 px-6 sm:px-10 md:px-12 py-12 md:py-20">
           <CornerBrackets />
-          <div className="font-mono text-[11px] md:text-[12px] uppercase tracking-[0.22em] text-[var(--green)] mb-5 md:mb-6">
-            ▸ Próximo Passo
-          </div>
+          <div className="font-mono text-[11px] md:text-[12px] uppercase tracking-[0.22em] text-[var(--green)] mb-5 md:mb-6">▸ Próximo Passo</div>
           <h2 className="font-heading text-[clamp(1.6rem,5.5vw,2.4rem)] md:text-[clamp(2rem,3.4vw,3.2rem)] font-semibold leading-[1.15] tracking-[-0.02em] mb-5 md:mb-6">
-            Sua empresa tem a base certa para{' '}
-            <span className="accent">decolar?</span>
+            Sua empresa tem a base certa para <span className="accent">decolar?</span>
           </h2>
           <p className="text-text-muted text-[clamp(1rem,3.6vw,1.1rem)] md:text-[clamp(1.1rem,1.3vw,1.2rem)] leading-[1.65] max-w-[560px] mx-auto mb-9 md:mb-11">
-            Seja para dar o primeiro passo na internet ou organizar uma operação que já roda.
-            Pare de perder vendas por desorganização técnica.
+            Seja para dar o primeiro passo na internet ou organizar uma operação que já roda. Pare de perder vendas por desorganização técnica.
           </p>
-          <MagneticButton href={CTA_HREF}>
-            Iniciar Diagnóstico
-          </MagneticButton>
+          <MagneticButton href={PRIMARY_CONTACT_HREF}>Iniciar Diagnóstico</MagneticButton>
         </div>
 
-        {/* Footer Grid */}
         <div className="reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr] gap-12 lg:gap-10 pt-10 md:pt-14 pb-10 md:pb-12">
-
-          {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <h4 className="flex items-baseline gap-2 font-mono text-[12px] uppercase tracking-[0.18em] mb-5">
               <span className="text-[var(--green)]">00</span>
               <span className="text-text-muted/50">/</span>
-              <span className="text-text-main">DESIGNAÇÃO</span>
+              <span className="text-text-main">Designação</span>
             </h4>
             <p className="text-text-muted text-[14px] md:text-[15px] leading-[1.7] max-w-[340px] mb-7">
-              A infraestrutura técnica por trás das marcas que escalam com segurança,
-              sem quebrar a operação no meio do caminho.
+              A infraestrutura técnica por trás das marcas que escalam com segurança, sem quebrar a operação no meio do caminho.
             </p>
 
             <ul className="flex flex-col gap-2.5 list-none m-0 p-0 mb-7">
               <li>
-                <a
-                  href={`mailto:${EMAIL}`}
-                  className="inline-flex items-center gap-2 font-mono text-[13px] text-text-muted hover:text-text-main transition-colors"
-                >
+                <a href={`mailto:${SITE_CONTACT.email}`} className="inline-flex items-center gap-2 font-mono text-[13px] text-text-muted hover:text-text-main transition-colors">
                   <span className="text-[var(--green)]">▸</span>
-                  {EMAIL}
+                  {SITE_CONTACT.email}
                 </a>
               </li>
               <li>
-                <a
-                  href={CTA_HREF}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 font-mono text-[13px] text-text-muted hover:text-text-main transition-colors"
-                >
+                <a href={PRIMARY_CONTACT_HREF} target={PRIMARY_CONTACT_HREF.startsWith('https://') ? '_blank' : undefined} rel={PRIMARY_CONTACT_HREF.startsWith('https://') ? 'noopener noreferrer' : undefined} className="inline-flex items-center gap-2 font-mono text-[13px] text-text-muted hover:text-text-main transition-colors">
                   <span className="text-[var(--green)]">▸</span>
                   Falar no WhatsApp
                 </a>
@@ -327,20 +284,20 @@ export default function Footer({ navLinks = [], onNavigate, currentPath = '/' })
             </ul>
 
             <div className="flex items-center gap-3">
-              <SocialButton href={INSTAGRAM_URL} label="Instagram"><InstagramIcon /></SocialButton>
-              <SocialButton href={LINKEDIN_URL} label="LinkedIn"><LinkedInIcon /></SocialButton>
+              <SocialButton href={SITE_CONTACT.instagramUrl} label="Instagram"><InstagramIcon /></SocialButton>
+              <SocialButton href={SITE_CONTACT.linkedinUrl} label="LinkedIn"><LinkedInIcon /></SocialButton>
             </div>
           </div>
 
-          {footerCols.map((col) => (
-            <div key={col.title}>
+          {footerCols.map((column) => (
+            <div key={column.title}>
               <h4 className="flex items-baseline gap-2 font-mono text-[12px] uppercase tracking-[0.18em] mb-5">
-                <span className="text-[var(--green)]">{col.index}</span>
+                <span className="text-[var(--green)]">{column.index}</span>
                 <span className="text-text-muted/50">/</span>
-                <span className="text-text-main">{col.title}</span>
+                <span className="text-text-main">{column.title}</span>
               </h4>
               <ul className="flex flex-col gap-3 list-none m-0 p-0">
-                {col.links.map((link) => (
+                {column.links.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}
@@ -349,9 +306,7 @@ export default function Footer({ navLinks = [], onNavigate, currentPath = '/' })
                       onClick={handleLinkClick(link)}
                       className="group inline-flex items-center text-text-muted text-[14px] md:text-[15px] hover:text-text-main transition-colors duration-200"
                     >
-                      <span className="inline-block w-0 group-hover:w-4 overflow-hidden text-[var(--green)] transition-[width] duration-300 whitespace-nowrap">
-                        →&nbsp;
-                      </span>
+                      <span className="inline-block w-0 group-hover:w-4 overflow-hidden text-[var(--green)] transition-[width] duration-300 whitespace-nowrap">→&nbsp;</span>
                       {link.label}
                     </a>
                   </li>
@@ -359,27 +314,19 @@ export default function Footer({ navLinks = [], onNavigate, currentPath = '/' })
               </ul>
             </div>
           ))}
-
         </div>
 
-        {/* Big centered wordmark */}
         <div className="reveal flex justify-center px-2 py-8 md:py-14">
-          <img
-            src={logo}
-            alt="Truth Commerce"
-            className="w-full max-w-[200px] md:max-w-[230px] h-auto opacity-95"
-          />
+          <img src={logo} alt="Truth Commerce" className="w-full max-w-[200px] md:max-w-[230px] h-auto opacity-95" />
         </div>
 
-        {/* Bottom bar */}
         <div className="reveal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-6 md:pt-8 border-t border-white/[0.06] font-mono text-[11px] md:text-[12px] uppercase tracking-[0.18em] text-text-muted/70">
-          <p className="m-0">© 2026 TRUTH COMMERCE — TODOS OS DIREITOS RESERVADOS</p>
+          <p className="m-0">© 2026 Truth Commerce — todos os direitos reservados</p>
           <p className="m-0 inline-flex items-center gap-2">
             <StatusDot />
-            ALL SYSTEMS OPERATIONAL
+            All Systems Operational
           </p>
         </div>
-
       </div>
     </footer>
   )

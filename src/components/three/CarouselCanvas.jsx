@@ -21,6 +21,7 @@ export default function CarouselCanvas({ scrollProgressRef, onCardClick, interac
     <div ref={containerRef} className="absolute inset-0">
       <Canvas
         frameloop={active ? 'always' : 'demand'}
+        resize={{ scroll: false }}
         camera={{ fov: 60, near: 1, far: 20000, position: [0, 4000, 8000] }}
         dpr={[1, 1.5]}
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}

@@ -9,14 +9,23 @@ import sampleGLB from './sampleGLB'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const N = 12000
+const PARTICLE_COUNT = {
+  mobile: 2500,
+  notebook: 5000,
+  desktop: 8000,
+}
 const GREEN = new THREE.Color('#07dd2b')
 const HOVER_RADIUS = 0.9
 const PUSH_STRENGTH = 0.4
 const TILT_Z = -Math.PI / 5.2
 
-function isMobile() { return window.innerWidth <= 768 }
-function isNotebook() { return window.innerWidth < 1500 }
+function isMobile() {
+  return window.innerWidth <= 768
+}
+
+function isNotebook() {
+  return window.innerWidth < 1500
+}
 
 export default function ParticleCloud() {
   const pointsRef = useRef()
@@ -35,40 +44,44 @@ export default function ParticleCloud() {
 
   const mobile = useMemo(() => isMobile(), [])
   const notebook = useMemo(() => !isMobile() && isNotebook(), [])
+  const particleCount = mobile
+    ? PARTICLE_COUNT.mobile
+    : notebook
+      ? PARTICLE_COUNT.notebook
+      : PARTICLE_COUNT.desktop
 
-  // Rocket: right side with tilt — positions tuned per viewport
   const rocketPos3 = useMemo(() => {
     if (mobile) return [0, -3.2, 0]
     if (notebook) return [4.5, -0.6, 0]
     return [4.5, -0.6, 0]
   }, [mobile, notebook])
+
   const rocketScale = useMemo(() => {
     if (mobile) return 0.8
     if (notebook) return 1.6
     return 1.6
   }, [mobile, notebook])
 
-  // Astronaut: left-center on desktop, below text on mobile/notebook
   const astroPos3 = useMemo(() => {
     if (mobile) return [0, -3.5, 0]
     if (notebook) return [-5.5, -0.1, 0]
     return [-3.5, 0, 0]
   }, [mobile, notebook])
+
   const astroScale = useMemo(() => {
     if (mobile) return 0.65
     if (notebook) return 1.4
     return 1.4
   }, [mobile, notebook])
 
-  // Sample both models — sampleGLB normalizes both to height 5.5, centered at origin
   const { rocketShape, astronautShape, offsets, idlePhase, currentPos } = useMemo(() => {
-    const rocketShape = sampleGLB(rocketGltf, N)
-    const astronautShape = sampleGLB(astronautGltf, N)
-    const offsets = new Float32Array(N * 3)
-    const idlePhase = new Float32Array(N)
-    const currentPos = new Float32Array(N * 3)
+    const rocketShape = sampleGLB(rocketGltf, particleCount)
+    const astronautShape = sampleGLB(astronautGltf, particleCount)
+    const offsets = new Float32Array(particleCount * 3)
+    const idlePhase = new Float32Array(particleCount)
+    const currentPos = new Float32Array(particleCount * 3)
 
-    for (let i = 0; i < N; i++) {
+    for (let i = 0; i < particleCount; i += 1) {
       const ix = i * 3
       idlePhase[i] = Math.random() * Math.PI * 2
       offsets[ix] = (Math.random() - 0.5) * 1.5
@@ -81,96 +94,112 @@ export default function ParticleCloud() {
     }
 
     return { rocketShape, astronautShape, offsets, idlePhase, currentPos }
-  }, [rocketGltf, astronautGltf])
+  }, [astronautGltf, particleCount, rocketGltf])
 
   const initPositions = useMemo(() => Float32Array.from(currentPos), [currentPos])
 
-  // Pre-baked colors for each shape
   const rocketColors = useMemo(() => {
-    const c = new Float32Array(N * 3)
-    for (let i = 0; i < N; i++) {
+    const colors = new Float32Array(particleCount * 3)
+
+    for (let i = 0; i < particleCount; i += 1) {
       const ix = i * 3
       const ny = (rocketShape[ix + 1] + 2.75) / 5.5
       if (ny < 0.3) {
-        const v = 1.0 + Math.random() * 0.5
-        c[ix] = GREEN.r * v; c[ix + 1] = GREEN.g * v; c[ix + 2] = GREEN.b * v
+        const value = 1 + Math.random() * 0.5
+        colors[ix] = GREEN.r * value
+        colors[ix + 1] = GREEN.g * value
+        colors[ix + 2] = GREEN.b * value
       } else if (Math.random() < 0.15) {
-        const v = 0.8 + Math.random() * 0.6
-        c[ix] = GREEN.r * v; c[ix + 1] = GREEN.g * v; c[ix + 2] = GREEN.b * v
+        const value = 0.8 + Math.random() * 0.6
+        colors[ix] = GREEN.r * value
+        colors[ix + 1] = GREEN.g * value
+        colors[ix + 2] = GREEN.b * value
       } else {
-        const w = 1.0 + Math.random() * 0.4
-        c[ix] = w; c[ix + 1] = w; c[ix + 2] = w
+        const white = 1 + Math.random() * 0.4
+        colors[ix] = white
+        colors[ix + 1] = white
+        colors[ix + 2] = white
       }
     }
-    return c
-  }, [rocketShape])
+
+    return colors
+  }, [particleCount, rocketShape])
 
   const astronautColors = useMemo(() => {
-    const c = new Float32Array(N * 3)
-    for (let i = 0; i < N; i++) {
+    const colors = new Float32Array(particleCount * 3)
+
+    for (let i = 0; i < particleCount; i += 1) {
       const ix = i * 3
       const ny = (astronautShape[ix + 1] + 2.75) / 5.5
-      const rand = Math.random()
-      if (ny > 0.65 && ny < 0.85 && rand > 0.3) {
-        const v = 0.6 + Math.random() * 0.4
-        c[ix] = GREEN.r * v; c[ix + 1] = GREEN.g * v; c[ix + 2] = GREEN.b * v
-      } else if (rand < 0.08) {
-        c[ix] = GREEN.r * 0.8; c[ix + 1] = GREEN.g * 0.8; c[ix + 2] = GREEN.b * 0.8
+      const random = Math.random()
+      if (ny > 0.65 && ny < 0.85 && random > 0.3) {
+        const value = 0.6 + Math.random() * 0.4
+        colors[ix] = GREEN.r * value
+        colors[ix + 1] = GREEN.g * value
+        colors[ix + 2] = GREEN.b * value
+      } else if (random < 0.08) {
+        colors[ix] = GREEN.r * 0.8
+        colors[ix + 1] = GREEN.g * 0.8
+        colors[ix + 2] = GREEN.b * 0.8
       } else {
-        const w = 0.85 + Math.random() * 0.15
-        c[ix] = w; c[ix + 1] = w; c[ix + 2] = w
+        const white = 0.85 + Math.random() * 0.15
+        colors[ix] = white
+        colors[ix + 1] = white
+        colors[ix + 2] = white
       }
     }
-    return c
-  }, [astronautShape])
+
+    return colors
+  }, [astronautShape, particleCount])
 
   const glowTexture = useMemo(() => createGlowTexture(), [])
 
-  // Entrance animation — faster on mobile so rocket is fully visible before user scrolls
   useEffect(() => {
     gsap.to(progressRef.current, {
       entrance: 1,
-      duration: mobile ? 1.2 : 3.0,
+      duration: mobile ? 1.2 : 3,
       ease: 'power2.out',
       delay: 0.4,
     })
   }, [mobile])
 
-  // Scroll morph trigger
   useEffect(() => {
-    const st = ScrollTrigger.create({
+    const trigger = ScrollTrigger.create({
       trigger: '.hero-wrapper',
       start: 'top top',
       endTrigger: '#alerta',
       end: 'center center',
-      scrub: 1.0,
+      scrub: 1,
       onUpdate: (self) => {
         progressRef.current.morph = self.progress
       },
     })
-    return () => st.kill()
+
+    return () => trigger.kill()
   }, [])
 
-  // Mouse tracking
   useEffect(() => {
     const raycaster = new THREE.Raycaster()
     const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0)
     const ndc = new THREE.Vector2()
     const hit = new THREE.Vector3()
-    const inv = new THREE.Matrix4()
+    const inverseMatrix = new THREE.Matrix4()
 
-    const onMove = (e) => {
-      ndc.x = (e.clientX / window.innerWidth) * 2 - 1
-      ndc.y = -(e.clientY / window.innerHeight) * 2 + 1
+    const onMove = (event) => {
+      ndc.x = (event.clientX / window.innerWidth) * 2 - 1
+      ndc.y = -(event.clientY / window.innerHeight) * 2 + 1
       hoveringRef.current = true
       raycaster.setFromCamera(ndc, camera)
       if (raycaster.ray.intersectPlane(plane, hit) && groupRef.current) {
         groupRef.current.updateMatrixWorld()
-        inv.copy(groupRef.current.matrixWorld).invert()
-        localMouseRef.current.copy(hit).applyMatrix4(inv)
+        inverseMatrix.copy(groupRef.current.matrixWorld).invert()
+        localMouseRef.current.copy(hit).applyMatrix4(inverseMatrix)
       }
     }
-    const onLeave = () => { hoveringRef.current = false }
+
+    const onLeave = () => {
+      hoveringRef.current = false
+    }
 
     window.addEventListener('mousemove', onMove, { passive: true })
     window.addEventListener('mouseleave', onLeave)
@@ -180,128 +209,109 @@ export default function ParticleCloud() {
     }
   }, [camera])
 
-  // Render loop
   useFrame((_, delta) => {
-    const pts = pointsRef.current
-    const grp = groupRef.current
-    if (!pts || !grp) return
+    const points = pointsRef.current
+    const group = groupRef.current
+    if (!points || !group) return
 
-    const ent = progressRef.current.entrance
+    const entrance = progressRef.current.entrance
     const morph = progressRef.current.morph
-
     const dt = Math.min(delta, 0.05)
     timeRef.current += dt
-    const t = timeRef.current
+    const time = timeRef.current
 
-    // Smoothstep for organic transition
-    const sm = morph * morph * (3 - 2 * morph)
-    const sim = 1.0 - sm
+    const smoothMorph = morph * morph * (3 - 2 * morph)
+    const inverseMorph = 1 - smoothMorph
 
-    // ── Group transform: lerp position, scale, rotation ──
-    grp.position.set(
-      rocketPos3[0] * sim + astroPos3[0] * sm,
-      rocketPos3[1] * sim + astroPos3[1] * sm,
-      rocketPos3[2] * sim + astroPos3[2] * sm,
+    group.position.set(
+      rocketPos3[0] * inverseMorph + astroPos3[0] * smoothMorph,
+      rocketPos3[1] * inverseMorph + astroPos3[1] * smoothMorph,
+      rocketPos3[2] * inverseMorph + astroPos3[2] * smoothMorph,
     )
 
-    const sc = rocketScale * sim + astroScale * sm
-    grp.scale.set(sc, sc, sc)
+    const scale = rocketScale * inverseMorph + astroScale * smoothMorph
+    group.scale.set(scale, scale, scale)
+    group.rotation.z = TILT_Z * inverseMorph
+    group.rotation.y = 0
 
-    // Tilt fades out as we morph to astronaut
-    grp.rotation.z = TILT_Z * sim
-    grp.rotation.y = 0
+    const positionAttribute = points.geometry.getAttribute('position')
+    const positionArray = positionAttribute.array
+    const colorAttribute = points.geometry.getAttribute('color')
+    const colorArray = colorAttribute.array
 
-    // ── Particle positions: lerp shapes + scatter at mid-morph ──
-    const posAttr = pts.geometry.getAttribute('position')
-    const posArr = posAttr.array
-    const colAttr = pts.geometry.getAttribute('color')
-    const colArr = colAttr.array
-
-    const entranceScatter = 1.0 - ent
-    // Scatter peaks at morph=0.5
-    const morphScatter = Math.sin(sm * Math.PI) * 0.8
-
+    const entranceScatter = 1 - entrance
+    const morphScatter = Math.sin(smoothMorph * Math.PI) * 0.8
     const isHover = hoveringRef.current
-    const mx = localMouseRef.current.x
-    const my = localMouseRef.current.y
-    const hoverRadSq = HOVER_RADIUS * HOVER_RADIUS
+    const mouseX = localMouseRef.current.x
+    const mouseY = localMouseRef.current.y
+    const hoverRadiusSquared = HOVER_RADIUS * HOVER_RADIUS
+    const springFactor = Math.min(0.04 * 60 * dt, 1)
 
-    const springFactor = Math.min(0.04 * 60 * dt, 1.0)
-
-    for (let i = 0; i < N; i++) {
+    for (let i = 0; i < particleCount; i += 1) {
       const ix = i * 3
       const iy = ix + 1
       const iz = ix + 2
       const phase = idlePhase[i]
 
-      // Breathing
-      const bx = Math.sin(t * 0.5 + phase) * 0.004
-      const by = Math.cos(t * 0.4 + phase * 1.3) * 0.004
-      const bz = Math.sin(t * 0.3 + phase * 0.7) * 0.002
+      const breathingX = Math.sin(time * 0.5 + phase) * 0.004
+      const breathingY = Math.cos(time * 0.4 + phase * 1.3) * 0.004
+      const breathingZ = Math.sin(time * 0.3 + phase * 0.7) * 0.002
 
-      // Lerp between rocket shape and astronaut shape (both centered, same height scale)
-      const targetX = rocketShape[ix] * sim + astronautShape[ix] * sm + bx
-      const targetY = rocketShape[iy] * sim + astronautShape[iy] * sm + by
-      const targetZ = rocketShape[iz] * sim + astronautShape[iz] * sm + bz
+      const targetX = rocketShape[ix] * inverseMorph + astronautShape[ix] * smoothMorph + breathingX
+      const targetY = rocketShape[iy] * inverseMorph + astronautShape[iy] * smoothMorph + breathingY
+      const targetZ = rocketShape[iz] * inverseMorph + astronautShape[iz] * smoothMorph + breathingZ
 
-      // Scatter during entrance or mid-morph
-      const scatterAmt = Math.max(entranceScatter, morphScatter)
-      const scX = offsets[ix] * scatterAmt * 8.0
-      const scY = offsets[iy] * scatterAmt * 8.0
-      const scZ = offsets[iz] * scatterAmt * 5.0
+      const scatterAmount = Math.max(entranceScatter, morphScatter)
+      const scatterX = offsets[ix] * scatterAmount * 8
+      const scatterY = offsets[iy] * scatterAmount * 8
+      const scatterZ = offsets[iz] * scatterAmount * 5
 
-      const finalTx = targetX + scX
-      const finalTy = targetY + scY
-      const finalTz = targetZ + scZ
+      const finalTargetX = targetX + scatterX
+      const finalTargetY = targetY + scatterY
+      const finalTargetZ = targetZ + scatterZ
 
-      let cx = currentPos[ix]
-      let cy = currentPos[iy]
-      let cz = currentPos[iz]
+      let currentX = currentPos[ix]
+      let currentY = currentPos[iy]
+      let currentZ = currentPos[iz]
 
-      // Mouse repulsion (only when settled)
       if (isHover && morphScatter < 0.3) {
-        const ddx = cx - mx
-        const ddy = cy - my
-        const distSq = ddx * ddx + ddy * ddy
-        if (distSq < hoverRadSq && distSq > 0.0001) {
-          const dist = Math.sqrt(distSq)
-          const f = (1.0 - dist / HOVER_RADIUS)
-          const push = f * f * PUSH_STRENGTH
-          cx += (ddx / dist) * push
-          cy += (ddy / dist) * push
+        const deltaX = currentX - mouseX
+        const deltaY = currentY - mouseY
+        const distanceSquared = deltaX * deltaX + deltaY * deltaY
+        if (distanceSquared < hoverRadiusSquared && distanceSquared > 0.0001) {
+          const distance = Math.sqrt(distanceSquared)
+          const factor = 1 - distance / HOVER_RADIUS
+          const push = factor * factor * PUSH_STRENGTH
+          currentX += (deltaX / distance) * push
+          currentY += (deltaY / distance) * push
         }
       }
 
-      // Spring toward target
-      cx += (finalTx - cx) * springFactor
-      cy += (finalTy - cy) * springFactor
-      cz += (finalTz - cz) * springFactor
+      currentX += (finalTargetX - currentX) * springFactor
+      currentY += (finalTargetY - currentY) * springFactor
+      currentZ += (finalTargetZ - currentZ) * springFactor
 
-      currentPos[ix] = cx
-      currentPos[iy] = cy
-      currentPos[iz] = cz
+      currentPos[ix] = currentX
+      currentPos[iy] = currentY
+      currentPos[iz] = currentZ
 
-      posArr[ix] = cx
-      posArr[iy] = cy
-      posArr[iz] = cz
+      positionArray[ix] = currentX
+      positionArray[iy] = currentY
+      positionArray[iz] = currentZ
 
-      // Color interpolation
-      colArr[ix] = rocketColors[ix] * sim + astronautColors[ix] * sm
-      colArr[iy] = rocketColors[iy] * sim + astronautColors[iy] * sm
-      colArr[iz] = rocketColors[iz] * sim + astronautColors[iz] * sm
+      colorArray[ix] = rocketColors[ix] * inverseMorph + astronautColors[ix] * smoothMorph
+      colorArray[iy] = rocketColors[iy] * inverseMorph + astronautColors[iy] * smoothMorph
+      colorArray[iz] = rocketColors[iz] * inverseMorph + astronautColors[iz] * smoothMorph
     }
 
-    posAttr.needsUpdate = true
-    colAttr.needsUpdate = true
+    positionAttribute.needsUpdate = true
+    colorAttribute.needsUpdate = true
+    points.material.opacity = entrance
 
-    // Opacity
-    pts.material.opacity = ent
-
-    // Blending: aditivo no foguete, normal no astronauta
     const targetBlending = morph > 0.5 ? THREE.NormalBlending : THREE.AdditiveBlending
-    if (pts.material.blending !== targetBlending) {
-      pts.material.blending = targetBlending
-      pts.material.needsUpdate = true
+    if (points.material.blending !== targetBlending) {
+      points.material.blending = targetBlending
+      points.material.needsUpdate = true
     }
   })
 
@@ -309,18 +319,8 @@ export default function ParticleCloud() {
     <group ref={groupRef} position={rocketPos3} scale={rocketScale} rotation={[0, 0, TILT_Z]}>
       <points ref={pointsRef}>
         <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            array={initPositions}
-            count={N}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-color"
-            array={Float32Array.from(rocketColors)}
-            count={N}
-            itemSize={3}
-          />
+          <bufferAttribute attach="attributes-position" array={initPositions} count={particleCount} itemSize={3} />
+          <bufferAttribute attach="attributes-color" array={Float32Array.from(rocketColors)} count={particleCount} itemSize={3} />
         </bufferGeometry>
         <pointsMaterial
           size={0.09}

@@ -233,7 +233,8 @@ export default function Depoimentos() {
             {CARDS.map((card, i) => {
               const isActive = activeIndex === i
               return (
-                <div
+                <button
+                  type="button"
                   key={card.name}
                   ref={(el) => { cardRefs.current[i] = el }}
                   className={`dep-card ${isActive ? 'is-active' : ''}`}
@@ -262,9 +263,9 @@ export default function Depoimentos() {
                     <div className="dep-duration">{card.duration}</div>
 
                     {/* Play button */}
-                    <button className="dep-play" aria-label="Play">
+                    <span className="dep-play" aria-hidden="true">
                       <PlayIcon />
-                    </button>
+                    </span>
                   </div>
 
                   {/* Footer */}
@@ -289,7 +290,7 @@ export default function Depoimentos() {
                       "{card.quote}"
                     </p>
                   </div>
-                </div>
+                </button>
               )
             })}
           </div>

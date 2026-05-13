@@ -32,17 +32,16 @@ function StackChip({ label, present }) {
 function MobileCaseCard({ caseData, onClick }) {
   const c = caseData
   return (
-    <article
+    <button
+      type="button"
       onClick={() => onClick(c)}
-      role="button"
-      tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
           onClick(c)
         }
       }}
-      className="relative cursor-pointer border border-white/[0.08] bg-[#08090b] overflow-hidden active:border-[var(--green)]/40 hover:border-white/15 transition-colors"
+      className="relative w-full cursor-pointer border border-white/[0.08] bg-[#08090b] overflow-hidden active:border-[var(--green)]/40 hover:border-white/15 transition-colors text-left"
     >
       <span className="absolute top-0 left-0 w-3 h-3 border-l border-t border-[var(--green)]/40 z-[2]" aria-hidden="true" />
       <span className="absolute top-0 right-0 w-3 h-3 border-r border-t border-[var(--green)]/40 z-[2]" aria-hidden="true" />
@@ -95,7 +94,7 @@ function MobileCaseCard({ caseData, onClick }) {
           </svg>
         </div>
       </div>
-    </article>
+    </button>
   )
 }
 

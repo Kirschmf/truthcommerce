@@ -6,9 +6,9 @@ import Metodologia from '../components/Metodologia'
 import LogoMarquee from '../components/LogoMarquee'
 import CeoSection from '../components/CeoSection'
 import Servicos from '../components/Servicos'
-import Depoimentos from '../components/Depoimentos'
 import FaqSection from '../components/FaqSection'
 
+const Depoimentos = lazy(() => import('../components/Depoimentos'))
 const CarrosselCases = lazy(() => import('../components/CarrosselCases'))
 
 export default function HomePage() {
@@ -25,7 +25,9 @@ export default function HomePage() {
       <Suspense fallback={<div className="h-screen" />}>
         <CarrosselCases />
       </Suspense>
-      <Depoimentos />
+      <Suspense fallback={<div className="min-h-[50vh]" />}>
+        <Depoimentos />
+      </Suspense>
       <FaqSection />
     </main>
   )

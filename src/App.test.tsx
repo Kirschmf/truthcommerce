@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { beforeEach, describe, it, expect } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
 import App from './App'
 
@@ -7,7 +7,7 @@ function renderAt(pathname = '/') {
   return render(
     <MemoryRouter initialEntries={[pathname]}>
       <App />
-    </MemoryRouter>
+    </MemoryRouter>,
   )
 }
 
@@ -36,7 +36,9 @@ describe('App', () => {
 
   it('renders the services page content', () => {
     renderAt('/nossos-servicos')
-    expect(screen.getByText('Conheça as soluções premium que oferecemos para sua empresa')).toBeInTheDocument()
+    expect(
+      screen.getByText('Conheça as soluções premium que oferecemos para sua empresa'),
+    ).toBeInTheDocument()
     expect(screen.getByText('Consultoria em E-commerce 360º')).toBeInTheDocument()
   })
 })

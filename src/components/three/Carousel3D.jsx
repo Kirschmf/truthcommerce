@@ -141,15 +141,18 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
   useEffect(() => {
     const canvas = gl.domElement
 
+    const isInteractiveNow = () =>
+      interactive3DRef ? interactive3DRef.current !== false : true
+
     const onWheel = (e) => {
-      if (!isInteractive()) return
+      if (!isInteractiveNow()) return
       if (hudOpacityRef.current > 0.5) {
         targetRotRef.current += e.deltaY * 0.0008
       }
     }
 
     const onDown = (e) => {
-      if (!isInteractive()) return
+      if (!isInteractiveNow()) return
       if (hudOpacityRef.current > 0.5) {
         dragRef.current = { active: true, startX: e.clientX, moved: 0 }
       }
@@ -159,7 +162,7 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
       const rect = canvas.getBoundingClientRect()
       mouseRef.current.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1
       mouseRef.current.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1
-      if (dragRef.current.active && isInteractive()) {
+      if (dragRef.current.active && isInteractiveNow()) {
         const dx = e.clientX - dragRef.current.startX
         targetRotRef.current += dx * 0.002
         dragRef.current.moved += Math.abs(dx)
@@ -170,7 +173,7 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
     const onUp = () => { dragRef.current.active = false }
 
     const onClick = (e) => {
-      if (!isInteractive()) return
+      if (!isInteractiveNow()) return
       if (hudOpacityRef.current < 0.5) return
       // Ignore clicks that were really drags (>6px movement)
       if (dragRef.current.moved > 6) return
@@ -208,7 +211,7 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
       window.removeEventListener('mouseup',   onUp)
       canvas.removeEventListener('click',     onClick)
     }
-  }, [camera, gl, onCardClick, raycaster])
+  }, [camera, gl, interactive3DRef, onCardClick, raycaster])
 
   // ── Render loop ───────────────────────────────────────────────
   useFrame(() => {
@@ -316,7 +319,7 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
     }
 
     // Hover cursor — only when 3D is the active interaction layer
-    if (hudOpacity > 0.5 && isInteractive()) {
+    if (hudOpacity > 0.5 && isInteractiveNow()) {
       raycaster.setFromCamera(mouseRef.current, camera)
       const hits = raycaster.intersectObjects(cardMeshesRef.current)
       gl.domElement.style.cursor = hits.length > 0 ? 'pointer' : 'default'

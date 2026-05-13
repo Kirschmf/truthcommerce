@@ -1,4 +1,6 @@
-export const CASES = [
+import type { CaseStudy } from '../types/site'
+
+export const CASES: CaseStudy[] = [
   {
     id: '01',
     client: 'SOPY',
@@ -6,11 +8,11 @@ export const CASES = [
     headline: 'Loja Online de Lava Roupas em Cápsulas',
     intro: 'Só colocar na máquina e dissolve 100%',
     description:
-      'Estruturação completa na Nuvemshop, com o plano nuvemshop next conseguimos desenvolver uma loja personalizada e exclusiva.',
+      'Estruturação completa na Nuvemshop, com o plano Nuvemshop Next conseguimos desenvolver uma loja personalizada e exclusiva.',
     metrics: [
       { label: 'Canais Ativos', value: 1, suffix: '', prefix: '' },
       { label: '2 Meses de Operação', value: 50, suffix: ' Vendas', prefix: '+' },
-      { label: 'Estoque Sincronizado ', value: 100, suffix: '%', prefix: '' },
+      { label: 'Estoque Sincronizado', value: 100, suffix: '%', prefix: '' },
     ],
     stack: {
       erp: { name: 'Omie', present: true },
@@ -48,7 +50,7 @@ export const CASES = [
     headline: 'Plataforma de Venda de Tickets Sob Medida',
     intro: 'Site de venda de tickets esportivos e para eventos no geral.',
     description:
-      'Plataforma desenvolvida em código próprio (Vite + React 18 + TypeScript + Postgres 17 + PlpgSQL (SupaBase)), com gestão de operação via CRM dedicado em vez de ERP tradicional.',
+      'Plataforma desenvolvida em código próprio (Vite + React + TypeScript + Postgres 17 + PL/pgSQL), com gestão de operação via CRM dedicado em vez de ERP tradicional.',
     metrics: [
       { label: 'Sync em tempo real', value: 100, suffix: '%', prefix: '' },
       { label: 'Pedidos por mês', value: 1800, suffix: '+', prefix: '' },
@@ -56,10 +58,10 @@ export const CASES = [
     ],
     stack: {
       erp: { name: 'Não utiliza ERP — gestão via CRM', present: false },
-      ecommerce: { name: 'Custom · Vite + React 18 + TypeScript', present: true },
+      ecommerce: { name: 'Custom · Vite + React + TypeScript', present: true },
       marketplaces: [],
     },
-    cta: { label: 'Visitar loja', href: 'https://nexteventosbrasil.com/', type: 'ecommerce' },
+    cta: { label: 'Visitar loja', href: 'https://nexteventosbrasil.com/', type: 'custom' },
     img: '/assets/images/next-print.png',
   },
   {
@@ -69,7 +71,7 @@ export const CASES = [
     headline: 'Loja Online de Produtos de Cozinha e Churrasco',
     intro: 'Marca brasileira para cozinha, churrasco e adega — estética, funcionalidade e durabilidade.',
     description:
-      'Reestruturação de catálogo, UX de checkout e integração entre ERP e plataforma de e-commerce. Foco em experiência de marca',
+      'Reestruturação de catálogo, UX de checkout e integração entre ERP e plataforma de e-commerce. Foco em experiência de marca.',
     metrics: [
       { label: 'Sincronização de estoque', value: 100, suffix: '%', prefix: '' },
       { label: 'Meios de Pagamento', value: 'Cartão e PIX', suffix: '', prefix: '' },
@@ -108,19 +110,19 @@ export const CASES = [
     id: '06',
     client: 'CAFE CARANDAI',
     segment: 'Alimentação & Café',
-    headline: 'loja Online de Café com Operação Digital Completa',
+    headline: 'Loja Online de Café com Operação Digital Completa',
     intro: 'Café 100% arábica das montanhas de Minas Gerais — tradição mineira e sabor marcante.',
     description:
-      'Entrada no digital com estrutura completa: loja própria, integração ERP, expansão para os principais Marketplaces e automação de pedidos.',
+      'Entrada no digital com estrutura completa: loja própria, integração ERP, expansão para os principais marketplaces e automação de pedidos.',
     metrics: [
       { label: 'Sincronização de estoque', value: 100, suffix: '%', prefix: '' },
       { label: 'Canais ativos', value: 4, suffix: '', prefix: '' },
-      { label: 'Configuração Fiscal', value: 100, suffix: '', prefix: '%' },
+      { label: 'Configuração Fiscal', value: 100, suffix: '%', prefix: '' },
     ],
     stack: {
       erp: { name: 'Bling', present: true },
       ecommerce: { name: 'Nuvemshop', present: true },
-      marketplaces: ['Mercado Livre, Shopee, Amazon'],
+      marketplaces: ['Mercado Livre', 'Shopee', 'Amazon'],
     },
     cta: { label: 'Visitar loja', href: 'https://cafecarandai.com.br/', type: 'ecommerce' },
     img: '/assets/images/cafe-print.png',

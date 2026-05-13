@@ -26,6 +26,7 @@ export default function HeroCanvas() {
       <div className="sticky top-0 w-full h-screen">
         <Canvas
           frameloop={active ? 'always' : 'demand'}
+          resize={{ scroll: false }}
           camera={{ fov: 42, position: [0, 0, 15], near: 0.1, far: 100 }}
           dpr={[1, 1.5]}
           gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}

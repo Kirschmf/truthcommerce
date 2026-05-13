@@ -1,11 +1,17 @@
-import { useState, useRef, useCallback } from 'react'
+import { useCallback, useId, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const FAQS = [
+interface FaqEntry {
+  question: string
+  answer: string
+}
+
+const FAQS: FaqEntry[] = [
   {
     question: 'A Truth atende quem está começando agora?',
     answer:
@@ -19,145 +25,162 @@ const FAQS = [
   {
     question: 'Vocês também criam o e-commerce próprio?',
     answer:
-      'Sim! Além da presença forte nos marketplaces, desenhamos e implementamos a arquitetura completa de lojas virtuais próprias (D2C ou B2B), deixando a operação centralizada em um só lugar.',
+      'Sim. Além da presença forte nos marketplaces, desenhamos e implementamos a arquitetura completa de lojas virtuais próprias, deixando a operação centralizada em um só lugar.',
   },
   {
     question: 'Vocês fazem a gestão de tráfego (Ads)?',
     answer:
-      'Não. Nós somos a etapa obrigatória antes do tráfego. Construímos a vitrine técnica perfeita e o sistema logístico impecável. Quando a máquina estiver sólida, você poderá investir em marketing com a certeza de que suportará o volume.',
+      'Não. Nós somos a etapa obrigatória antes do tráfego. Construímos a vitrine técnica perfeita e o sistema logístico impecável para que o investimento em mídia venha sobre uma base sólida.',
   },
   {
     question: 'O que é entregue no final do projeto?',
     answer:
-      'Uma operação digital blindada e conectada. Seu ecossistema 100% integrado, catálogo padronizado segundo as regras de cada canal, fluxos automatizados e sua equipe treinada para operar a estrutura.',
+      'Uma operação digital blindada e conectada: ecossistema integrado, catálogo padronizado, fluxos automatizados e sua equipe treinada para operar a estrutura.',
   },
 ]
 
-function FaqItem({ index, question, answer, isOpen, onToggle }) {
-  const bodyRef = useRef(null)
-  const iconRef = useRef(null)
+interface FaqItemProps extends FaqEntry {
+  index: number
+  isOpen: boolean
+  onToggle: (index: number) => void
+}
+
+function FaqItem({ index, question, answer, isOpen, onToggle }: FaqItemProps) {
+  const bodyRef = useRef<HTMLDivElement | null>(null)
+  const iconRef = useRef<HTMLSpanElement | null>(null)
+  const contentId = useId()
+  const buttonId = useId()
+  const prefersReducedMotion = usePrefersReducedMotion()
 
   const handleClick = useCallback(() => {
     onToggle(index)
   }, [index, onToggle])
 
-  // Animate open/close with GSAP
-  useGSAP(() => {
-    const body = bodyRef.current
-    const icon = iconRef.current
-    if (!body || !icon) return
+  useGSAP(
+    () => {
+      const body = bodyRef.current
+      const icon = iconRef.current
+      if (!body || !icon || prefersReducedMotion) return
 
-    if (isOpen) {
-      gsap.to(body, { height: 'auto', duration: 0.5, ease: 'power3.inOut' })
-      gsap.to(icon, { rotation: 45, duration: 0.3, ease: 'power2.out' })
-    } else {
-      gsap.to(body, { height: 0, duration: 0.4, ease: 'power3.inOut' })
-      gsap.to(icon, { rotation: 0, duration: 0.3, ease: 'power2.out' })
-    }
-  }, [isOpen])
+      if (isOpen) {
+        gsap.to(body, { height: 'auto', duration: 0.5, ease: 'power3.inOut' })
+        gsap.to(icon, { rotation: 45, duration: 0.3, ease: 'power2.out' })
+      } else {
+        gsap.to(body, { height: 0, duration: 0.4, ease: 'power3.inOut' })
+        gsap.to(icon, { rotation: 0, duration: 0.3, ease: 'power2.out' })
+      }
+    },
+    { dependencies: [isOpen, prefersReducedMotion] },
+  )
 
   return (
     <div className="faq-item">
       <button
+        id={buttonId}
+        type="button"
         onClick={handleClick}
         className="faq-header"
+        aria-expanded={isOpen}
+        aria-controls={contentId}
       >
         <span className="faq-question">
           {index + 1}. {question}
         </span>
-        <span
-          ref={iconRef}
-          className={`faq-icon ${isOpen ? 'faq-icon--active' : ''}`}
-        >
+        <span ref={iconRef} className={`faq-icon ${isOpen ? 'faq-icon--active' : ''}`} aria-hidden="true">
           +
         </span>
       </button>
       <div
         ref={bodyRef}
+        id={contentId}
+        role="region"
+        aria-labelledby={buttonId}
         className="overflow-hidden"
-        style={{ height: 0 }}
+        style={{ height: prefersReducedMotion ? 'auto' : 0 }}
+        hidden={!isOpen && prefersReducedMotion}
       >
-        <p className="faq-answer">
-          {answer}
-        </p>
+        <p className="faq-answer">{answer}</p>
       </div>
     </div>
   )
 }
 
 export default function FaqSection() {
-  const sectionRef = useRef(null)
-  const titleRef = useRef(null)
-  const listRef = useRef(null)
-  const itemRefs = useRef([])
-  const [openIndex, setOpenIndex] = useState(null)
+  const sectionRef = useRef<HTMLElement | null>(null)
+  const titleRef = useRef<HTMLHeadingElement | null>(null)
+  const listRef = useRef<HTMLDivElement | null>(null)
+  const itemRefs = useRef<Array<HTMLDivElement | null>>([])
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const prefersReducedMotion = usePrefersReducedMotion()
 
-  const handleToggle = useCallback((index) => {
+  const handleToggle = useCallback((index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index))
   }, [])
 
-  useGSAP(() => {
-    // Title entrance
-    gsap.from(titleRef.current, {
-      opacity: 0,
-      y: 60,
-      duration: 1,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top 75%',
-        once: true,
-      },
-    })
+  useGSAP(
+    () => {
+      if (prefersReducedMotion) return
 
-    // Items stagger entrance
-    const items = itemRefs.current.filter(Boolean)
-    if (items.length) {
-      gsap.from(items, {
+      gsap.from(titleRef.current, {
         opacity: 0,
-        y: 30,
-        stagger: 0.08,
-        duration: 0.6,
-        ease: 'power2.out',
+        y: 60,
+        duration: 1,
+        ease: 'power3.out',
         scrollTrigger: {
-          trigger: listRef.current,
-          start: 'top 80%',
+          trigger: sectionRef.current,
+          start: 'top 75%',
           once: true,
         },
       })
-    }
-  }, { scope: sectionRef })
+
+      const items = itemRefs.current.filter(Boolean)
+      if (items.length > 0) {
+        gsap.from(items, {
+          opacity: 0,
+          y: 30,
+          stagger: 0.08,
+          duration: 0.6,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: listRef.current,
+            start: 'top 80%',
+            once: true,
+          },
+        })
+      }
+    },
+    { scope: sectionRef, dependencies: [prefersReducedMotion] },
+  )
 
   return (
     <section id="faq" ref={sectionRef} className="faq-section">
       <div className="faq-container">
-
-        {/* Title */}
         <h2 ref={titleRef} className="faq-title">
-          Perguntas<br />Frequentes
+          Perguntas
+          <br />
+          Frequentes
         </h2>
 
-        {/* Separator */}
         <div className="faq-separator" />
 
-        {/* FAQ list */}
         <div ref={listRef}>
-          {FAQS.map((faq, i) => (
+          {FAQS.map((faq, index) => (
             <div
               key={faq.question}
-              ref={(el) => { itemRefs.current[i] = el }}
+              ref={(element) => {
+                itemRefs.current[index] = element
+              }}
             >
               <FaqItem
-                index={i}
+                index={index}
                 question={faq.question}
                 answer={faq.answer}
-                isOpen={openIndex === i}
+                isOpen={openIndex === index}
                 onToggle={handleToggle}
               />
             </div>
           ))}
         </div>
-
       </div>
 
       <style>{`
@@ -177,7 +200,6 @@ export default function FaqSection() {
           margin: 0 auto;
         }
 
-        /* ===== Title ===== */
         .faq-title {
           font-family: var(--font-heading, 'Sora', sans-serif);
           font-size: clamp(40px, 7vw, 80px);
@@ -190,24 +212,16 @@ export default function FaqSection() {
           margin: 0 0 40px 0;
         }
 
-        /* ===== Separator ===== */
         .faq-separator {
           height: 1px;
           background: #1a1a1a;
           margin-bottom: 8px;
         }
 
-        /* ===== Item ===== */
         .faq-item {
           border-bottom: 1px solid #1a1a1a;
-          cursor: pointer;
         }
 
-        .faq-item:last-child {
-          border-bottom: 1px solid #1a1a1a;
-        }
-
-        /* ===== Header (clickable row) ===== */
         .faq-header {
           width: 100%;
           display: flex;
@@ -226,7 +240,11 @@ export default function FaqSection() {
           }
         }
 
-        /* ===== Question text ===== */
+        .faq-header:focus-visible {
+          outline: 2px solid var(--green);
+          outline-offset: 4px;
+        }
+
         .faq-question {
           font-family: var(--font-heading, 'Sora', sans-serif);
           font-size: clamp(15px, 1.6vw, 18px);
@@ -241,7 +259,6 @@ export default function FaqSection() {
           color: #06c927;
         }
 
-        /* ===== Icon ===== */
         .faq-icon {
           color: #555;
           display: flex;
@@ -250,21 +267,17 @@ export default function FaqSection() {
           font-size: 22px;
           font-weight: 300;
           flex-shrink: 0;
-          transition: border-color 0.3s ease, color 0.3s ease;
+          transition: color 0.3s ease;
         }
 
-        .faq-icon--active {
-          color: #07dd2b;
-        }
-
+        .faq-icon--active,
         .faq-item:hover .faq-icon {
           color: #07dd2b;
         }
 
-        /* ===== Answer ===== */
         .faq-answer {
           font-size: 14px;
-          color: #666;
+          color: #8f8f97;
           line-height: 1.8;
           max-width: 620px;
           padding: 0 0 28px 0;

@@ -5,6 +5,8 @@ import Footer from './components/Footer'
 import StarfieldBg from './components/StarfieldBg'
 import HomePage from './pages/HomePage'
 import NossosServicosPage from './pages/NossosServicosPage'
+import { PRIMARY_CONTACT_HREF } from './config/site'
+import type { NavLinkItem } from './types/site'
 
 function scrollToTop() {
   if (window.__lenis) {
@@ -23,36 +25,40 @@ export default function App() {
     scrollToTop()
   }, [location.pathname])
 
-  const navLinks = useMemo(() => (
-    isServicesPage
-      ? [
-          { label: 'Início', href: '/' },
-          { label: 'Nossos Serviços', href: '/nossos-servicos' },
-          { label: 'Falar com especialista', href: '#footer' },
-        ]
-      : [
-          { label: 'Início', href: '/' },
-          { label: 'Nossos Serviços', href: '/nossos-servicos' },
-          { label: 'Metodologia', href: '#metodo' },
-          { label: 'Infraestrutura Ativa', href: '#depoimentos' },
-          { label: 'Perguntas Frequentes', href: '#faq' },
-        ]
-  ), [isServicesPage])
+  const navLinks = useMemo<NavLinkItem[]>(() => {
+    if (isServicesPage) {
+      return [
+        { label: 'Início', href: '/' },
+        { label: 'Nossos Serviços', href: '/nossos-servicos' },
+        { label: 'Falar com especialista', href: PRIMARY_CONTACT_HREF },
+      ]
+    }
 
-  const footerLinks = useMemo(() => (
-    isServicesPage
-      ? [
-          { label: 'Início', href: '/' },
-          { label: 'Nossos Serviços', href: '/nossos-servicos' },
-          { label: 'Contato', href: '#footer' },
-        ]
-      : [
-          { label: 'Início', href: '/' },
-          { label: 'Metodologia', href: '#metodo' },
-          { label: 'Infraestrutura Ativa', href: '#depoimentos' },
-          { label: 'Perguntas Frequentes', href: '#faq' },
-        ]
-  ), [isServicesPage])
+    return [
+      { label: 'Início', href: '/' },
+      { label: 'Nossos Serviços', href: '/nossos-servicos' },
+      { label: 'Metodologia', href: '#metodo' },
+      { label: 'Infraestrutura Ativa', href: '#depoimentos' },
+      { label: 'Perguntas Frequentes', href: '#faq' },
+    ]
+  }, [isServicesPage])
+
+  const footerLinks = useMemo<NavLinkItem[]>(() => {
+    if (isServicesPage) {
+      return [
+        { label: 'Início', href: '/' },
+        { label: 'Nossos Serviços', href: '/nossos-servicos' },
+        { label: 'Contato', href: PRIMARY_CONTACT_HREF },
+      ]
+    }
+
+    return [
+      { label: 'Início', href: '/' },
+      { label: 'Metodologia', href: '#metodo' },
+      { label: 'Infraestrutura Ativa', href: '#depoimentos' },
+      { label: 'Perguntas Frequentes', href: '#faq' },
+    ]
+  }, [isServicesPage])
 
   return (
     <div className="relative min-h-screen text-text-main">
