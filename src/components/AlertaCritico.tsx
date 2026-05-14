@@ -44,7 +44,7 @@ export default function AlertaCritico() {
         </h2>
 
         <p className="text-text-muted text-[clamp(0.95rem,3.5vw,1.05rem)] md:text-[clamp(1.05rem,1.2vw,1.15rem)] leading-[1.65] md:leading-[1.7] max-w-[560px]">
-          Rutura de estoque, devoluções em massa e margens destruídas. Este é o preço de vender na internet sem uma base sólida. Antes de gastar dinheiro com anúncios, precisa garantir que a sua operação aguenta o volume. Nós blindamos a sua estrutura.
+          Ruptura de estoque, devoluções em massa e margens destruídas. Este é o preço de vender na internet sem uma base sólida. Antes de gastar dinheiro com anúncios, precisa garantir que a sua operação aguenta o volume. Nós blindamos a sua estrutura.
         </p>
       </div>
     </section>
