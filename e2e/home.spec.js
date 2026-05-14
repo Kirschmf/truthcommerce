@@ -48,25 +48,52 @@ test.describe('Home Page', () => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/')
 
-    await page.getByRole('button', { name: 'Abrir menu' }).click()
+    const trigger = page.getByRole('button', { name: 'Abrir menu' })
+    await trigger.click()
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+
     await page.locator('nav').filter({ has: page.getByRole('link', { name: 'Nossos Serviços', exact: true }) }).getByRole('link', { name: 'Nossos Serviços', exact: true }).click()
     await expect(page).toHaveURL(/\/nossos-servicos$/)
     await expect(page.getByRole('heading', { name: 'Conheça as soluções premium que oferecemos para sua empresa' })).toBeVisible()
 
-    await page.getByRole('button', { name: 'Abrir menu' }).click()
+    const secondTrigger = page.getByRole('button', { name: 'Abrir menu' })
+    await secondTrigger.click()
+    await expect(secondTrigger).toHaveAttribute('aria-expanded', 'true')
+
     await page.locator('nav').filter({ has: page.getByRole('link', { name: 'Início', exact: true }) }).last().getByRole('link', { name: 'Início', exact: true }).click()
     await expect(page).toHaveURL(/\/$/)
     await expect(page.locator('h1').first()).toBeVisible()
   })
 
   test('sections become visible on scroll', async ({ page }) => {
-    // Scroll down to trigger GSAP animations and lazy loading
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 3))
     await page.waitForTimeout(1000)
 
-    // AlertaCritico section should exist in the DOM
     const alertSection = page.locator('text=Alerta Crítico').first()
     await expect(alertSection).toBeAttached({ timeout: 5000 })
+  })
+
+  test('faq exposes accessible accordion state', async ({ page }) => {
+    const faqButton = page.getByRole('button', { name: /A Truth atende quem está começando agora\?/i })
+    await expect(faqButton).toHaveAttribute('aria-expanded', 'false')
+    await faqButton.click()
+    await expect(faqButton).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  test('case detail dialog opens and closes with keyboard support', async ({ page }) => {
+    await page.evaluate(async () => {
+      const scrollStep = window.innerHeight
+      for (let i = 0; i < 8; i++) {
+        window.scrollBy(0, scrollStep)
+        await new Promise((resolve) => setTimeout(resolve, 300))
+      }
+    })
+
+    await page.getByRole('button', { name: /Ver detalhes/i }).first().click()
+    const dialog = page.getByRole('dialog')
+    await expect(dialog).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(dialog).toHaveCount(0)
   })
 
   test('lazy-loaded CarrosselCases renders on scroll', async ({ page }) => {

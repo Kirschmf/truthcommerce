@@ -36,7 +36,7 @@ No linter or formatter is configured (no ESLint, Prettier, or similar).
 - **Playwright** for E2E tests (Chromium)
 
 ### App Structure
-`src/main.jsx` → `<App />` renders all sections in order:
+`src/main.tsx` → `<App />` renders all sections in order:
 
 1. `StarfieldBg` — full-page 2D canvas starfield (z-behind everything)
 2. `Header` — navbar with mobile menu
@@ -66,7 +66,7 @@ archive/                 # Deprecated legacy files — NEVER delete
 ### 3D Pipeline
 - GLB models (`foguete.glb`, `astronaut.glb`, `satellite.glb`) in `public/assets/models/`
 - `sampleGLB.js` samples GLB mesh vertices into point cloud positions
-- `ParticleCloud.jsx` renders 9K-point `<points>` with glow texture from `GlowTexture.js`
+- `ParticleCloud.jsx` renders a responsive point cloud with glow texture from `GlowTexture.js`
 - Hero morphs rocket→astronaut via ScrollTrigger-driven position interpolation
 - `AlertaCanvas` + `AstronautCloud` provide a second R3F scene for the AlertaCritico section
 - Carousel uses `Carousel3D.jsx` with cylindrical geometry + satellite particle cloud
@@ -79,15 +79,15 @@ archive/                 # Deprecated legacy files — NEVER delete
 - `body::before` in `global.css` renders an SVG noise texture overlay at `z-index: 1` with `pointer-events: none` — be careful with z-index stacking
 
 ### Scroll Architecture
-- `useLenis` hook (called once in `App`) creates a singleton Lenis instance and bridges it to GSAP: `lenisInstance.on('scroll', ScrollTrigger.update)` + `gsap.ticker.add` drives Lenis RAF
+- `useLenis` hook (called once in `HomePage`) creates a singleton Lenis instance and bridges it to GSAP
 - All scroll-driven GSAP animations depend on this bridge — removing or reordering it breaks ScrollTrigger timing
 - Lenis instance is exposed as `window.__lenis` for imperative access (e.g., `window.__lenis.scrollTo()`)
 
 ### Testing
 - Vitest config lives in `vite.config.js` (`test` key), not a separate file
 - `test.globals: true` — Vitest globals (`describe`, `it`, `expect`) are available without imports
-- Test setup in `src/test/setup.js` mocks `matchMedia`, `ResizeObserver`, and canvas contexts (2D + WebGL) for jsdom compatibility with Three.js/R3F
-- Playwright config (`playwright.config.js`) auto-starts `npm run dev` on port 5173 — no need to start a separate dev server for E2E tests
+- Test setup in `src/test/setup.ts` mocks `matchMedia`, `ResizeObserver`, and canvas contexts (2D + WebGL) for jsdom compatibility with Three.js/R3F
+- Playwright config (`playwright.config.ts`) auto-starts `npm run dev` on port 5173 — no need to start a separate dev server for E2E tests
 - E2E tests run only in Chromium (`projects` config)
 
 ## Code Conventions

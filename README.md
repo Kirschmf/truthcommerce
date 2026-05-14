@@ -50,11 +50,12 @@ src/
 
 ## Arquitetura atual
 
-- `src/main.tsx` monta o app com `BrowserRouter`
+- `src/main.tsx` monta o app com `BrowserRouter`, analytics e error boundary
 - `src/App.tsx` compõe layout global, rotas e navegação contextual
 - `src/pages/HomePage.tsx` monta a home com seções lazy e scroll suave
 - `src/pages/NossosServicosPage.tsx` expõe a página de serviços
 - `src/config/site.ts` concentra URLs de contato e links institucionais
+- `src/config/observability.ts` centraliza DSN e parâmetros de observabilidade
 
 ## Variáveis de ambiente
 
