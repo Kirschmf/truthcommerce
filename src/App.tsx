@@ -30,7 +30,6 @@ export default function App() {
       return [
         { label: 'Início', href: '/' },
         { label: 'Nossos Serviços', href: '/nossos-servicos' },
-        { label: 'Falar com especialista', href: PRIMARY_CONTACT_HREF },
       ]
     }
 

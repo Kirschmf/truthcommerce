@@ -63,6 +63,7 @@ export default function StarfieldBg() {
     let scrollY = 0
     let lastNow = 0
     let lenisAttached = false
+    let resizeObserver: ResizeObserver | null = null
 
     const layers: StarLayerConfig[] = [
       { stars: [], drift: 0.008, sizeMin: 0.3, sizeMax: 0.7, opMin: 0.15, opMax: 0.4, parallax: 0.02 },
@@ -264,12 +265,24 @@ export default function StarfieldBg() {
       targetScrollY = window.scrollY || window.pageYOffset || 0
     }
 
+    const observePageGrowth = () => {
+      if (typeof ResizeObserver === 'undefined') return
+
+      resizeObserver = new ResizeObserver(() => {
+        extendIfGrown()
+      })
+
+      resizeObserver.observe(document.documentElement)
+      resizeObserver.observe(document.body)
+    }
+
     const init = () => {
       resize()
       createAll()
       onScroll()
       animationFrameId = requestAnimationFrame(draw)
       tryAttachLenis()
+      observePageGrowth()
       window.setTimeout(extendIfGrown, 400)
       window.setTimeout(extendIfGrown, 1200)
       window.setTimeout(extendIfGrown, 3000)
@@ -290,6 +303,7 @@ export default function StarfieldBg() {
 
     return () => {
       cancelAnimationFrame(animationFrameId)
+      resizeObserver?.disconnect()
       window.removeEventListener('resize', onResize)
       window.removeEventListener('scroll', onScroll)
     }
