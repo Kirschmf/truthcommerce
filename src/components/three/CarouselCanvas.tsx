@@ -2,19 +2,32 @@ import { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import Carousel3D from './Carousel3D'
 
-export default function CarouselCanvas({ scrollProgressRef, onCardClick, interactive3DRef }) {
-  const containerRef = useRef(null)
+interface CarouselCanvasProps {
+  scrollProgressRef: React.MutableRefObject<number>
+  onCardClick: (value: unknown) => void
+  interactive3DRef: React.MutableRefObject<boolean>
+}
+
+export default function CarouselCanvas({
+  scrollProgressRef,
+  onCardClick,
+  interactive3DRef,
+}: CarouselCanvasProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const [active, setActive] = useState(false)
 
   useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => setActive(entry.isIntersecting),
-      { threshold: 0.05 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
+    const element = containerRef.current
+    if (!element) return undefined
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry) {
+        setActive(entry.isIntersecting)
+      }
+    }, { threshold: 0.05 })
+
+    observer.observe(element)
+    return () => observer.disconnect()
   }, [])
 
   return (
