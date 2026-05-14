@@ -4,13 +4,11 @@ import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import createGlowTexture from './GlowTexture'
 import sampleGLB from './sampleGLB'
-import { CASES as CASE_DATA } from '../../data/cases'
+import { CASES } from '../../data/cases'
+import { getFullCases } from '../caseShared'
 
-const CASES = CASE_DATA
-
-// 6 cases × 3 = 18 cards on the ring
-const FULL_CASES = [...CASES, ...CASES, ...CASES]
-const TOTAL      = FULL_CASES.length
+const FULL_CASES = getFullCases(3)
+const TOTAL = FULL_CASES.length
 const RADIUS     = 3500
 const CARD_W     = 1100
 const CARD_H     = 620
@@ -370,4 +368,3 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
   )
 }
 
-useGLTF.preload('/assets/models/satellite.glb')

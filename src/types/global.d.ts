@@ -10,6 +10,7 @@ declare global {
     readonly VITE_CONTACT_EMAIL?: string
     readonly VITE_INSTAGRAM_URL?: string
     readonly VITE_LINKEDIN_URL?: string
+    readonly VITE_SENTRY_DSN?: string
   }
 }
 

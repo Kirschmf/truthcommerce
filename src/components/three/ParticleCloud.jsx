@@ -164,10 +164,14 @@ export default function ParticleCloud() {
   }, [mobile])
 
   useEffect(() => {
+    const heroElement = document.querySelector('.hero-wrapper')
+    const alertElement = document.querySelector('#alerta')
+    if (!heroElement || !alertElement) return undefined
+
     const trigger = ScrollTrigger.create({
-      trigger: '.hero-wrapper',
+      trigger: heroElement,
       start: 'top top',
-      endTrigger: '#alerta',
+      endTrigger: alertElement,
       end: 'center center',
       scrub: 1,
       onUpdate: (self) => {
@@ -337,5 +341,3 @@ export default function ParticleCloud() {
   )
 }
 
-useGLTF.preload('/assets/models/foguete.glb')
-useGLTF.preload('/assets/models/astronaut.glb')

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import gsap from 'gsap'
 import { CASES } from '../data/cases'
+import { CASE_STACK_LABELS } from './caseShared'
 
 function CornerBrackets() {
   const base = 'absolute w-4 h-4 md:w-5 md:h-5 z-[2] pointer-events-none'
@@ -179,9 +180,9 @@ export default function CasesCarousel2D({ activeOpacityRef, activeRef, onCaseCli
               </p>
 
               <div className="flex flex-wrap gap-2">
-                <StackChip label="ERP" present={c.stack.erp.present} />
-                <StackChip label="E-COMMERCE" present={c.stack.ecommerce.present} />
-                <StackChip label="MKT" present={c.stack.marketplaces.length > 0} />
+                <StackChip label={CASE_STACK_LABELS.erp} present={c.stack.erp.present} />
+                <StackChip label={CASE_STACK_LABELS.ecommerce} present={c.stack.ecommerce.present} />
+                <StackChip label={CASE_STACK_LABELS.marketplaces} present={c.stack.marketplaces.length > 0} />
               </div>
 
               <div className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--green)] mt-2">

@@ -6,6 +6,7 @@ import CarouselCanvas from './three/CarouselCanvas'
 import CaseDetailPanel from './CaseDetailPanel'
 import CasesCarousel2D from './CasesCarousel2D'
 import { CASES } from '../data/cases'
+import { CASE_STACK_LABELS } from './caseShared'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -76,9 +77,9 @@ function MobileCaseCard({ caseData, onClick }) {
         <p className="text-[13px] text-text-muted leading-[1.6] mb-4">{c.intro}</p>
 
         <div className="flex flex-wrap gap-2 mb-5">
-          <StackChip label="ERP" present={c.stack.erp.present} />
-          <StackChip label="E-COMMERCE" present={c.stack.ecommerce.present} />
-          <StackChip label="MKT" present={c.stack.marketplaces.length > 0} />
+          <StackChip label={CASE_STACK_LABELS.erp} present={c.stack.erp.present} />
+          <StackChip label={CASE_STACK_LABELS.ecommerce} present={c.stack.ecommerce.present} />
+          <StackChip label={CASE_STACK_LABELS.marketplaces} present={c.stack.marketplaces.length > 0} />
         </div>
 
         <div className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--green)]">
