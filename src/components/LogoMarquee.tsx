@@ -76,23 +76,6 @@ export default function LogoMarquee() {
         </div>
       </div>
 
-      <style>{`
-        @keyframes marquee-scroll {
-          from { transform: translateX(0); }
-          to { transform: translateX(calc(var(--set-width) * -1)); }
-        }
-
-        .logo-marquee-item {
-          opacity: 0.85;
-          transition: opacity 0.3s ease;
-        }
-
-        @media (hover: hover) {
-          .logo-marquee-item:hover {
-            opacity: 1;
-          }
-        }
-      `}</style>
     </section>
   )
 }

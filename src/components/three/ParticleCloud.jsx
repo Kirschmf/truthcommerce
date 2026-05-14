@@ -1,11 +1,11 @@
-import { useRef, useMemo, useEffect } from 'react'
+import { useRef, useMemo, useEffect, useState } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import createGlowTexture from './GlowTexture'
-import sampleGLB from './sampleGLB'
+import { loadPointCloudSet } from './loadPointClouds'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -39,9 +39,6 @@ export default function ParticleCloud() {
   const hoveringRef = useRef(false)
   const { camera } = useThree()
 
-  const rocketGltf = useGLTF('/assets/models/foguete.glb')
-  const astronautGltf = useGLTF('/assets/models/astronaut.glb')
-
   const mobile = useMemo(() => isMobile(), [])
   const notebook = useMemo(() => !isMobile() && isNotebook(), [])
   const particleCount = mobile
@@ -74,9 +71,31 @@ export default function ParticleCloud() {
     return 1.4
   }, [mobile, notebook])
 
-  const { rocketShape, astronautShape, offsets, idlePhase, currentPos } = useMemo(() => {
-    const rocketShape = sampleGLB(rocketGltf, particleCount)
-    const astronautShape = sampleGLB(astronautGltf, particleCount)
+  const [pointClouds, setPointClouds] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+
+    Promise.all([
+      loadPointCloudSet('/assets/models/foguete.points.json'),
+      loadPointCloudSet('/assets/models/astronaut.points.json'),
+    ]).then(([rocketSet, astronautSet]) => {
+      if (cancelled) return
+      setPointClouds({
+        rocketShape: rocketSet[particleCount],
+        astronautShape: astronautSet[particleCount],
+      })
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [particleCount])
+
+  const geometryData = useMemo(() => {
+    if (!pointClouds?.rocketShape || !pointClouds?.astronautShape) return null
+
+    const { rocketShape, astronautShape } = pointClouds
     const offsets = new Float32Array(particleCount * 3)
     const idlePhase = new Float32Array(particleCount)
     const currentPos = new Float32Array(particleCount * 3)
@@ -94,11 +113,14 @@ export default function ParticleCloud() {
     }
 
     return { rocketShape, astronautShape, offsets, idlePhase, currentPos }
-  }, [astronautGltf, particleCount, rocketGltf])
+  }, [particleCount, pointClouds])
 
-  const initPositions = useMemo(() => Float32Array.from(currentPos), [currentPos])
+  const initPositions = useMemo(() => (geometryData ? Float32Array.from(geometryData.currentPos) : null), [geometryData])
 
   const rocketColors = useMemo(() => {
+    if (!geometryData) return null
+
+    const { rocketShape } = geometryData
     const colors = new Float32Array(particleCount * 3)
 
     for (let i = 0; i < particleCount; i += 1) {
@@ -123,9 +145,12 @@ export default function ParticleCloud() {
     }
 
     return colors
-  }, [particleCount, rocketShape])
+  }, [geometryData, particleCount])
 
   const astronautColors = useMemo(() => {
+    if (!geometryData) return null
+
+    const { astronautShape } = geometryData
     const colors = new Float32Array(particleCount * 3)
 
     for (let i = 0; i < particleCount; i += 1) {
@@ -150,7 +175,7 @@ export default function ParticleCloud() {
     }
 
     return colors
-  }, [astronautShape, particleCount])
+  }, [geometryData, particleCount])
 
   const glowTexture = useMemo(() => createGlowTexture(), [])
 
@@ -214,10 +239,13 @@ export default function ParticleCloud() {
   }, [camera])
 
   useFrame((_, delta) => {
+    if (!geometryData || !rocketColors || !astronautColors) return
+
     const points = pointsRef.current
     const group = groupRef.current
     if (!points || !group) return
 
+    const { rocketShape, astronautShape, offsets, idlePhase, currentPos } = geometryData
     const entrance = progressRef.current.entrance
     const morph = progressRef.current.morph
     const dt = Math.min(delta, 0.05)
@@ -319,12 +347,16 @@ export default function ParticleCloud() {
     }
   })
 
+  if (!geometryData || !initPositions || !rocketColors || !astronautColors) {
+    return null
+  }
+
   return (
     <group ref={groupRef} position={rocketPos3} scale={rocketScale} rotation={[0, 0, TILT_Z]}>
       <points ref={pointsRef}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" array={initPositions} count={particleCount} itemSize={3} />
-          <bufferAttribute attach="attributes-color" array={Float32Array.from(rocketColors)} count={particleCount} itemSize={3} />
+          <bufferAttribute attach="attributes-color" array={rocketColors} count={particleCount} itemSize={3} />
         </bufferGeometry>
         <pointsMaterial
           size={0.09}

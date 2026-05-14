@@ -1,9 +1,9 @@
-import { useRef, useMemo, useEffect } from 'react'
+import { useRef, useMemo, useEffect, useState } from 'react'
 import { useFrame, useThree, useLoader } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import createGlowTexture from './GlowTexture'
-import sampleGLB from './sampleGLB'
+import { loadPointCloudSet } from './loadPointClouds'
 import { CASES } from '../../data/cases'
 import { getFullCases } from '../caseShared'
 
@@ -55,8 +55,21 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
   const raycaster     = useMemo(() => new THREE.Raycaster(), [])
   const cardMeshesRef = useRef([])
 
-  // ── Models ───────────────────────────────────────────────────
-  const satelliteGltf = useGLTF('/assets/models/satellite.glb')
+  const [satellitePoints, setSatellitePoints] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+
+    loadPointCloudSet('/assets/models/satellite.points.json').then((set) => {
+      if (!cancelled) {
+        setSatellitePoints(set[SAT_N])
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   // 6 unique textures shared across 18 card slots
   const baseTextures = useLoader(THREE.TextureLoader, CASES.map(c => c.img))
@@ -95,41 +108,44 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
   }, [baseTextures])
 
   // ── Satellite particle cloud ─────────────────────────────────
-  const { satCurrentPos, satNoise, satBasePos, satColors } = useMemo(() => {
-    const rawPos     = sampleGLB(satelliteGltf, SAT_N)
-    const basePos    = new Float32Array(SAT_N * 3)
-    const noise      = new Float32Array(SAT_N * 3)
+  const satelliteGeometry = useMemo(() => {
+    if (!satellitePoints) return null
+
+    const basePos = new Float32Array(SAT_N * 3)
+    const noise = new Float32Array(SAT_N * 3)
     const currentPos = new Float32Array(SAT_N * 3)
-    const colors     = new Float32Array(SAT_N * 3)
-    const green      = new THREE.Color('#07dd2b')
+    const colors = new Float32Array(SAT_N * 3)
+    const green = new THREE.Color('#07dd2b')
 
-    for (let i = 0; i < SAT_N; i++) {
+    for (let i = 0; i < SAT_N; i += 1) {
       const ix = i * 3
-      // Scale from sampleGLB-normalized height (5.5) to 1500 world units
-      basePos[ix]     = rawPos[ix]     * SAT_SCALE
-      basePos[ix + 1] = rawPos[ix + 1] * SAT_SCALE
-      basePos[ix + 2] = rawPos[ix + 2] * SAT_SCALE
+      basePos[ix] = satellitePoints[ix] * SAT_SCALE
+      basePos[ix + 1] = satellitePoints[ix + 1] * SAT_SCALE
+      basePos[ix + 2] = satellitePoints[ix + 2] * SAT_SCALE
 
-      currentPos[ix]     = basePos[ix]
+      currentPos[ix] = basePos[ix]
       currentPos[ix + 1] = basePos[ix + 1]
       currentPos[ix + 2] = basePos[ix + 2]
 
-      noise[ix]     = (Math.random() - 0.5) * 2
+      noise[ix] = (Math.random() - 0.5) * 2
       noise[ix + 1] = (Math.random() - 0.5) * 2
       noise[ix + 2] = (Math.random() - 0.5) * 2
 
-      // 15% green accents, 85% white/silver
       if (Math.random() > 0.85) {
-        const v = 0.6 + Math.random() * 0.4
-        colors[ix] = green.r * v; colors[ix + 1] = green.g * v; colors[ix + 2] = green.b * v
+        const value = 0.6 + Math.random() * 0.4
+        colors[ix] = green.r * value
+        colors[ix + 1] = green.g * value
+        colors[ix + 2] = green.b * value
       } else {
-        const w = 0.85 + Math.random() * 0.15
-        colors[ix] = w; colors[ix + 1] = w; colors[ix + 2] = w
+        const white = 0.85 + Math.random() * 0.15
+        colors[ix] = white
+        colors[ix + 1] = white
+        colors[ix + 2] = white
       }
     }
 
     return { satCurrentPos: currentPos, satNoise: noise, satBasePos: basePos, satColors: colors }
-  }, [satelliteGltf])
+  }, [satellitePoints])
 
   const glowTex = useMemo(() => createGlowTexture(), [])
 
@@ -285,24 +301,25 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
     const satOpacity  = satFade
     const satScatter  = (1 - satFade) * 1200
 
-    if (satPointsRef.current) {
+    if (satPointsRef.current && satelliteGeometry) {
       satPointsRef.current.material.opacity = satOpacity
 
       if (satOpacity > 0.01) {
         const posAttr = satPointsRef.current.geometry.getAttribute('position')
-        const posArr  = posAttr.array
+        const posArr = posAttr.array
+        const { satBasePos, satNoise, satCurrentPos } = satelliteGeometry
 
-        for (let i = 0; i < SAT_N; i++) {
+        for (let i = 0; i < SAT_N; i += 1) {
           const ix = i * 3
-          const tx = satBasePos[ix]     + satNoise[ix]     * satScatter
+          const tx = satBasePos[ix] + satNoise[ix] * satScatter
           const ty = satBasePos[ix + 1] + satNoise[ix + 1] * satScatter
           const tz = satBasePos[ix + 2] + satNoise[ix + 2] * satScatter
 
-          satCurrentPos[ix]     += (tx - satCurrentPos[ix])     * 0.04
+          satCurrentPos[ix] += (tx - satCurrentPos[ix]) * 0.04
           satCurrentPos[ix + 1] += (ty - satCurrentPos[ix + 1]) * 0.04
           satCurrentPos[ix + 2] += (tz - satCurrentPos[ix + 2]) * 0.04
 
-          posArr[ix]     = satCurrentPos[ix]
+          posArr[ix] = satCurrentPos[ix]
           posArr[ix + 1] = satCurrentPos[ix + 1]
           posArr[ix + 2] = satCurrentPos[ix + 2]
         }
@@ -336,34 +353,26 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
       </group>
 
       {/* Satellite particle cloud */}
-      <group ref={satGroupRef}>
-        <points ref={satPointsRef}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              array={satCurrentPos}
-              count={SAT_N}
-              itemSize={3}
+      {satelliteGeometry && (
+        <group ref={satGroupRef}>
+          <points ref={satPointsRef}>
+            <bufferGeometry>
+              <bufferAttribute attach="attributes-position" array={satelliteGeometry.satCurrentPos} count={SAT_N} itemSize={3} />
+              <bufferAttribute attach="attributes-color" array={satelliteGeometry.satColors} count={SAT_N} itemSize={3} />
+            </bufferGeometry>
+            <pointsMaterial
+              size={20}
+              map={glowTex}
+              vertexColors
+              transparent
+              opacity={1}
+              blending={THREE.AdditiveBlending}
+              depthWrite={false}
+              sizeAttenuation
             />
-            <bufferAttribute
-              attach="attributes-color"
-              array={satColors}
-              count={SAT_N}
-              itemSize={3}
-            />
-          </bufferGeometry>
-          <pointsMaterial
-            size={20}
-            map={glowTex}
-            vertexColors
-            transparent
-            opacity={1}
-            blending={THREE.AdditiveBlending}
-            depthWrite={false}
-            sizeAttenuation
-          />
-        </points>
-      </group>
+          </points>
+        </group>
+      )}
     </>
   )
 }
