@@ -1,6 +1,12 @@
-import { useRef, useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-const LOGOS = [
+interface LogoItem {
+  src: string
+  alt: string
+  style: { height: number }
+}
+
+const LOGOS: LogoItem[] = [
   { src: '/assets/images/Amazon_logo.svg', alt: 'Amazon', style: { height: 36 } },
   { src: '/assets/images/Shopify_logo_2018.svg', alt: 'Shopify', style: { height: 44 } },
   { src: '/assets/images/mercadolivre_logo.svg', alt: 'Mercado Livre', style: { height: 40 } },
@@ -13,27 +19,25 @@ const LOGOS = [
 
 function LogoSet() {
   return LOGOS.map((logo) => (
-    <div
-      key={logo.alt}
-      className="logo-marquee-item flex-shrink-0 flex items-center justify-center"
-    >
-      <img
-        src={logo.src}
-        alt={logo.alt}
-        style={logo.style}
-        className="w-auto object-contain"
-      />
+    <div key={logo.alt} className="logo-marquee-item flex-shrink-0 flex items-center justify-center">
+      <img src={logo.src} alt={logo.alt} style={logo.style} className="w-auto object-contain" />
     </div>
   ))
 }
 
 export default function LogoMarquee() {
-  const setRef = useRef(null)
+  const setRef = useRef<HTMLDivElement | null>(null)
   const [setWidth, setSetWidth] = useState(0)
 
   useEffect(() => {
     if (!setRef.current) return
-    const measure = () => setSetWidth(setRef.current.offsetWidth)
+
+    const measure = () => {
+      if (setRef.current) {
+        setSetWidth(setRef.current.offsetWidth)
+      }
+    }
+
     measure()
     window.addEventListener('resize', measure)
     return () => window.removeEventListener('resize', measure)
@@ -46,26 +50,26 @@ export default function LogoMarquee() {
       </p>
 
       <div className="relative">
-        {/* Fade edges */}
         <div className="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-bg-base to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-bg-base to-transparent z-10 pointer-events-none" />
 
         <div
           className="marquee-track flex items-center w-max"
-          style={setWidth ? {
-            animation: `marquee-scroll ${45}s linear infinite`,
-            '--set-width': `${setWidth}px`,
-          } : undefined}
+          style={
+            setWidth
+              ? ({
+                  animation: `marquee-scroll ${45}s linear infinite`,
+                  '--set-width': `${setWidth}px`,
+                } as React.CSSProperties)
+              : undefined
+          }
         >
-          {/* Set 1 — measured */}
           <div ref={setRef} className="flex items-center gap-16 flex-shrink-0 pr-16">
             <LogoSet />
           </div>
-          {/* Set 2 */}
           <div className="flex items-center gap-16 flex-shrink-0 pr-16" aria-hidden="true">
             <LogoSet />
           </div>
-          {/* Set 3 */}
           <div className="flex items-center gap-16 flex-shrink-0 pr-16" aria-hidden="true">
             <LogoSet />
           </div>

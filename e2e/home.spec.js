@@ -74,7 +74,9 @@ test.describe('Home Page', () => {
   })
 
   test('faq exposes accessible accordion state', async ({ page }) => {
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
     const faqButton = page.getByRole('button', { name: /A Truth atende quem está começando agora\?/i })
+    await expect(faqButton).toBeVisible()
     await expect(faqButton).toHaveAttribute('aria-expanded', 'false')
     await faqButton.click()
     await expect(faqButton).toHaveAttribute('aria-expanded', 'true')

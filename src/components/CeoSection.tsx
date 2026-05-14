@@ -5,7 +5,16 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const METRICS = [
+interface Metric {
+  value: number | null
+  display?: string
+  prefix: string
+  suffix: string
+  label: string
+  animate: boolean
+}
+
+const METRICS: Metric[] = [
   { value: 4000, prefix: '+', suffix: '', label: 'PROJETOS ENTREGUES', animate: true },
   { value: 98, prefix: '', suffix: '%', label: 'TAXA DE RETENÇÃO', animate: true },
   { value: 14, prefix: '', suffix: '+', label: 'ANOS DE EXPERIÊNCIA', animate: true },
@@ -13,15 +22,13 @@ const METRICS = [
 ]
 
 export default function CeoSection() {
-  const sectionRef = useRef(null)
-  const contentRef = useRef(null)
-  const metricsRef = useRef(null)
-  const counterRefs = useRef([])
+  const sectionRef = useRef<HTMLElement | null>(null)
+  const contentRef = useRef<HTMLDivElement | null>(null)
+  const metricsRef = useRef<HTMLDivElement | null>(null)
+  const counterRefs = useRef<Array<HTMLSpanElement | null>>([])
 
   useGSAP(() => {
-    // Bidirectional fade in/out tied to scroll progress (same pattern as AlertaCritico).
-    // 0%→30% fade in, 30%→70% fully visible, 70%→100% fade out — reverses naturally on scroll-up.
-    const tl = gsap.timeline({
+    const timeline = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
         start: 'top 90%',
@@ -29,56 +36,43 @@ export default function CeoSection() {
         scrub: 1,
       },
     })
-    tl.fromTo(contentRef.current,
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, ease: 'none', duration: 0.3 }
-    )
-    tl.to(contentRef.current, { opacity: 1, y: 0, duration: 0.4 })
-    tl.to(contentRef.current,
-      { opacity: 0, y: -40, ease: 'none', duration: 0.3 }
-    )
 
-    // Counters: one-shot, kept independent so numbers don't unwind when scrolling back up
-    counterRefs.current.forEach((el, i) => {
-      if (!el || !METRICS[i].animate) return
-      const target = METRICS[i].value
-      const obj = { val: 0 }
-      gsap.to(obj, {
-        val: target,
+    timeline
+      .fromTo(contentRef.current, { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: 'none', duration: 0.3 })
+      .to(contentRef.current, { opacity: 1, y: 0, duration: 0.4 })
+      .to(contentRef.current, { opacity: 0, y: -40, ease: 'none', duration: 0.3 })
+
+    counterRefs.current.forEach((element, index) => {
+      const metric = METRICS[index]
+      if (!element || !metric?.animate || metric.value === null) return
+
+      const state = { value: 0 }
+      gsap.to(state, {
+        value: metric.value,
         duration: 1.6,
         ease: 'power2.out',
-        snap: { val: 1 },
+        snap: { value: 1 },
         scrollTrigger: {
           trigger: metricsRef.current,
           start: 'top 80%',
           once: true,
         },
         onUpdate: () => {
-          el.textContent = Math.round(obj.val)
+          element.textContent = String(Math.round(state.value))
         },
       })
     })
   }, { scope: sectionRef })
 
   return (
-    <section
-      id="ceo"
-      ref={sectionRef}
-      className="ceo-section w-full px-[5%] py-20 md:py-28 relative"
-    >
+    <section id="ceo" ref={sectionRef} className="ceo-section w-full px-[5%] py-20 md:py-28 relative">
       <div ref={contentRef} className="ceo-container" style={{ opacity: 0 }}>
-        <span className="ceo-eyebrow">/ A MENTE POR TRÁS DA MÁQUINA</span>
+        <span className="ceo-eyebrow">/ A mente por trás da máquina</span>
 
         <div className="ceo-grid">
-          {/* Photo column (sticky no desktop) */}
           <div className="ceo-photo-col">
             <div className="ceo-photo-wrapper">
-              <img
-                src="/assets/images/anilo.png"
-                alt="Anilo Foppa — CEO Truth Commerce"
-                className="ceo-photo"
-                loading="lazy"
-              />
+              <img src="/assets/images/anilo.png" alt="Anilo Foppa — CEO Truth Commerce" className="ceo-photo" loading="lazy" />
               <div className="ceo-photo-tag">
                 <span className="ceo-tag-dot" aria-hidden="true" />
                 <span className="ceo-tag-text">Anilo Foppa · CEO & Fundador</span>
@@ -86,7 +80,6 @@ export default function CeoSection() {
             </div>
           </div>
 
-          {/* Content column */}
           <div className="ceo-content-col">
             <h2 className="ceo-name">
               ANILO <span className="ceo-name-accent">FOPPA</span>
@@ -94,29 +87,33 @@ export default function CeoSection() {
             <p className="ceo-role">CEO &amp; Fundador · Truth Commerce</p>
 
             <p className="ceo-bio">
-              Com mais de uma década construindo infraestruturas de e-commerce,
-              a Truth Commerce nasceu de uma convicção: crescimento sustentável
-              exige uma fundação cirúrgica.
+              Com mais de uma década construindo infraestruturas de e-commerce, a Truth Commerce nasceu de uma convicção: crescimento sustentável exige uma fundação cirúrgica.
             </p>
 
             <blockquote className="ceo-quote">
               <span aria-hidden="true" className="ceo-quote-bar" />
-              <p>"Não vendemos tráfego. Construímos a máquina que aguenta o tráfego."</p>
+              <p>“Não vendemos tráfego. Construímos a máquina que aguenta o tráfego.”</p>
             </blockquote>
 
             <div ref={metricsRef} className="ceo-metrics">
-              {METRICS.map((m, i) => (
-                <div key={m.label} className="metric">
+              {METRICS.map((metric, index) => (
+                <div key={metric.label} className="metric">
                   <div className="metric-value">
-                    {m.prefix && <span className="metric-accent">{m.prefix}</span>}
-                    {m.animate ? (
-                      <span ref={(el) => { counterRefs.current[i] = el }}>0</span>
+                    {metric.prefix && <span className="metric-accent">{metric.prefix}</span>}
+                    {metric.animate ? (
+                      <span
+                        ref={(element) => {
+                          counterRefs.current[index] = element
+                        }}
+                      >
+                        0
+                      </span>
                     ) : (
-                      <span>{m.display}</span>
+                      <span>{metric.display}</span>
                     )}
-                    {m.suffix && <span className="metric-accent">{m.suffix}</span>}
+                    {metric.suffix && <span className="metric-accent">{metric.suffix}</span>}
                   </div>
-                  <div className="metric-label">{m.label}</div>
+                  <div className="metric-label">{metric.label}</div>
                 </div>
               ))}
             </div>
@@ -150,9 +147,9 @@ export default function CeoSection() {
           letter-spacing: 0.18em;
           font-weight: 700;
           margin-bottom: 32px;
+          text-transform: uppercase;
         }
 
-        /* ===== Grid base (mobile) ===== */
         .ceo-grid {
           display: grid;
           grid-template-columns: 1fr;
@@ -160,7 +157,6 @@ export default function CeoSection() {
           align-items: start;
         }
 
-        /* ===== Photo ===== */
         .ceo-photo-col {
           width: 100%;
           max-width: 320px;
@@ -214,7 +210,6 @@ export default function CeoSection() {
           white-space: nowrap;
         }
 
-        /* ===== Content ===== */
         .ceo-content-col {
           display: flex;
           flex-direction: column;
@@ -241,6 +236,7 @@ export default function CeoSection() {
           color: #888;
           letter-spacing: 0.1em;
           margin: 0 0 24px 0;
+          text-transform: uppercase;
         }
 
         .ceo-bio {
@@ -277,7 +273,6 @@ export default function CeoSection() {
           margin: 0;
         }
 
-        /* ===== Metrics (mobile: 2x2 grid) ===== */
         .ceo-metrics {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -315,7 +310,6 @@ export default function CeoSection() {
           font-weight: 600;
         }
 
-        /* ===== CTA ===== */
         .ceo-cta {
           display: inline-flex;
           align-items: center;
@@ -352,15 +346,16 @@ export default function CeoSection() {
             background: rgba(7, 221, 43, 0.12);
             border-color: #07dd2b;
           }
+
           .ceo-cta:hover .ceo-cta-arrow {
             transform: translateX(4px);
           }
+
           .ceo-photo-wrapper:hover .ceo-photo {
             transform: scale(1.03);
           }
         }
 
-        /* ===== Mobile pequeno: CTA full width ===== */
         @media (max-width: 480px) {
           .ceo-cta {
             justify-content: center;
@@ -369,7 +364,6 @@ export default function CeoSection() {
           }
         }
 
-        /* ===== Tablet (>=768px) ===== */
         @media (min-width: 768px) {
           .ceo-name {
             font-size: 44px;
@@ -393,7 +387,6 @@ export default function CeoSection() {
           }
         }
 
-        /* ===== Desktop (>=1025px): split + foto sticky ===== */
         @media (min-width: 1025px) {
           .ceo-grid {
             grid-template-columns: minmax(280px, 360px) 1fr;
