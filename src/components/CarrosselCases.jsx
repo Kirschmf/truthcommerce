@@ -102,7 +102,7 @@ function MobileCaseCard({ caseData, onClick }) {
 /* ── Mobile section ───────────────────────────────────────────── */
 function MobileCases({ onCaseClick }) {
   return (
-    <section className="block md:hidden py-16 px-[5%]">
+    <section id="projetos" className="block md:hidden py-16 px-[5%]">
       <div className="mb-10">
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted/70 mb-3">
           [ Cases · Sistemas Ativos ]
@@ -224,7 +224,7 @@ export default function CarrosselCases() {
             }
           `}</style>
 
-          <section ref={sectionRef} className="carousel-section hidden md:block">
+          <section id="projetos" ref={sectionRef} className="carousel-section hidden md:block">
             <CarouselCanvas
               scrollProgressRef={scrollProgressRef}
               onCardClick={setActiveCase}

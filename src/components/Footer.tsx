@@ -293,7 +293,7 @@ export default function Footer({ navLinks, onNavigate, currentPath }: FooterProp
           ))}
         </div>
 
-        <div className="reveal flex justify-center px-2 py-10 md:py-16">
+        <div className="reveal flex justify-center px-2 pt-6 pb-10 md:pt-4 md:pb-16">
           <img src={logo} alt="Truth Commerce" className="w-full max-w-[200px] md:max-w-[230px] h-auto opacity-95" />
         </div>
 

@@ -38,7 +38,7 @@ export default function App() {
       { label: 'Início', href: '/' },
       { label: 'Nossos Serviços', href: '/nossos-servicos' },
       { label: 'Metodologia', href: '#metodo' },
-      { label: 'Infraestrutura Ativa', href: '#depoimentos' },
+      { label: 'Infraestrutura Ativa', href: '#projetos' },
       { label: 'Perguntas Frequentes', href: '#faq' },
     ]
   }, [isServicesPage])
@@ -55,7 +55,7 @@ export default function App() {
     return [
       { label: 'Início', href: '/' },
       { label: 'Metodologia', href: '#metodo' },
-      { label: 'Infraestrutura Ativa', href: '#depoimentos' },
+      { label: 'Infraestrutura Ativa', href: '#projetos' },
       { label: 'Perguntas Frequentes', href: '#faq' },
     ]
   }, [isServicesPage])
