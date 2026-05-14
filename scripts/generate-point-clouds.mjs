@@ -1,8 +1,8 @@
 import { writeFile } from 'node:fs/promises'
-import { pathToFileURL } from 'node:url'
-import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import sampleGLB from '../src/components/three/sampleGLB.js'
+
+globalThis.self = globalThis
 
 globalThis.ProgressEvent = class ProgressEvent {
   constructor(type, init = {}) {
@@ -15,19 +15,19 @@ const MODELS = [
   {
     name: 'foguete',
     url: 'http://127.0.0.1:43123/assets/models/foguete.glb',
-    output: '/home/matheuskirsch/truth-site/public/assets/models/foguete.points.json',
+    output: '/home/matheuskirsch/truth-site/public/assets/models/foguete.points.bin',
     counts: [2500, 5000, 8000],
   },
   {
     name: 'astronaut',
     url: 'http://127.0.0.1:43123/assets/models/astronaut.glb',
-    output: '/home/matheuskirsch/truth-site/public/assets/models/astronaut.points.json',
+    output: '/home/matheuskirsch/truth-site/public/assets/models/astronaut.points.bin',
     counts: [2500, 3500, 5000, 8000, 9000],
   },
   {
     name: 'satellite',
     url: 'http://127.0.0.1:43123/assets/models/satellite.glb',
-    output: '/home/matheuskirsch/truth-site/public/assets/models/satellite.points.json',
+    output: '/home/matheuskirsch/truth-site/public/assets/models/satellite.points.bin',
     counts: [6000],
   },
 ]
@@ -41,13 +41,15 @@ function loadGltf(url) {
 
 for (const model of MODELS) {
   const gltf = await loadGltf(model.url)
-  const payload = {}
+  const chunks = []
 
   for (const count of model.counts) {
     const sampled = sampleGLB(gltf, count)
-    payload[count] = Array.from(sampled)
+    const header = new Uint32Array([count, sampled.length])
+    chunks.push(Buffer.from(header.buffer))
+    chunks.push(Buffer.from(sampled.buffer))
   }
 
-  await writeFile(model.output, JSON.stringify(payload))
-  console.log(`generated ${model.name} -> ${pathToFileURL(model.output).href}`)
+  await writeFile(model.output, Buffer.concat(chunks))
+  console.log(`generated ${model.name}`)
 }

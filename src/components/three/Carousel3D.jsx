@@ -60,7 +60,7 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
   useEffect(() => {
     let cancelled = false
 
-    loadPointCloudSet('/assets/models/satellite.points.json').then((set) => {
+    loadPointCloudSet('/assets/models/satellite.points.bin').then((set) => {
       if (!cancelled) {
         setSatellitePoints(set[SAT_N])
       }
@@ -226,6 +226,9 @@ export default function Carousel3D({ scrollProgressRef, onCardClick, interactive
       canvas.removeEventListener('click',     onClick)
     }
   }, [camera, gl, interactive3DRef, onCardClick, raycaster])
+
+  const isInteractiveNow = () =>
+    interactive3DRef ? interactive3DRef.current !== false : true
 
   // ── Render loop ───────────────────────────────────────────────
   useFrame(() => {

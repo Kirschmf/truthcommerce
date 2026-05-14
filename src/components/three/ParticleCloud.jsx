@@ -77,8 +77,8 @@ export default function ParticleCloud() {
     let cancelled = false
 
     Promise.all([
-      loadPointCloudSet('/assets/models/foguete.points.json'),
-      loadPointCloudSet('/assets/models/astronaut.points.json'),
+      loadPointCloudSet('/assets/models/foguete.points.bin'),
+      loadPointCloudSet('/assets/models/astronaut.points.bin'),
     ]).then(([rocketSet, astronautSet]) => {
       if (cancelled) return
       setPointClouds({

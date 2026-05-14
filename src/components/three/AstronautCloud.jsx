@@ -1,11 +1,10 @@
-import { useRef, useMemo, useEffect } from 'react'
+import { useRef, useMemo, useEffect, useState } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import createGlowTexture from './GlowTexture'
-import sampleGLB from './sampleGLB'
+import { loadPointCloudSet } from './loadPointClouds'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -30,11 +29,26 @@ export default function AstronautCloud() {
   const timeRef = useRef(0)
   const { camera, gl } = useThree()
 
-  const astronautGltf = useGLTF('/assets/models/astronaut.glb')
   const particleCount = isMobile() ? PARTICLE_COUNT.mobile : PARTICLE_COUNT.desktop
+  const [astronautPoints, setAstronautPoints] = useState(null)
 
-  const { astronautPos, currentPos, idlePhase, spawnOffsets } = useMemo(() => {
-    const sampledPositions = sampleGLB(astronautGltf, particleCount)
+  useEffect(() => {
+    let cancelled = false
+
+    loadPointCloudSet('/assets/models/astronaut.points.bin').then((set) => {
+      if (!cancelled) {
+        setAstronautPoints(set[particleCount])
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [particleCount])
+
+  const geometryData = useMemo(() => {
+    if (!astronautPoints) return null
+
     const positions = new Float32Array(particleCount * 3)
     const phases = new Float32Array(particleCount)
     const offsets = new Float32Array(particleCount * 3)
@@ -46,20 +60,23 @@ export default function AstronautCloud() {
       offsets[ix + 1] = (Math.random() - 0.5) * 4
       offsets[ix + 2] = (Math.random() - 0.5) * 2
 
-      positions[ix] = sampledPositions[ix] + offsets[ix]
-      positions[ix + 1] = sampledPositions[ix + 1] + offsets[ix + 1]
-      positions[ix + 2] = sampledPositions[ix + 2] + offsets[ix + 2]
+      positions[ix] = astronautPoints[ix] + offsets[ix]
+      positions[ix + 1] = astronautPoints[ix + 1] + offsets[ix + 1]
+      positions[ix + 2] = astronautPoints[ix + 2] + offsets[ix + 2]
     }
 
     return {
-      astronautPos: sampledPositions,
+      astronautPos: astronautPoints,
       currentPos: positions,
       idlePhase: phases,
       spawnOffsets: offsets,
     }
-  }, [astronautGltf, particleCount])
+  }, [astronautPoints, particleCount])
 
   const colors = useMemo(() => {
+    if (!geometryData) return null
+
+    const { astronautPos } = geometryData
     const palette = new Float32Array(particleCount * 3)
 
     for (let i = 0; i < particleCount; i += 1) {
@@ -85,7 +102,7 @@ export default function AstronautCloud() {
     }
 
     return palette
-  }, [astronautPos, particleCount])
+  }, [geometryData, particleCount])
 
   const glowTexture = useMemo(() => createGlowTexture(), [])
 
@@ -169,9 +186,12 @@ export default function AstronautCloud() {
   }, [camera, gl])
 
   useFrame((_, delta) => {
+    if (!geometryData || !colors) return
+
     const points = pointsRef.current
     if (!points) return
 
+    const { astronautPos, currentPos, idlePhase, spawnOffsets } = geometryData
     const visibility = progressRef.current.scrollVisibility
 
     if (visibility <= 0.001) {
@@ -245,11 +265,15 @@ export default function AstronautCloud() {
     }
   })
 
+  if (!geometryData || !colors) {
+    return null
+  }
+
   return (
     <group ref={groupRef}>
       <points ref={pointsRef}>
         <bufferGeometry>
-          <bufferAttribute attach="attributes-position" array={currentPos} count={particleCount} itemSize={3} />
+          <bufferAttribute attach="attributes-position" array={geometryData.currentPos} count={particleCount} itemSize={3} />
           <bufferAttribute attach="attributes-color" array={colors} count={particleCount} itemSize={3} />
         </bufferGeometry>
         <pointsMaterial
