@@ -1,11 +1,17 @@
-import { useRef, useState, useCallback } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const PILARES = [
+interface Pilar {
+  title: string
+  desc: string
+  image: string
+}
+
+const PILARES: Pilar[] = [
   {
     title: 'Infraestrutura Marketplaces',
     desc: 'Configuração completa e integração com os maiores marketplaces do país, do cadastro à operação logística',
@@ -31,59 +37,63 @@ const PILARES = [
 const TOTAL = String(PILARES.length).padStart(2, '0')
 
 export default function Servicos() {
-  const sectionRef = useRef(null)
-  const imageContainerRef = useRef(null)
-  const imageRefs = useRef([])
-  const itemRefs = useRef([])
-  const lineRefs = useRef([])
-  const descRefs = useRef([])
-  const badgeRef = useRef(null)
+  const sectionRef = useRef<HTMLElement | null>(null)
+  const imageContainerRef = useRef<HTMLDivElement | null>(null)
+  const imageRefs = useRef<Array<HTMLImageElement | null>>([])
+  const itemRefs = useRef<Array<HTMLHeadingElement | null>>([])
+  const lineRefs = useRef<Array<HTMLDivElement | null>>([])
+  const descRefs = useRef<Array<HTMLDivElement | null>>([])
+  const badgeRef = useRef<HTMLSpanElement | null>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const activeRef = useRef(0)
 
-  const handlePilarEnter = useCallback((index) => {
+  const handlePilarEnter = useCallback((index: number) => {
     if (index === activeRef.current) return
-    const prev = activeRef.current
+    const previous = activeRef.current
     activeRef.current = index
     setActiveIndex(index)
 
-    // 1. Image crossfade with subtle scale
-    imageRefs.current.forEach((img, i) => {
-      if (i === index) {
-        gsap.set(img, { zIndex: 2 })
-        gsap.fromTo(img,
+    imageRefs.current.forEach((image, currentIndex) => {
+      if (!image) return
+      if (currentIndex === index) {
+        gsap.set(image, { zIndex: 2 })
+        gsap.fromTo(
+          image,
           { opacity: 0, scale: 1.05 },
-          { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out', overwrite: 'auto' }
+          { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out', overwrite: 'auto' },
         )
-      } else if (i === prev) {
-        gsap.to(img, { opacity: 0, duration: 0.4, zIndex: 1, overwrite: 'auto' })
+      } else if (currentIndex === previous) {
+        gsap.to(image, { opacity: 0, duration: 0.4, zIndex: 1, overwrite: 'auto' })
       } else {
-        gsap.set(img, { opacity: 0, zIndex: 0 })
+        gsap.set(image, { opacity: 0, zIndex: 0 })
       }
     })
 
-    // 2. Active item text
-    gsap.to(itemRefs.current[index], {
-      color: '#ffffff',
-      x: 8,
-      duration: 0.4,
-      ease: 'power2.out',
-      overwrite: 'auto',
-    })
+    const activeItem = itemRefs.current[index]
+    if (activeItem) {
+      gsap.to(activeItem, {
+        color: '#ffffff',
+        x: 8,
+        duration: 0.4,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      })
+    }
 
-    // 3. Active description
-    gsap.to(descRefs.current[index], {
-      opacity: 1,
-      y: 0,
-      height: 'auto',
-      duration: 0.4,
-      ease: 'power2.out',
-      overwrite: 'auto',
-    })
+    const activeDesc = descRefs.current[index]
+    if (activeDesc) {
+      gsap.to(activeDesc, {
+        opacity: 1,
+        y: 0,
+        height: 'auto',
+        duration: 0.4,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      })
+    }
 
-    // 4. Inactive items
-    itemRefs.current.forEach((item, i) => {
-      if (i === index || !item) return
+    itemRefs.current.forEach((item, currentIndex) => {
+      if (!item || currentIndex === index) return
       gsap.to(item, {
         color: '#2a2a2a',
         x: 0,
@@ -93,9 +103,8 @@ export default function Servicos() {
       })
     })
 
-    // 5. Inactive descriptions
-    descRefs.current.forEach((desc, i) => {
-      if (i === index || !desc) return
+    descRefs.current.forEach((desc, currentIndex) => {
+      if (!desc || currentIndex === index) return
       gsap.to(desc, {
         opacity: 0,
         y: 8,
@@ -106,89 +115,84 @@ export default function Servicos() {
       })
     })
 
-    // 6. Green line on active
-    lineRefs.current.forEach((line, i) => {
+    lineRefs.current.forEach((line, currentIndex) => {
       if (!line) return
-      if (i === index) {
-        gsap.fromTo(line,
+      if (currentIndex === index) {
+        gsap.fromTo(
+          line,
           { scaleX: 0 },
-          { scaleX: 1, duration: 0.5, ease: 'power3.out', transformOrigin: 'left', overwrite: 'auto' }
+          { scaleX: 1, duration: 0.5, ease: 'power3.out', transformOrigin: 'left', overwrite: 'auto' },
         )
       } else {
         gsap.to(line, { scaleX: 0, duration: 0.3, overwrite: 'auto' })
       }
     })
 
-    // 7. Badge text
     if (badgeRef.current) {
       badgeRef.current.textContent = `${String(index + 1).padStart(2, '0')} / ${TOTAL}`
     }
   }, [])
 
-  // Section entrance + set initial state
   useGSAP(() => {
-    // Set initial states for images
-    imageRefs.current.forEach((img, i) => {
-      if (!img) return
-      if (i === 0) {
-        gsap.set(img, { opacity: 1, scale: 1, zIndex: 2 })
+    imageRefs.current.forEach((image, index) => {
+      if (!image) return
+      if (index === 0) {
+        gsap.set(image, { opacity: 1, scale: 1, zIndex: 2 })
       } else {
-        gsap.set(img, { opacity: 0, scale: 1.05, zIndex: 0 })
+        gsap.set(image, { opacity: 0, scale: 1.05, zIndex: 0 })
       }
     })
 
-    // Set initial states for items
-    itemRefs.current.forEach((item, i) => {
+    itemRefs.current.forEach((item, index) => {
       if (!item) return
-      gsap.set(item, { color: i === 0 ? '#ffffff' : '#2a2a2a', x: i === 0 ? 8 : 0 })
+      gsap.set(item, { color: index === 0 ? '#ffffff' : '#2a2a2a', x: index === 0 ? 8 : 0 })
     })
 
-    // Set initial states for descriptions
-    descRefs.current.forEach((desc, i) => {
+    descRefs.current.forEach((desc, index) => {
       if (!desc) return
-      if (i === 0) {
+      if (index === 0) {
         gsap.set(desc, { opacity: 1, y: 0, height: 'auto' })
       } else {
         gsap.set(desc, { opacity: 0, y: 8, height: 0 })
       }
     })
 
-    // Set initial green line
-    lineRefs.current.forEach((line, i) => {
+    lineRefs.current.forEach((line, index) => {
       if (!line) return
-      gsap.set(line, { scaleX: i === 0 ? 1 : 0, transformOrigin: 'left' })
+      gsap.set(line, { scaleX: index === 0 ? 1 : 0, transformOrigin: 'left' })
     })
 
-    // Eyebrow entrance
-    const eyebrow = sectionRef.current.querySelector('.pilares-eyebrow')
-    gsap.from(eyebrow, {
-      opacity: 0,
-      y: 30,
-      duration: 0.7,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top 75%',
-        once: true,
-      },
-    })
+    const eyebrow = sectionRef.current?.querySelector('.pilares-eyebrow')
+    if (eyebrow) {
+      gsap.from(eyebrow, {
+        opacity: 0,
+        y: 30,
+        duration: 0.7,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 75%',
+          once: true,
+        },
+      })
+    }
 
-    // List items stagger entrance
-    const listItems = sectionRef.current.querySelectorAll('.pilar-item')
-    gsap.from(listItems, {
-      opacity: 0,
-      y: 60,
-      stagger: 0.08,
-      duration: 0.8,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top 70%',
-        once: true,
-      },
-    })
+    const listItems = sectionRef.current?.querySelectorAll('.pilar-item')
+    if (listItems?.length) {
+      gsap.from(listItems, {
+        opacity: 0,
+        y: 60,
+        stagger: 0.08,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 70%',
+          once: true,
+        },
+      })
+    }
 
-    // Image container entrance
     if (imageContainerRef.current) {
       gsap.from(imageContainerRef.current, {
         opacity: 0,
@@ -207,20 +211,17 @@ export default function Servicos() {
   return (
     <section id="servicos" ref={sectionRef} className="pilares-section w-full px-[5%] py-20 md:py-32">
       <div className="max-w-[1100px] mx-auto">
-
-        <span className="pilares-eyebrow">
-          NOSSOS PILARES
-        </span>
+        <span className="pilares-eyebrow">NOSSOS PILARES</span>
 
         <div className="pilares-grid">
-
-          {/* Left — Image */}
           <div className="pilares-image-col">
             <div ref={imageContainerRef} className="pilares-image-container">
-              {PILARES.map((pilar, i) => (
+              {PILARES.map((pilar, index) => (
                 <img
                   key={pilar.title}
-                  ref={(el) => { imageRefs.current[i] = el }}
+                  ref={(element) => {
+                    imageRefs.current[index] = element
+                  }}
                   src={pilar.image}
                   alt={pilar.title}
                   className="pilares-image"
@@ -228,29 +229,27 @@ export default function Servicos() {
                 />
               ))}
 
-              {/* Badge */}
               <div className="pilares-badge">
                 <span ref={badgeRef}>01 / {TOTAL}</span>
               </div>
             </div>
           </div>
 
-          {/* Right — List */}
           <div className="pilares-list">
-            {PILARES.map((pilar, i) => (
+            {PILARES.map((pilar, index) => (
               <div
                 key={pilar.title}
-                className={`pilar-item ${activeIndex === i ? 'is-active' : ''}`}
-                onMouseEnter={() => handlePilarEnter(i)}
+                className={`pilar-item ${activeIndex === index ? 'is-active' : ''}`}
+                onMouseEnter={() => handlePilarEnter(index)}
               >
-                <div className="pilar-number">
-                  {String(i + 1).padStart(2, '0')}
-                </div>
+                <div className="pilar-number">{String(index + 1).padStart(2, '0')}</div>
 
                 <div className="pilar-content">
                   <div className="pilar-title-row">
                     <h3
-                      ref={(el) => { itemRefs.current[i] = el }}
+                      ref={(element) => {
+                        itemRefs.current[index] = element
+                      }}
                       className="pilar-title"
                     >
                       {pilar.title}
@@ -259,36 +258,31 @@ export default function Servicos() {
                   </div>
 
                   <div
-                    ref={(el) => { descRefs.current[i] = el }}
+                    ref={(element) => {
+                      descRefs.current[index] = element
+                    }}
                     className="pilar-desc"
                   >
                     <p>{pilar.desc}</p>
                   </div>
                 </div>
 
-                {/* Bottom line */}
                 <div className="pilar-border" />
                 <div
-                  ref={(el) => { lineRefs.current[i] = el }}
+                  ref={(element) => {
+                    lineRefs.current[index] = element
+                  }}
                   className="pilar-line-green"
                 />
 
-                {/* Mobile image (accordion) */}
-                <div className={`pilar-mobile-image ${activeIndex === i ? 'is-open' : ''}`}>
-                  <img
-                    src={pilar.image}
-                    alt={pilar.title}
-                    className="pilar-mobile-img"
-                    loading="lazy"
-                  />
+                <div className={`pilar-mobile-image ${activeIndex === index ? 'is-open' : ''}`}>
+                  <img src={pilar.image} alt={pilar.title} className="pilar-mobile-img" loading="lazy" />
                 </div>
               </div>
             ))}
           </div>
-
         </div>
       </div>
-
     </section>
   )
 }
