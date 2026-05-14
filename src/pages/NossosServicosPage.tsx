@@ -27,11 +27,6 @@ const SERVICE_ITEMS: ServiceItem[] = [
     title: 'Logística Integrada',
     text: 'Toda venda perdida por atraso, erro de estoque ou falha operacional custa caro. Organizamos sua logística para que pedidos, estoque, expedição e acompanhamento funcionem como um sistema único. Isso melhora a experiência do cliente, reduz ruído interno e cria uma operação preparada para sustentar volume com eficiência.',
   },
-  {
-    index: '05',
-    title: 'Especialistas em Marketplace',
-    text: 'Se a sua empresa quer vender com força em canais como NuvemShop, Shopify e ecossistemas de marketplace, nós assumimos a parte estratégica e técnica. Estruturamos loja, integrações, vitrine, conversão e rotina operacional para acelerar vendas com consistência. Você ganha mais velocidade de execução e uma presença digital muito mais competitiva.',
-  },
 ]
 
 export default function NossosServicosPage() {
