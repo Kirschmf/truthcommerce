@@ -229,21 +229,7 @@ export default function Footer({ navLinks, onNavigate, currentPath }: FooterProp
   return (
     <footer id="footer" ref={sectionRef} className="relative w-full px-[5%] pt-12 md:pt-20 pb-8 border-t border-white/[0.06]">
       <div className="max-w-[1280px] mx-auto">
-        <div className="reveal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-10 md:pb-16 border-b border-white/[0.06] font-mono text-[11px] md:text-[12px] uppercase tracking-[0.18em] text-text-muted">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-            <span className="inline-flex items-center gap-2">
-              <StatusDot />
-              <span>Status: Online</span>
-            </span>
-            <span className="opacity-30">/</span>
-            <span>Base: São Paulo · BR</span>
-          </div>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 opacity-80">
-            <span>UTC −03:00</span>
-            <span className="opacity-30">/</span>
-            <span>v.2026.04</span>
-          </div>
-        </div>
+        
 
         <div className="reveal relative text-center my-14 md:my-24 px-6 sm:px-10 md:px-12 py-12 md:py-20">
           <CornerBrackets />
@@ -316,16 +302,12 @@ export default function Footer({ navLinks, onNavigate, currentPath }: FooterProp
           ))}
         </div>
 
-        <div className="reveal flex justify-center px-2 py-8 md:py-14">
+        <div className="reveal flex justify-center px-2 py-10 md:py-16">
           <img src={logo} alt="Truth Commerce" className="w-full max-w-[200px] md:max-w-[230px] h-auto opacity-95" />
         </div>
 
-        <div className="reveal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-6 md:pt-8 border-t border-white/[0.06] font-mono text-[11px] md:text-[12px] uppercase tracking-[0.18em] text-text-muted/70">
-          <p className="m-0">© 2026 Truth Commerce — todos os direitos reservados</p>
-          <p className="m-0 inline-flex items-center gap-2">
-            <StatusDot />
-            All Systems Operational
-          </p>
+        <div className="reveal flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 pt-6 md:pt-8 border-t border-white/[0.06] font-mono text-[11px] md:text-[12px] uppercase tracking-[0.18em] text-text-muted/70">
+          <p className="m-0 text-center">© 2026 Truth Commerce — todos os direitos reservados</p>
         </div>
       </div>
     </footer>
