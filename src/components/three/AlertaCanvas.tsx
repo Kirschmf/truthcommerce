@@ -3,25 +3,28 @@ import { Canvas } from '@react-three/fiber'
 import AstronautCloud from './AstronautCloud'
 
 export default function AlertaCanvas() {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const [active, setActive] = useState(false)
 
   useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => setActive(entry.isIntersecting),
-      { threshold: 0.05 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
+    const element = containerRef.current
+    if (!element) return undefined
+
+    const observer = new IntersectionObserver((entries) => {
+      const [entry] = entries
+      if (entry) {
+        setActive(entry.isIntersecting)
+      }
+    }, {
+      threshold: 0.05,
+    })
+
+    observer.observe(element)
+    return () => observer.disconnect()
   }, [])
 
   return (
-    <div
-      ref={containerRef}
-      className="absolute left-0 top-0 w-[50%] h-full pointer-events-none hidden md:block"
-    >
+    <div ref={containerRef} className="absolute left-0 top-0 w-[50%] h-full pointer-events-none hidden md:block">
       <Canvas
         frameloop={active ? 'always' : 'demand'}
         resize={{ scroll: false }}
