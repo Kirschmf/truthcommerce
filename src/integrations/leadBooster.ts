@@ -116,7 +116,11 @@ function waitForLeadBoosterInitialization() {
   }
 
   initializationPromise = new Promise((resolve) => {
+    let completed = false
+
     const completeInitialization = () => {
+      if (completed) return
+      completed = true
       initializationPromise = null
       resolve()
     }
@@ -133,6 +137,49 @@ function waitForLeadBoosterInitialization() {
   return initializationPromise
 }
 
+function getLeadBoosterFrameElement() {
+  return document.querySelector<HTMLIFrameElement>('iframe[title="Chatbot"]')
+}
+
+function isLeadBoosterLauncherVisible() {
+  const frame = getLeadBoosterFrameElement()
+  if (!frame) return false
+
+  const rect = frame.getBoundingClientRect()
+  return rect.width <= 104 && rect.height <= 104
+}
+
+function clickLeadBoosterLauncher() {
+  const frame = getLeadBoosterFrameElement()
+  if (!frame) return false
+
+  const rect = frame.getBoundingClientRect()
+  if (!rect.width || !rect.height) return false
+
+  const x = rect.left + rect.width / 2
+  const y = rect.top + rect.height / 2
+
+  frame.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: x, clientY: y, pointerId: 1, pointerType: 'mouse' }))
+  frame.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, clientX: x, clientY: y }))
+  frame.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, clientX: x, clientY: y, pointerId: 1, pointerType: 'mouse' }))
+  frame.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, clientX: x, clientY: y }))
+  frame.click()
+
+  return true
+}
+
+async function waitForLeadBoosterOpen() {
+  if (typeof window === 'undefined') return
+
+  await new Promise((resolve) => window.setTimeout(resolve, 300))
+
+  if (!isLeadBoosterLauncherVisible()) {
+    return
+  }
+
+  clickLeadBoosterLauncher()
+}
+
 export function initializeLeadBooster() {
   if (typeof window === 'undefined') return
 
@@ -147,4 +194,5 @@ export async function openLeadBooster() {
   await ensureLeadBoosterLoaded()
   await waitForLeadBoosterInitialization()
   window.LeadBooster?.trigger('open')
+  await waitForLeadBoosterOpen()
 }
