@@ -68,7 +68,7 @@ export default function App() {
         <Route path="/nossos-servicos" element={<NossosServicosPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <Footer navLinks={footerLinks} onNavigate={navigate} currentPath={location.pathname} />
+      <Footer key={location.pathname} navLinks={footerLinks} onNavigate={navigate} currentPath={location.pathname} />
     </div>
   )
 }
