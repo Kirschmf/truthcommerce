@@ -222,7 +222,7 @@ export default function Footer({ navLinks, onNavigate, currentPath }: FooterProp
       <div className="max-w-[1280px] mx-auto">
         
 
-        <div className="reveal relative text-center my-14 md:my-24 px-6 sm:px-10 md:px-12 py-12 md:py-20">
+        <div className="reveal relative text-center my-14 md:my-16 px-6 sm:px-10 md:px-12 py-12 md:py-10">
           <CornerBrackets />
           <div className="font-mono text-[11px] md:text-[12px] uppercase tracking-[0.22em] text-[var(--green)] mb-5 md:mb-6">▸ Próximo Passo</div>
           <h2 className="font-heading text-[clamp(1.6rem,5.5vw,2.4rem)] md:text-[clamp(2rem,3.4vw,3.2rem)] font-semibold leading-[1.15] tracking-[-0.02em] mb-5 md:mb-6">
