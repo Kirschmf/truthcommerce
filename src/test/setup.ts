@@ -50,6 +50,7 @@ Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
         moveTo: noop,
         lineTo: noop,
         arc: noop,
+        ellipse: noop,
         fill: noop,
         stroke: noop,
         save: noop,

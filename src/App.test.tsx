@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
 import App from './App'
@@ -32,10 +32,12 @@ describe('App', () => {
     expect(screen.getAllByText('Falar com especialista').length).toBeGreaterThanOrEqual(1)
   })
 
-  it('opens LeadBooster from the specialist CTA', () => {
+  it('renders the specialist CTA with the LeadBooster href', async () => {
     renderAt('/')
-    fireEvent.click(screen.getAllByText('Falar com especialista')[0])
-    expect(window.LeadBooster?.trigger).toHaveBeenCalledWith('open')
+    const cta = screen.getAllByText('Falar com especialista')[0].closest('a')
+    await waitFor(() => {
+      expect(cta).toHaveAttribute('href', '#leadbooster')
+    })
   })
 
   it('renders the shared navigation items', () => {

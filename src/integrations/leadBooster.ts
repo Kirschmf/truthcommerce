@@ -11,6 +11,7 @@ const LEAD_BOOSTER_CONFIG = {
 } as const
 
 let loadPromise: Promise<void> | null = null
+let initializationPromise: Promise<void> | null = null
 
 function createLeadBoosterStub(): NonNullable<Window['LeadBooster']> {
   return {
@@ -101,17 +102,49 @@ export function ensureLeadBoosterLoaded() {
   return loadPromise
 }
 
+function waitForLeadBoosterInitialization() {
+  if (typeof window === 'undefined') {
+    return Promise.resolve()
+  }
+
+  if (window.LeadBooster?.initialized) {
+    return Promise.resolve()
+  }
+
+  if (initializationPromise) {
+    return initializationPromise
+  }
+
+  initializationPromise = new Promise((resolve) => {
+    const completeInitialization = () => {
+      initializationPromise = null
+      resolve()
+    }
+
+    window.LeadBooster?.on('initialized', completeInitialization)
+
+    window.setTimeout(() => {
+      if (window.LeadBooster?.initialized) {
+        completeInitialization()
+      }
+    }, 0)
+  })
+
+  return initializationPromise
+}
+
 export function initializeLeadBooster() {
   if (typeof window === 'undefined') return
 
   configureLeadBooster()
-  void ensureLeadBoosterLoaded().catch(() => {})
+  void ensureLeadBoosterLoaded().then(() => waitForLeadBoosterInitialization()).catch(() => {})
 }
 
-export function openLeadBooster() {
+export async function openLeadBooster() {
   if (typeof window === 'undefined') return
 
   configureLeadBooster()
-  void ensureLeadBoosterLoaded().catch(() => {})
+  await ensureLeadBoosterLoaded()
+  await waitForLeadBoosterInitialization()
   window.LeadBooster?.trigger('open')
 }
