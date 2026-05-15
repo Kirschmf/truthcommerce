@@ -1,5 +1,3 @@
-import { PRIMARY_CONTACT_HREF } from '../config/site'
-
 interface ServiceItem {
   index: string
   title: string
@@ -97,31 +95,6 @@ export default function NossosServicosPage() {
         </div>
       </section>
 
-      <section className="px-[5%] pt-4 pb-8 md:pb-12">
-        <div className="max-w-[1180px] mx-auto rounded-[28px] border border-white/[0.08] bg-[linear-gradient(135deg,rgba(7,221,43,0.08),rgba(255,255,255,0.02))] px-6 py-10 md:px-10 md:py-14">
-          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--green)] mb-4">
-                Próximo passo
-              </p>
-              <h2 className="font-heading text-[clamp(1.8rem,4.5vw,3rem)] font-semibold tracking-[-0.03em] leading-[1.08] mb-4 max-w-[16ch]">
-                Se a sua estrutura não suporta crescimento, a sua venda para antes da escala.
-              </h2>
-              <p className="text-text-muted text-[1rem] md:text-[1.05rem] leading-[1.75] max-w-[58ch]">
-                Nós unimos estratégia, tecnologia e operação para montar uma base comercial capaz de vender mais hoje e crescer com segurança amanhã.
-              </p>
-            </div>
-            <a
-              href={PRIMARY_CONTACT_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-[#EBEBEB] px-7 py-3.5 text-[13px] font-medium text-[#050505] transition-all duration-300 hover:bg-white hover:-translate-y-px"
-            >
-              Solicitar diagnóstico <span>→</span>
-            </a>
-          </div>
-        </div>
-      </section>
     </main>
   )
 }
