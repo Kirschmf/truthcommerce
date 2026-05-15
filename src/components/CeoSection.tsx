@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { LEAD_BOOSTER_HREF, openLeadBooster } from '../integrations/leadBooster'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -118,7 +119,10 @@ export default function CeoSection() {
               ))}
             </div>
 
-            <a href="#footer" className="ceo-cta">
+            <a href={LEAD_BOOSTER_HREF} onClick={(event) => {
+              event.preventDefault()
+              openLeadBooster()
+            }} className="ceo-cta">
               <span className="ceo-cta-dot" aria-hidden="true" />
               Iniciar diagnóstico
               <span className="ceo-cta-arrow" aria-hidden="true">→</span>

@@ -5,7 +5,7 @@ import Footer from './components/Footer'
 import StarfieldBg from './components/StarfieldBg'
 import HomePage from './pages/HomePage'
 import NossosServicosPage from './pages/NossosServicosPage'
-import { PRIMARY_CONTACT_HREF } from './config/site'
+import { LEAD_BOOSTER_HREF } from './integrations/leadBooster'
 import type { NavLinkItem } from './types/site'
 
 function scrollToTop() {
@@ -47,7 +47,7 @@ export default function App() {
       return [
         { label: 'Início', href: '/' },
         { label: 'Nossos Serviços', href: '/nossos-servicos' },
-        { label: 'Contato', href: PRIMARY_CONTACT_HREF },
+        { label: 'Contato', href: LEAD_BOOSTER_HREF },
       ]
     }
 

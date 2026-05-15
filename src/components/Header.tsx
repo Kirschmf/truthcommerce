@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { PRIMARY_CONTACT_HREF } from '../config/site'
+import { LEAD_BOOSTER_HREF, isLeadBoosterHref, openLeadBooster } from '../integrations/leadBooster'
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion'
 import type { NavLinkItem } from '../types/site'
 
@@ -97,6 +97,12 @@ export default function Header({ navLinks, onNavigate, currentPath }: HeaderProp
           document.body.style.overflow = ''
         }
 
+        if (isLeadBoosterHref(href)) {
+          event.preventDefault()
+          openLeadBooster()
+          return
+        }
+
         if (href.startsWith('#')) {
           event.preventDefault()
           scrollToTarget(href)
@@ -147,9 +153,8 @@ export default function Header({ navLinks, onNavigate, currentPath }: HeaderProp
 
           <div className="flex items-center gap-4 shrink-0">
             <a
-              href={PRIMARY_CONTACT_HREF}
-              target={PRIMARY_CONTACT_HREF.startsWith('https://') ? '_blank' : undefined}
-              rel={PRIMARY_CONTACT_HREF.startsWith('https://') ? 'noopener noreferrer' : undefined}
+              href={LEAD_BOOSTER_HREF}
+              onClick={handleNavigate(LEAD_BOOSTER_HREF)}
               className="hidden md:inline-flex items-center gap-2 text-white text-[13px] font-medium px-[22px] py-2.5 rounded-full border border-white/55 no-underline whitespace-nowrap transition-all duration-250 hover:bg-white hover:text-black hover:border-white group"
             >
               Avaliar Estrutura
@@ -219,10 +224,8 @@ export default function Header({ navLinks, onNavigate, currentPath }: HeaderProp
 
             <div className="px-[8%] py-7 shrink-0">
               <motion.a
-                href={PRIMARY_CONTACT_HREF}
-                target={PRIMARY_CONTACT_HREF.startsWith('https://') ? '_blank' : undefined}
-                rel={PRIMARY_CONTACT_HREF.startsWith('https://') ? 'noopener noreferrer' : undefined}
-                onClick={() => closeMenu()}
+                href={LEAD_BOOSTER_HREF}
+                onClick={handleNavigate(LEAD_BOOSTER_HREF, { close: true })}
                 initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}

@@ -2,6 +2,7 @@ import { lazy, Suspense, useMemo, useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { LEAD_BOOSTER_HREF, openLeadBooster } from '../integrations/leadBooster'
 import useTypewriter from '../hooks/useTypewriter'
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion'
 
@@ -115,7 +116,10 @@ export default function HeroSection() {
             <a href="#metodo" className="flex-1 md:flex-none inline-flex items-center justify-center px-3 py-2.5 md:px-[30px] md:py-[15px] bg-[#EBEBEB] text-[#050505] text-[12px] md:text-[13px] font-medium rounded-full border border-[#EBEBEB] tracking-[0.02em] transition-all duration-300 ease-smooth hover:bg-white hover:-translate-y-px whitespace-nowrap">
               Conhecer a estrutura
             </a>
-            <a href="#footer" className="flex-1 md:flex-none inline-flex items-center justify-center px-3 py-2.5 md:px-[30px] md:py-[15px] bg-transparent text-text-main text-[12px] md:text-[13px] font-medium rounded-full border border-white/[0.14] tracking-[0.02em] transition-all duration-300 ease-smooth hover:bg-white/[0.06] hover:border-white/[0.28] hover:-translate-y-px whitespace-nowrap">
+            <a href={LEAD_BOOSTER_HREF} onClick={(event) => {
+              event.preventDefault()
+              openLeadBooster()
+            }} className="flex-1 md:flex-none inline-flex items-center justify-center px-3 py-2.5 md:px-[30px] md:py-[15px] bg-transparent text-text-main text-[12px] md:text-[13px] font-medium rounded-full border border-white/[0.14] tracking-[0.02em] transition-all duration-300 ease-smooth hover:bg-white/[0.06] hover:border-white/[0.28] hover:-translate-y-px whitespace-nowrap">
               Falar com especialista
             </a>
           </div>

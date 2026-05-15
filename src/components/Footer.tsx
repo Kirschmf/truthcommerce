@@ -2,7 +2,8 @@ import { useCallback, useRef, type MouseEvent, type ReactNode } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { PRIMARY_CONTACT_HREF, SITE_CONTACT } from '../config/site'
+import { SITE_CONTACT } from '../config/site'
+import { LEAD_BOOSTER_HREF, isLeadBoosterHref, openLeadBooster } from '../integrations/leadBooster'
 import type { NavLinkItem } from '../types/site'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -85,6 +86,11 @@ function MagneticButton({ href, children }: { href: string; children: ReactNode 
     <a
       ref={btnRef}
       href={href}
+      onClick={(event) => {
+        if (!isLeadBoosterHref(href)) return
+        event.preventDefault()
+        openLeadBooster()
+      }}
       target={href.startsWith('https://') ? '_blank' : undefined}
       rel={href.startsWith('https://') ? 'noopener noreferrer' : undefined}
       onMouseEnter={handleEnter}
@@ -171,7 +177,6 @@ export default function Footer({ navLinks, onNavigate, currentPath }: FooterProp
       index: '03',
       title: 'CONEXÃO',
       links: [
-        { label: 'WhatsApp', href: PRIMARY_CONTACT_HREF, external: PRIMARY_CONTACT_HREF.startsWith('https://') },
         { label: 'Instagram', href: SITE_CONTACT.instagramUrl, external: true },
         { label: 'LinkedIn', href: SITE_CONTACT.linkedinUrl, external: true },
       ],
@@ -180,6 +185,12 @@ export default function Footer({ navLinks, onNavigate, currentPath }: FooterProp
 
   const handleLinkClick = useCallback((link: NavLinkItem) => (event: MouseEvent<HTMLAnchorElement>) => {
     if (link.external) return
+
+    if (isLeadBoosterHref(link.href)) {
+      event.preventDefault()
+      openLeadBooster()
+      return
+    }
 
     if (link.href.startsWith('#')) {
       event.preventDefault()
@@ -231,7 +242,7 @@ export default function Footer({ navLinks, onNavigate, currentPath }: FooterProp
           <p className="text-text-muted text-[clamp(1rem,3.6vw,1.1rem)] md:text-[clamp(1.1rem,1.3vw,1.2rem)] leading-[1.65] max-w-[560px] mx-auto mb-9 md:mb-11">
             Seja para dar o primeiro passo na internet ou organizar uma operação que já roda. Pare de perder vendas por desorganização técnica.
           </p>
-          <MagneticButton href={PRIMARY_CONTACT_HREF}>Iniciar Diagnóstico</MagneticButton>
+          <MagneticButton href={LEAD_BOOSTER_HREF}>Iniciar Diagnóstico</MagneticButton>
         </div>
 
         <div className="reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr] gap-12 lg:gap-10 pt-10 md:pt-14 pb-10 md:pb-12">
@@ -250,12 +261,6 @@ export default function Footer({ navLinks, onNavigate, currentPath }: FooterProp
                 <a href={`mailto:${SITE_CONTACT.email}`} className="inline-flex items-center gap-2 font-mono text-[13px] text-text-muted hover:text-text-main transition-colors">
                   <span className="text-[var(--green)]">▸</span>
                   {SITE_CONTACT.email}
-                </a>
-              </li>
-              <li>
-                <a href={PRIMARY_CONTACT_HREF} target={PRIMARY_CONTACT_HREF.startsWith('https://') ? '_blank' : undefined} rel={PRIMARY_CONTACT_HREF.startsWith('https://') ? 'noopener noreferrer' : undefined} className="inline-flex items-center gap-2 font-mono text-[13px] text-text-muted hover:text-text-main transition-colors">
-                  <span className="text-[var(--green)]">▸</span>
-                  Falar no WhatsApp
                 </a>
               </li>
             </ul>

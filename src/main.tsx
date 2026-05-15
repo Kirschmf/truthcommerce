@@ -7,6 +7,7 @@ import * as Sentry from '@sentry/react'
 import App from './App'
 import AppErrorBoundary from './components/AppErrorBoundary'
 import { OBSERVABILITY } from './config/observability'
+import { initializeLeadBooster } from './integrations/leadBooster'
 import './styles/global.css'
 
 const rootElement = document.getElementById('root')
@@ -22,6 +23,8 @@ if (OBSERVABILITY.sentryDsn) {
     tracesSampleRate: OBSERVABILITY.tracesSampleRate,
   })
 }
+
+initializeLeadBooster()
 
 createRoot(rootElement).render(
   <StrictMode>

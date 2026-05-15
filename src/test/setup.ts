@@ -1,4 +1,12 @@
 import '@testing-library/jest-dom'
+import { vi } from 'vitest'
+
+window.pipedriveLeadboosterConfig = undefined
+window.LeadBooster = {
+  q: [],
+  on: vi.fn(),
+  trigger: vi.fn(),
+}
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

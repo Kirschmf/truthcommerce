@@ -2,6 +2,16 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Home Page', () => {
   test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      window.__leadBoosterTriggerCalls = []
+      window.LeadBooster = {
+        q: [],
+        on: () => {},
+        trigger: (name) => {
+          window.__leadBoosterTriggerCalls.push(name)
+        },
+      }
+    })
     await page.goto('/')
   })
 
@@ -80,6 +90,21 @@ test.describe('Home Page', () => {
     await expect(faqButton).toHaveAttribute('aria-expanded', 'false')
     await faqButton.click()
     await expect(faqButton).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  test('opens LeadBooster from primary CTAs without navigation', async ({ page }) => {
+    await page.getByRole('link', { name: 'Falar com especialista' }).click()
+    await expect(page).toHaveURL(/\/$/)
+    await expect.poll(() => page.evaluate(() => window.__leadBoosterTriggerCalls.at(-1))).toBe('open')
+
+    await page.getByRole('link', { name: 'Avaliar Estrutura' }).first().click()
+    await expect(page).toHaveURL(/\/$/)
+    await expect.poll(() => page.evaluate(() => window.__leadBoosterTriggerCalls.at(-1))).toBe('open')
+
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+    await page.getByRole('link', { name: 'Iniciar Diagnóstico' }).click()
+    await expect(page).toHaveURL(/\/$/)
+    await expect.poll(() => page.evaluate(() => window.__leadBoosterTriggerCalls.at(-1))).toBe('open')
   })
 
   test('case detail dialog opens and closes with keyboard support', async ({ page }) => {
