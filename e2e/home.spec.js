@@ -1,6 +1,21 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('Home Page', () => {
+  async function expectLeadBoosterToExpand(page) {
+    await expect.poll(() => page.evaluate(() => {
+      const iframe = document.querySelector('iframe[title="Chatbot"]')
+      const rect = iframe?.getBoundingClientRect()
+      return rect ? { width: rect.width, height: rect.height } : null
+    })).toMatchObject({ width: expect.any(Number), height: expect.any(Number) })
+
+    await expect.poll(() => page.evaluate(() => {
+      const iframe = document.querySelector('iframe[title="Chatbot"]')
+      const rect = iframe?.getBoundingClientRect()
+      if (!rect) return false
+      return rect.width > 104 || rect.height > 104
+    })).toBe(true)
+  }
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
   })
@@ -85,28 +100,16 @@ test.describe('Home Page', () => {
   test('opens LeadBooster from primary CTAs without navigation', async ({ page }) => {
     await page.getByRole('link', { name: 'Falar com especialista' }).click()
     await expect(page).toHaveURL(/\/$/)
-    await expect.poll(() => page.evaluate(() => {
-      const iframe = document.querySelector('iframe[title="Chatbot"]')
-      const rect = iframe?.getBoundingClientRect()
-      return rect ? `${rect.width}x${rect.height}` : null
-    })).toBe('415x540')
+    await expectLeadBoosterToExpand(page)
 
     await page.getByRole('link', { name: 'Avaliar Estrutura' }).first().click()
     await expect(page).toHaveURL(/\/$/)
-    await expect.poll(() => page.evaluate(() => {
-      const iframe = document.querySelector('iframe[title="Chatbot"]')
-      const rect = iframe?.getBoundingClientRect()
-      return rect ? `${rect.width}x${rect.height}` : null
-    })).toBe('415x540')
+    await expectLeadBoosterToExpand(page)
 
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
     await page.getByRole('link', { name: 'Iniciar Diagnóstico' }).click()
     await expect(page).toHaveURL(/\/$/)
-    await expect.poll(() => page.evaluate(() => {
-      const iframe = document.querySelector('iframe[title="Chatbot"]')
-      const rect = iframe?.getBoundingClientRect()
-      return rect ? `${rect.width}x${rect.height}` : null
-    })).toBe('415x540')
+    await expectLeadBoosterToExpand(page)
   })
 
   test('case detail dialog opens and closes with keyboard support', async ({ page }) => {

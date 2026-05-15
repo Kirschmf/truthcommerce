@@ -13,6 +13,11 @@ const LEAD_BOOSTER_CONFIG = {
 let loadPromise: Promise<void> | null = null
 let initializationPromise: Promise<void> | null = null
 
+const LEAD_BOOSTER_INITIALIZATION_TIMEOUT_MS = 5000
+const LEAD_BOOSTER_OPEN_RETRY_DELAY_MS = 400
+const LEAD_BOOSTER_OPEN_RETRIES = 2
+const LEAD_BOOSTER_LAUNCHER_MAX_SIZE = 104
+
 function createLeadBoosterStub(): NonNullable<Window['LeadBooster']> {
   return {
     q: [],
@@ -102,7 +107,7 @@ export function ensureLeadBoosterLoaded() {
   return loadPromise
 }
 
-function waitForLeadBoosterInitialization() {
+function waitForLeadBoosterInitialization(timeoutMs = LEAD_BOOSTER_INITIALIZATION_TIMEOUT_MS) {
   if (typeof window === 'undefined') {
     return Promise.resolve()
   }
@@ -115,7 +120,7 @@ function waitForLeadBoosterInitialization() {
     return initializationPromise
   }
 
-  initializationPromise = new Promise((resolve) => {
+  initializationPromise = new Promise((resolve, reject) => {
     let completed = false
 
     const completeInitialization = () => {
@@ -125,13 +130,23 @@ function waitForLeadBoosterInitialization() {
       resolve()
     }
 
+    const failInitialization = () => {
+      if (completed) return
+      completed = true
+      initializationPromise = null
+      reject(new Error('LeadBooster initialization timed out'))
+    }
+
     window.LeadBooster?.on('initialized', completeInitialization)
 
     window.setTimeout(() => {
       if (window.LeadBooster?.initialized) {
         completeInitialization()
+        return
       }
-    }, 0)
+
+      failInitialization()
+    }, timeoutMs)
   })
 
   return initializationPromise
@@ -141,43 +156,44 @@ function getLeadBoosterFrameElement() {
   return document.querySelector<HTMLIFrameElement>('iframe[title="Chatbot"]')
 }
 
+function getLeadBoosterFrameRect() {
+  const frame = getLeadBoosterFrameElement()
+  if (!frame) return null
+
+  const rect = frame.getBoundingClientRect()
+  if (!rect.width || !rect.height) return null
+
+  return rect
+}
+
 function isLeadBoosterLauncherVisible() {
-  const frame = getLeadBoosterFrameElement()
-  if (!frame) return false
+  const rect = getLeadBoosterFrameRect()
+  if (!rect) return false
 
-  const rect = frame.getBoundingClientRect()
-  return rect.width <= 104 && rect.height <= 104
+  return rect.width <= LEAD_BOOSTER_LAUNCHER_MAX_SIZE && rect.height <= LEAD_BOOSTER_LAUNCHER_MAX_SIZE
 }
 
-function clickLeadBoosterLauncher() {
-  const frame = getLeadBoosterFrameElement()
-  if (!frame) return false
+function isLeadBoosterExpanded() {
+  const rect = getLeadBoosterFrameRect()
+  if (!rect) return false
 
-  const rect = frame.getBoundingClientRect()
-  if (!rect.width || !rect.height) return false
-
-  const x = rect.left + rect.width / 2
-  const y = rect.top + rect.height / 2
-
-  frame.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: x, clientY: y, pointerId: 1, pointerType: 'mouse' }))
-  frame.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, clientX: x, clientY: y }))
-  frame.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, clientX: x, clientY: y, pointerId: 1, pointerType: 'mouse' }))
-  frame.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, clientX: x, clientY: y }))
-  frame.click()
-
-  return true
+  return rect.width > LEAD_BOOSTER_LAUNCHER_MAX_SIZE || rect.height > LEAD_BOOSTER_LAUNCHER_MAX_SIZE
 }
 
-async function waitForLeadBoosterOpen() {
-  if (typeof window === 'undefined') return
+async function waitForLeadBoosterExpanded(timeoutMs = LEAD_BOOSTER_OPEN_RETRY_DELAY_MS) {
+  if (typeof window === 'undefined') return false
 
-  await new Promise((resolve) => window.setTimeout(resolve, 300))
+  const start = window.performance.now()
 
-  if (!isLeadBoosterLauncherVisible()) {
-    return
+  while (window.performance.now() - start < timeoutMs) {
+    if (isLeadBoosterExpanded()) {
+      return true
+    }
+
+    await new Promise((resolve) => window.setTimeout(resolve, 50))
   }
 
-  clickLeadBoosterLauncher()
+  return isLeadBoosterExpanded()
 }
 
 export function initializeLeadBooster() {
@@ -193,6 +209,16 @@ export async function openLeadBooster() {
   configureLeadBooster()
   await ensureLeadBoosterLoaded()
   await waitForLeadBoosterInitialization()
-  window.LeadBooster?.trigger('open')
-  await waitForLeadBoosterOpen()
+
+  for (let attempt = 0; attempt < LEAD_BOOSTER_OPEN_RETRIES; attempt += 1) {
+    window.LeadBooster?.trigger('open')
+
+    if (await waitForLeadBoosterExpanded()) {
+      return
+    }
+
+    if (!isLeadBoosterLauncherVisible()) {
+      return
+    }
+  }
 }
